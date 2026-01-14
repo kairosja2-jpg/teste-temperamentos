@@ -112,22 +112,28 @@
       display:flex;
       gap:18px;
       flex-wrap:wrap;
-      align-items:center;
+      align-items:flex-start;
       justify-content:space-between;
     }
 
-    .headline{
-      font-size:22px;
-      margin:0 0 8px;
-      line-height:1.2;
-      letter-spacing:-0.4px;
+    /* ✅ NOVO: primeira dobra (mais claro e maior) */
+    .heroTitle{
+      font-size:30px;
+      line-height:1.15;
+      letter-spacing:-0.6px;
+      margin:0 0 10px;
+      font-weight:950;
+    }
+    @media (max-width: 520px){
+      .heroTitle{font-size:26px;}
     }
 
-    .sub{
-      margin:0;
+    .heroSub{
+      margin:0 0 14px;
       color:var(--muted);
-      line-height:1.5;
-      font-size:14px;
+      line-height:1.55;
+      font-size:15px;
+      max-width: 56ch;
     }
 
     .btn{
@@ -138,7 +144,7 @@
       padding:11px 14px;
       border-radius:14px;
       cursor:pointer;
-      font-weight:800;
+      font-weight:900;
       transition: transform .08s ease, border-color .15s ease, filter .15s ease;
       text-decoration:none;
       display:inline-flex;
@@ -156,6 +162,16 @@
     .btn.primary:hover{filter:brightness(1.02);}
     .btn[disabled]{opacity:.55; cursor:not-allowed; transform:none !important;}
 
+    /* ✅ NOVO: CTA grande (65+) */
+    .btn.bigCta{
+      padding:16px 18px;
+      font-size:16px;
+      border-radius:16px;
+      width: min(420px, 100%);
+      justify-content:center;
+      box-shadow: 0 14px 34px rgba(0,0,0,.28);
+    }
+
     .content{padding:18px;}
 
     .progress{
@@ -164,7 +180,7 @@
       overflow:hidden;
       background: rgba(0,0,0,.25);
       border:1px solid var(--stroke);
-      margin: 2px 0 16px;
+      margin: 2px 0 10px;
     }
     .bar{
       height:100%;
@@ -173,9 +189,63 @@
       transition: width .25s ease;
     }
 
+    /* ✅ texto motivador do progresso */
+    .progressText{
+      font-size:12px;
+      color: rgba(255,255,255,.78);
+      line-height:1.5;
+      margin: 0 0 16px;
+    }
+    .progressText b{color: rgba(255,255,255,.92);}
+
     .qline{
       font-size:16px;
-      margin: 2px 0 12px;
+      margin: 2px 0 10px;
+    }
+
+    /* micro reforço na pergunta 1 */
+    .micro{
+      font-size:12px;
+      color: rgba(255,255,255,.78);
+      line-height:1.5;
+      margin: 0 0 12px;
+    }
+
+    /* ✅ NOVO: checklist anti-ansiedade */
+    .checklist{
+      margin-top:12px;
+      padding:12px 12px;
+      border-radius:16px;
+      border:1px solid var(--stroke);
+      background: rgba(0,0,0,.14);
+      color: rgba(255,255,255,.86);
+      font-size:13px;
+      line-height:1.55;
+      max-width: 520px;
+    }
+    .checklist ul{margin:0; padding-left:18px;}
+    .checklist li{margin:6px 0;}
+
+    /* ✅ NOVO: prova de confiança */
+    .trust{
+      margin-top:12px;
+      padding:14px;
+      border-radius: var(--radius);
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.06);
+      max-width: 720px;
+    }
+    .trustTitle{
+      margin:0 0 6px;
+      font-weight:950;
+      letter-spacing:-0.2px;
+      font-size:14px;
+    }
+    .trustText{
+      margin:0;
+      color: rgba(255,255,255,.82);
+      line-height:1.55;
+      font-size:13px;
     }
 
     .opts{
@@ -206,6 +276,15 @@
       line-height:1.5;
     }
 
+    .navRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      margin-top:12px;
+    }
+
     .grid{
       display:grid;
       grid-template-columns: 1.1fr .9fr;
@@ -224,7 +303,7 @@
 
     .resultTitle{
       font-size:22px;
-      font-weight:900;
+      font-weight:950;
       margin:0 0 6px;
       letter-spacing:-0.5px;
     }
@@ -255,7 +334,20 @@
     .bullets{margin:10px 0 0; padding-left:18px; color: rgba(255,255,255,.84);}
     .bullets li{margin:6px 0;}
 
-    .bookTitle{font-weight:900; margin:0 0 6px; font-size:15px;}
+    /* ✅ NOVO: transição resultado -> livro */
+    .bridge{
+      margin-top:12px;
+      padding:12px;
+      border-radius:16px;
+      border:1px solid var(--stroke);
+      background: rgba(0,0,0,.12);
+      color: rgba(255,255,255,.88);
+      line-height:1.55;
+      font-size:13px;
+    }
+    .bridge b{color: rgba(255,255,255,.95);}
+
+    .bookTitle{font-weight:950; margin:0 0 6px; font-size:15px;}
     .bookSub{margin:0 0 12px; color:var(--muted); line-height:1.45; font-size:13px;}
 
     .coverWrap{
@@ -291,10 +383,17 @@
       border-radius:16px;
     }
 
+    /* ✅ NOVO: CTA suave */
+    .ctaBigText{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+    }
+
     .tiny{font-size:12px; color: var(--muted); margin-top:8px; line-height:1.5;}
     .divider{height:1px; background: var(--stroke); margin:12px 0;}
 
-    /* NOVO: organização da recomendação */
     .sectionTitle{
       font-size:12px;
       text-transform:uppercase;
@@ -305,7 +404,7 @@
     .miniDivider{height:1px; background: var(--stroke); margin:14px 0;}
     .toggleRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;}
 
-    /* ✅ NOVO: bloco Instagram */
+    /* ✅ Instagram */
     .igBox{
       margin-top:14px;
       padding:14px;
@@ -346,13 +445,43 @@
 
     <div class="shell" id="app">
       <div class="hero">
-        <div style="min-width:280px; flex:1 1 540px;">
-          <p class="headline">Descubra seu temperamento dominante e tenha um caminho prático para o equilíbrio emocional.</p>
-          <p class="sub">Responda do jeito mais honesto possível. No final, você verá seu resultado, pontos-chave e o livro recomendado para começar.</p>
+        <div style="min-width:280px; flex:1 1 620px;">
+          <!-- ✅ 1) Primeira dobra (modelo pronto) -->
+          <h2 class="heroTitle">Descubra seu temperamento dominante em poucos minutos</h2>
+          <p class="heroSub">Um teste simples de 25 perguntas com resultado imediato, baseado no modelo clássico dos temperamentos.</p>
+
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            <button type="button" class="btn" id="restartBtnTop" style="display:none;">Refazer</button>
+
+            <!-- ✅ Botão principal grande e claro -->
+            <button type="button" class="btn primary bigCta" id="startBtn">👉 Começar o teste agora</button>
+          </div>
+
+          <!-- ✅ 2) reduzir ansiedade -->
+          <div class="checklist" id="preChecklist">
+            <ul>
+              <li>✔️ Leva cerca de 2 minutos</li>
+              <li>✔️ Resultado aparece no final</li>
+              <li>✔️ Sem cadastro obrigatório</li>
+              <li>✔️ Você pode sair quando quiser</li>
+            </ul>
+          </div>
+
+          <!-- ✅ 3) prova de confiança -->
+          <div class="trust" id="trustBox">
+            <p class="trustTitle">Por que confiar?</p>
+            <p class="trustText">
+              Criado por <b>Leonardo Monteiro</b>, autor da série <b>O Guia Prático dos Temperamentos</b>.
+              Baseado no <b>modelo clássico dos quatro temperamentos</b>, usado há séculos para autoconhecimento.
+            </p>
+          </div>
         </div>
-        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-          <button type="button" class="btn" id="restartBtnTop" style="display:none;">Refazer</button>
-          <button type="button" class="btn primary" id="startBtn">Começar agora</button>
+
+        <div style="min-width:240px; flex:0 0 260px; display:flex; justify-content:flex-end; align-items:flex-start;">
+          <div class="badge" title="Observação importante" style="margin-top:6px;">
+            <span>✅</span>
+            <span>Resultado imediato (sem cadastro)</span>
+          </div>
         </div>
       </div>
 
@@ -361,10 +490,18 @@
           <div class="bar" id="bar"></div>
         </div>
 
+        <div class="progressText" id="progressText" style="display:none;"></div>
+
         <div id="screen-quiz" style="display:none;">
           <div class="qline" id="question"></div>
+          <div class="micro" id="microHint" style="display:none;"></div>
+
           <div class="opts" id="options"></div>
-          <div class="help">Dica: responda como você é <b>na maior parte do tempo</b> (não apenas em um dia específico).</div>
+
+          <div class="navRow">
+            <div class="help">Dica: responda como você é <b>na maior parte do tempo</b> (não apenas em um dia específico).</div>
+            <button type="button" class="btn" id="backBtn" disabled>⬅️ Voltar 1</button>
+          </div>
         </div>
 
         <div id="screen-result" style="display:none;">
@@ -374,22 +511,28 @@
               <div class="muted" id="resultText"></div>
               <div class="pills" id="traits"></div>
 
+              <!-- ✅ 4) transição resultado -> livro -->
+              <div class="bridge">
+                <b>Quer aprofundar esse resultado?</b><br>
+                Muitas pessoas sentem que o teste revela <b>o que são</b>, mas o livro mostra <b>como lidar com isso no dia a dia</b>.
+              </div>
+
               <div class="proof">
-                <b>Coleção de guias práticos por temperamento</b> — focada em clareza, hábitos e equilíbrio emocional.
+                <b>Um guia prático, direto</b> — pensado para leitura simples e aplicação no dia a dia.
                 <ul class="bullets">
                   <li>Entenda seu padrão (sem culpa) e o “ponto de ajuste” mais importante.</li>
                   <li>Estratégias simples e aplicáveis no dia a dia.</li>
-                  <li>Leitura direta, com foco em mudança prática.</li>
+                  <li><b>Compra segura pela Amazon</b>.</li>
                 </ul>
               </div>
 
               <div class="ctaRow">
+                <!-- ✅ 6) CTA suave (não "Comprar agora") -->
                 <a class="btn primary ctaBig" id="ctaBig" href="#" target="_blank" rel="noopener">
-                  Quero o guia do meu temperamento na Amazon
+                  <span class="ctaBigText">✨ Continuar minha jornada (ver o guia recomendado)</span>
                 </a>
               </div>
 
-              <!-- NOVO: nota aparece só quando o principal for Melancólico -->
               <div class="tiny" id="melNote" style="display:none;">
                 Se o seu resultado for Melancólico, o livro entra no ar em <b>17 de janeiro</b>.
               </div>
@@ -417,7 +560,6 @@
             </div>
           </div>
 
-          <!-- ✅ NOVO: Instagram no final do resultado -->
           <div class="igBox">
             <div class="igRow">
               <p class="igText">
@@ -439,14 +581,14 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  // ✅ Instagram (já preenchido)
+  // ✅ Instagram
   const INSTAGRAM_URL = "https://instagram.com/leonardomobarreto";
   const INSTAGRAM_HANDLE = "@leonardomobarreto";
   const igLink = document.getElementById("igLink");
   igLink.href = INSTAGRAM_URL;
   igLink.textContent = "📷 " + INSTAGRAM_HANDLE;
 
-  // ✅ Função segura de evento GA4
+  // ✅ GA4
   function track(name, params){
     try{
       if(typeof gtag === "function"){
@@ -455,24 +597,6 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch(e){}
   }
 
-  // ✅ rastrear cliques (Amazon + Instagram)
-  document.addEventListener("click", (e) => {
-    const a = e.target && e.target.closest ? e.target.closest("a") : null;
-    if(!a || !a.href) return;
-
-    if(a.href.includes("amazon.com.br")){
-      track("amazon_click", {
-        link_url: a.href,
-        placement: (a.id === "ctaBig") ? "cta_big" : "book_card"
-      });
-    }
-
-    if(a.id === "igLink" || a.href.includes("instagram.com")){
-      track("instagram_click", { link_url: a.href });
-    }
-  });
-
-  // Rastreamento simples (UTM) - ajuda a medir a origem no link da Amazon
   const UTM_BASE = { utm_source: "teste_temperamentos", utm_medium: "site", utm_campaign: "resultado" };
 
   function withParams(url, params){
@@ -486,6 +610,39 @@ document.addEventListener("DOMContentLoaded", () => {
       return url + sep + q;
     }
   }
+
+  function getBookKeyFromAnchor(a){
+    if(!a) return null;
+    const dk = a.getAttribute("data-book");
+    if(dk) return dk;
+    try{
+      const u = new URL(a.href);
+      return u.searchParams.get("utm_content");
+    } catch(e){
+      const m = String(a.href || "").match(/utm_content=([^&]+)/i);
+      return m ? decodeURIComponent(m[1]) : null;
+    }
+  }
+
+  // ✅ cliques (Amazon + Instagram) com book_key
+  document.addEventListener("click", (e) => {
+    const a = e.target && e.target.closest ? e.target.closest("a") : null;
+    if(!a || !a.href) return;
+
+    if(a.href.includes("amazon.com.br")){
+      const book_key = getBookKeyFromAnchor(a) || (a.id === "ctaBig" ? (state.lastKey || null) : null);
+
+      track("amazon_click", {
+        link_url: a.href,
+        placement: (a.id === "ctaBig") ? "cta_big" : "book_card",
+        book_key: book_key || "unknown"
+      });
+    }
+
+    if(a.id === "igLink" || a.href.includes("instagram.com")){
+      track("instagram_click", { link_url: a.href });
+    }
+  });
 
   const BOOKS = {
     colerico: {
@@ -672,6 +829,7 @@ document.addEventListener("DOMContentLoaded", () => {
     i: 0,
     score: { colerico:0, fleumatico:0, sanguineo:0, melancolico:0 },
     picks: { colerico:0, fleumatico:0, sanguineo:0, melancolico:0 },
+    answers: [],
     lastKey: null
   };
 
@@ -685,7 +843,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const restartBtnTop = document.getElementById("restartBtnTop");
   const ctaBig = document.getElementById("ctaBig");
 
-  // containers dos cards
+  const progressText = document.getElementById("progressText");
+  const microHint = document.getElementById("microHint");
+  const backBtn = document.getElementById("backBtn");
+
   const elBookPrimary = document.getElementById("bookPrimary");
   const elBookSecondary = document.getElementById("bookSecondary");
   const elBookAll = document.getElementById("bookAll");
@@ -696,24 +857,43 @@ document.addEventListener("DOMContentLoaded", () => {
   function setProgress(){
     const p = Math.round((state.i / QUESTIONS.length) * 100);
     elBar.style.width = p + "%";
+
+    const remaining = Math.max(QUESTIONS.length - state.i, 0);
+    if(screenQuiz.style.display === "block"){
+      progressText.style.display = "block";
+      let msg = `Faltam <b>${remaining}</b> perguntas para ver seu resultado.`;
+      if(state.i === 9) msg += ` <b>Você está indo bem</b> — continue!`;
+      if(state.i === 17) msg += ` Falta pouco. <b>Segura mais um pouco</b> 🙂`;
+      progressText.innerHTML = msg;
+    } else {
+      progressText.style.display = "none";
+      progressText.innerHTML = "";
+    }
+
+    backBtn.disabled = state.answers.length === 0;
   }
 
   function reset(){
     state.i = 0;
     state.score = { colerico:0, fleumatico:0, sanguineo:0, melancolico:0 };
     state.picks = { colerico:0, fleumatico:0, sanguineo:0, melancolico:0 };
+    state.answers = [];
     state.lastKey = null;
 
     elBar.style.width = "0%";
+    progressText.style.display = "none";
+    progressText.innerHTML = "";
+
     screenQuiz.style.display = "none";
     screenResult.style.display = "none";
     startBtn.style.display = "inline-flex";
     restartBtnTop.style.display = "none";
 
     ctaBig.href = "#";
-    ctaBig.textContent = "Quero o guia do meu temperamento na Amazon";
+    ctaBig.textContent = "✨ Continuar minha jornada (ver o guia recomendado)";
     ctaBig.style.pointerEvents = "none";
     ctaBig.style.opacity = ".75";
+    ctaBig.removeAttribute("data-book");
 
     elBookPrimary.innerHTML = "";
     elBookSecondary.innerHTML = "";
@@ -721,13 +901,26 @@ document.addEventListener("DOMContentLoaded", () => {
     allBooksBox.style.display = "none";
     toggleAllBtn.textContent = "Ver coleção completa";
     melNote.style.display = "none";
+
+    microHint.style.display = "none";
+    microHint.innerHTML = "";
+    backBtn.disabled = true;
   }
 
   function renderQuestion(){
     setProgress();
     const item = QUESTIONS[state.i];
+
     elQ.innerHTML = `<b>${state.i+1}/${QUESTIONS.length}</b> — ${item.q}`;
     elO.innerHTML = "";
+
+    if(state.i === 0){
+      microHint.style.display = "block";
+      microHint.innerHTML = `Leva ~<b>2 minutos</b>. No final você recebe o <b>livro ideal</b> para começar.`;
+    } else {
+      microHint.style.display = "none";
+      microHint.innerHTML = "";
+    }
 
     item.o.forEach((opt) => {
       const btn = document.createElement("button");
@@ -735,6 +928,9 @@ document.addEventListener("DOMContentLoaded", () => {
       btn.className = "opt";
       btn.textContent = opt.t;
       btn.addEventListener("click", () => {
+        track("question_answer", { q_index: state.i + 1, choice: opt.k });
+
+        state.answers.push(opt.k);
         state.score[opt.k] += 2;
         state.picks[opt.k] += 1;
         state.i += 1;
@@ -746,7 +942,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ranking determinístico (score > picks > ordem fixa)
+  function goBackOne(){
+    if(state.answers.length === 0) return;
+    state.i = Math.max(state.i - 1, 0);
+
+    const last = state.answers.pop();
+    if(last){
+      state.score[last] = Math.max(state.score[last] - 2, 0);
+      state.picks[last] = Math.max(state.picks[last] - 1, 0);
+    }
+    renderQuestion();
+  }
+
   function rankTemperaments(){
     const order = ["colerico","melancolico","sanguineo","fleumatico"];
     return order.slice().sort((a,b) => {
@@ -756,12 +963,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // top1 e top2
   function topTwoTemperaments(){
     const ranked = rankTemperaments();
     const primary = ranked[0];
 
-    // Regra especial: se marcou 25/25 no mesmo temperamento, use o par como alternativa
     const allSame = state.picks[primary] === QUESTIONS.length;
     const pairMap = {
       melancolico: "fleumatico",
@@ -813,7 +1018,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderBookCard(key, opts = {}){
     const b = BOOKS[key];
-    const buttonLabel = opts.buttonLabel || "Ver na Amazon";
+    const buttonLabel = opts.buttonLabel || "Ver o guia recomendado";
 
     const cover = b.coverSrc ? `
       <div class="cover">
@@ -830,19 +1035,18 @@ document.addEventListener("DOMContentLoaded", () => {
         <div style="flex:1 1 220px; min-width:220px;">
           <div class="bookTitle">${b.title}</div>
           <div class="bookSub">${b.subtitle}</div>
-          <a class="btn primary" href="${link}" target="_blank" rel="noopener">${buttonLabel}</a>
+          <a class="btn primary" data-book="${key}" href="${link}" target="_blank" rel="noopener">${buttonLabel}</a>
         </div>
       </div>
     `;
   }
 
-  // coleção completa (apenas quando expandir)
   function renderAllBooks(){
     const keys = ["colerico","fleumatico","sanguineo","melancolico"];
     return keys.map(k => {
       return `
         <div style="margin-bottom:14px;">
-          ${renderBookCard(k, { buttonLabel: "Ver na Amazon" })}
+          ${renderBookCard(k, { buttonLabel: "Ver o guia recomendado" })}
         </div>
       `;
     }).join("");
@@ -850,47 +1054,48 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function showResult(){
     elBar.style.width = "100%";
+    progressText.style.display = "none";
+    progressText.innerHTML = "";
 
     const [primary, secondary] = topTwoTemperaments();
     state.lastKey = primary;
 
-    // Resultado textual segue o dominante (primary)
     const copy = resultCopy(primary);
     document.getElementById("resultTitle").textContent = copy.title;
     document.getElementById("resultText").textContent = copy.text;
     document.getElementById("traits").innerHTML = copy.traits.map(t => `<span class="pill">${t}</span>`).join("");
 
-    // 1 recomendado + 1 alternativa
-    elBookPrimary.innerHTML = renderBookCard(primary, { buttonLabel: "Ver na Amazon" });
-    elBookSecondary.innerHTML = renderBookCard(secondary, { buttonLabel: "Ver na Amazon" });
+    elBookPrimary.innerHTML = renderBookCard(primary, { buttonLabel: "Ver o guia recomendado" });
+    elBookSecondary.innerHTML = renderBookCard(secondary, { buttonLabel: "Ver o guia recomendado" });
 
-    // CTA grande: prioriza o principal; se não tiver link, usa alternativa
     const linkPrimary = amazonLinkFor(primary);
     const linkSecondary = amazonLinkFor(secondary);
 
     if(linkPrimary){
       ctaBig.href = linkPrimary;
-      ctaBig.textContent = "Quero o guia do meu temperamento na Amazon";
+      ctaBig.setAttribute("data-book", primary);
+      ctaBig.innerHTML = `<span class="ctaBigText">✨ Quero aprofundar meu temperamento (ver o guia recomendado)</span>`;
       ctaBig.style.pointerEvents = "auto";
       ctaBig.style.opacity = "1";
     } else if(linkSecondary){
       ctaBig.href = linkSecondary;
-      ctaBig.textContent = "Meu principal está em breve — ver alternativa na Amazon";
+      ctaBig.setAttribute("data-book", secondary);
+      ctaBig.innerHTML = `<span class="ctaBigText">✨ Meu principal está em breve — ver o guia recomendado</span>`;
       ctaBig.style.pointerEvents = "auto";
       ctaBig.style.opacity = "1";
     } else {
       ctaBig.href = "#";
-      ctaBig.textContent = "Em breve na Amazon";
+      ctaBig.removeAttribute("data-book");
+      ctaBig.innerHTML = `<span class="ctaBigText">Em breve na Amazon</span>`;
       ctaBig.style.pointerEvents = "none";
       ctaBig.style.opacity = ".75";
     }
 
-    melNote.style.display = "none";
+    melNote.style.display = (primary === "melancolico") ? "block" : "none";
 
     screenQuiz.style.display = "none";
     screenResult.style.display = "block";
 
-    // ✅ Evento quando o resultado aparece (opcional)
     track("result_view", { primary: primary, secondary: secondary });
   }
 
@@ -899,10 +1104,10 @@ document.addEventListener("DOMContentLoaded", () => {
     restartBtnTop.style.display = "inline-flex";
     screenResult.style.display = "none";
     screenQuiz.style.display = "block";
+    setProgress();
     renderQuestion();
   }
 
-  // toggle coleção completa
   toggleAllBtn.addEventListener("click", () => {
     const isOpen = allBooksBox.style.display === "block";
     if(isOpen){
@@ -916,6 +1121,8 @@ document.addEventListener("DOMContentLoaded", () => {
     allBooksBox.style.display = "block";
     toggleAllBtn.textContent = "Ocultar coleção";
   });
+
+  backBtn.addEventListener("click", goBackOne);
 
   startBtn.addEventListener("click", start);
   restartBtn.addEventListener("click", () => { reset(); start(); });
