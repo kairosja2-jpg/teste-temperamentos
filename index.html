@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Teste de Temperamento</title>
+  <style>
+    body{font-family:system-ui,Arial; margin:0; background:#0b1220; color:#e9eefc;}
+    .wrap{max-width:820px; margin:0 auto; padding:28px;}
+    .card{background:#111a2e; border:1px solid #223158; border-radius:16px; padding:18px; box-shadow:0 10px 30px rgba(0,0,0,.25);}
+    h1{margin:0 0 8px; font-size:28px;}
+    p{line-height:1.5; opacity:.92}
+    .progress{height:10px; background:#0b1220; border:1px solid #223158; border-radius:999px; overflow:hidden; margin:14px 0;}
+    .bar{height:100%; width:0%; background:#5aa9ff;}
+    .q{font-size:18px; margin:10px 0 12px;}
+    .opts{display:grid; gap:10px;}
+    button.opt{
+      background:#0b1220; color:#e9eefc; border:1px solid #223158; border-radius:14px;
+      padding:12px 12px; text-align:left; cursor:pointer; font-size:15px;
+    }
+    button.opt:hover{border-color:#5aa9ff; transform:translateY(-1px);}
+    .row{display:flex; gap:14px; flex-wrap:wrap; align-items:stretch;}
+    .result{flex:1 1 360px;}
+    .book{flex:1 1 320px;}
+    .pill{display:inline-block; padding:6px 10px; border-radius:999px; border:1px solid #223158; background:#0b1220; margin:6px 6px 0 0;}
+    .cta{
+      display:inline-block; margin-top:12px; padding:12px 14px; border-radius:14px;
+      background:#5aa9ff; color:#061023; font-weight:700; text-decoration:none;
+    }
+    .cta:hover{filter:brightness(1.05)}
+    .email{margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;}
+    input{padding:12px; border-radius:14px; border:1px solid #223158; background:#0b1220; color:#e9eefc; min-width:240px;}
+    .mini{font-size:12px; opacity:.75; margin-top:10px;}
+    .footer{margin-top:18px; font-size:12px; opacity:.7;}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" id="app">
+      <h1>Teste rápido de temperamento</h1>
+      <p>Responda com sinceridade. No final, você verá seu temperamento dominante e a recomendação do livro certo para começar.</p>
+
+      <div class="progress" aria-label="Progresso do teste">
+        <div class="bar" id="bar"></div>
+      </div>
+
+      <div id="screen-quiz">
+        <div class="q" id="question"></div>
+        <div class="opts" id="options"></div>
+        <div class="footer">Leva ~2 minutos. Sem pegadinhas.</div>
+      </div>
+
+      <div id="screen-result" style="display:none;">
+        <div class="row">
+          <div class="card result">
+            <h2 style="margin:0 0 6px;">Seu resultado:</h2>
+            <div id="resultTitle" style="font-size:22px; font-weight:800;"></div>
+            <p id="resultText"></p>
+            <div id="traits"></div>
+
+            <!-- Captura de e-mail (opcional, mas recomendada) -->
+            <div class="email">
+              <input id="email" type="email" placeholder="Seu e-mail (para receber um plano de 7 dias)" />
+              <button class="opt" id="saveEmailBtn" style="text-align:center; font-weight:700;">Quero o plano</button>
+            </div>
+            <div class="mini" id="emailMsg"></div>
+            <div class="mini">Ao enviar, você concorda em receber e-mails e pode sair quando quiser.</div>
+          </div>
+
+          <div class="card book">
+            <h2 style="margin:0 0 6px;">Livro recomendado</h2>
+            <div id="bookCard"></div>
+          </div>
+        </div>
+
+        <div style="margin-top:14px;">
+          <button class="opt" id="restartBtn">Refazer teste</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<script>
+  // 1) Links da Amazon (troque pelos seus links)
+  // Dica: se você tiver afiliado, use o link com tag de afiliado.
+  const BOOKS = {
+    colerico: {
+      title: "O Guia Prático do Temperamento Colérico",
+      subtitle: "Intensidade, liderança e equilíbrio emocional",
+      amazonUrl: "https://www.amazon.com.br/dp/SEU_ASIN_AQUI",
+      // imageUrl pode ser capa hospedada em algum lugar (opcional)
+      imageUrl: ""
+    },
+    fleumatico: {
+      title: "O Guia Prático do Temperamento Fleumático",
+      subtitle: "Constância, presença e equilíbrio emocional",
+      amazonUrl: "https://www.amazon.com.br/dp/SEU_ASIN_AQUI",
+      imageUrl: ""
+    },
+    sanguineo: {
+      title: "O Guia Prático do Temperamento Sanguíneo",
+      subtitle: "Energia, presença e equilíbrio emocional",
+      amazonUrl: "https://www.amazon.com.br/dp/SEU_ASIN_AQUI",
+      imageUrl: ""
+    },
+    melancolico: {
+      title: "O Guia Prático do Temperamento Melancólico",
+      subtitle: "Profundidade, direção e equilíbrio emocional",
+      amazonUrl: "https://www.amazon.com.br/dp/SEU_ASIN_AQUI",
+      imageUrl: ""
+    }
+  };
+
+  // 2) Perguntas (cada opção soma pontos para um temperamento)
+  // Você pode ajustar quantidade e textos depois.
+  const QUESTIONS = [
+    { q: "Em geral, quando surge um problema eu…",
+      o: [
+        { t:"Quero resolver rápido e assumir o controle.", s:{colerico:2} },
+        { t:"Analiso bem antes de agir, pensando nas consequências.", s:{melancolico:2} },
+        { t:"Converso com alguém, alivio a tensão e vou tentando.", s:{sanguineo:2} },
+        { t:"Evito estresse; faço o necessário no meu tempo.", s:{fleumatico:2} },
+      ]
+    },
+    { q: "Quando estou sob pressão, minha tendência é…",
+      o: [
+        { t:"Ficar mais direto e impaciente.", s:{colerico:2} },
+        { t:"Travar por excesso de pensamento/autoexigência.", s:{melancolico:2} },
+        { t:"Dispersar e tentar “levar no humor”.", s:{sanguineo:2} },
+        { t:"Me fechar e adiar decisões.", s:{fleumatico:2} },
+      ]
+    },
+    { q: "No trabalho/estudo, eu costumo ser…",
+      o: [
+        { t:"Focado em metas e resultado.", s:{colerico:2} },
+        { t:"Detalhista, cuidadoso e exigente.", s:{melancolico:2} },
+        { t:"Criativo, comunicativo, começo empolgado.", s:{sanguineo:2} },
+        { t:"Constante quando entra na rotina, mas demoro a começar.", s:{fleumatico:2} },
+      ]
+    },
+    { q: "Em conflitos, normalmente eu…",
+      o: [
+        { t:"Enfrento, falo na hora e defendo meu ponto.", s:{colerico:2} },
+        { t:"Fico remoendo e pensando no que deveria ter dito.", s:{melancolico:2} },
+        { t:"Tento aliviar, mas posso exagerar ou falar demais.", s:{sanguineo:2} },
+        { t:"Evito confronto e cedo para manter a paz.", s:{fleumatico:2} },
+      ]
+    },
+    { q: "Meu maior risco emocional costuma ser…",
+      o: [
+        { t:"Explodir, perder a paciência, controlar demais.", s:{colerico:2} },
+        { t:"Auto-crítica, pessimismo, peso emocional.", s:{melancolico:2} },
+        { t:"Impulsividade, instabilidade, buscar estímulo demais.", s:{sanguineo:2} },
+        { t:"Acomodação, procrastinação, falta de urgência.", s:{fleumatico:2} },
+      ]
+    },
+    { q: "Quando penso em mudar um hábito, eu…",
+      o: [
+        { t:"Crio meta e vou pra cima (às vezes exagero).", s:{colerico:2} },
+        { t:"Planejo tudo e acabo demorando para começar.", s:{melancolico:2} },
+        { t:"Começo animado e depois perco consistência.", s:{sanguineo:2} },
+        { t:"Quero mudar, mas a inércia me segura.", s:{fleumatico:2} },
+      ]
+    }
+  ];
+
+  const state = {
+    i: 0,
+    score: { colerico:0, fleumatico:0, sanguineo:0, melancolico:0 }
+  };
+
+  const elQ = document.getElementById("question");
+  const elO = document.getElementById("options");
+  const elBar = document.getElementById("bar");
+  const screenQuiz = document.getElementById("screen-quiz");
+  const screenResult = document.getElementById("screen-result");
+
+  function progress(){
+    const p = Math.round((state.i / QUESTIONS.length) * 100);
+    elBar.style.width = p + "%";
+  }
+
+  function renderQuestion(){
+    progress();
+    const item = QUESTIONS[state.i];
+    elQ.textContent = (state.i+1) + "/" + QUESTIONS.length + " — " + item.q;
+    elO.innerHTML = "";
+    item.o.forEach((opt) => {
+      const btn = document.createElement("button");
+      btn.className = "opt";
+      btn.textContent = opt.t;
+      btn.onclick = () => {
+        Object.keys(opt.s).forEach(k => state.score[k] += opt.s[k]);
+        state.i++;
+        if(state.i >= QUESTIONS.length) showResult();
+        else renderQuestion();
+      };
+      elO.appendChild(btn);
+    });
+  }
+
+  function dominantTemper(){
+    const entries = Object.entries(state.score);
+    entries.sort((a,b) => b[1]-a[1]);
+    return entries[0][0];
+  }
+
+  function resultCopy(key){
+    const map = {
+      colerico: {
+        title: "Colérico",
+        text: "Você tende a agir com intensidade, direção e foco em resultado. Seu crescimento vem de equilibrar força com presença e autocontrole.",
+        traits: ["Decisão e liderança", "Urgência e ação", "Risco: impaciência/controle"]
+      },
+      melancolico: {
+        title: "Melancólico",
+        text: "Você tem profundidade, sensibilidade e um olhar refinado. Seu crescimento vem de transformar exigência em direção, sem carregar peso desnecessário.",
+        traits: ["Profundidade e análise", "Senso de qualidade", "Risco: autoexigência/travar"]
+      },
+      sanguineo: {
+        title: "Sanguíneo",
+        text: "Você é energia, presença e conexão. Seu crescimento vem de manter consistência e escolher bem onde colocar sua atenção.",
+        traits: ["Comunicação e carisma", "Criatividade e entusiasmo", "Risco: dispersão/impulsos"]
+      },
+      fleumatico: {
+        title: "Fleumático",
+        text: "Você tende à constância e estabilidade quando tem um trilho claro. Seu crescimento vem de ativar iniciativa e urgência sem perder sua paz.",
+        traits: ["Calma e equilíbrio", "Estabilidade na rotina", "Risco: acomodação/procrastinação"]
+      }
+    };
+    return map[key];
+  }
+
+  function renderBookCard(key){
+    const b = BOOKS[key];
+    const img = b.imageUrl
+      ? `<img src="${b.imageUrl}" alt="Capa do livro" style="width:100%; border-radius:12px; border:1px solid #223158; margin-bottom:10px;" />`
+      : "";
+    return `
+      ${img}
+      <div style="font-weight:800; font-size:16px;">${b.title}</div>
+      <div style="opacity:.9; margin-top:4px;">${b.subtitle}</div>
+      <a class="cta" href="${b.amazonUrl}" target="_blank" rel="noopener">Ver na Amazon</a>
+      <div class="mini">Dica: coloque um bônus “envie o comprovante” para aumentar conversão.</div>
+    `;
+  }
+
+  function showResult(){
+    elBar.style.width = "100%";
+    const key = dominantTemper();
+    const copy = resultCopy(key);
+
+    document.getElementById("resultTitle").textContent = copy.title;
+    document.getElementById("resultText").textContent = copy.text;
+
+    const traits = document.getElementById("traits");
+    traits.innerHTML = copy.traits.map(t => `<span class="pill">${t}</span>`).join("");
+
+    document.getElementById("bookCard").innerHTML = renderBookCard(key);
+
+    screenQuiz.style.display = "none";
+    screenResult.style.display = "block";
+  }
+
+  // Captura de e-mail (demo)
+  // Troque por integração real (Mailchimp/Brevo/ConvertKit) via webhook/Forms
+  document.getElementById("saveEmailBtn").addEventListener("click", () => {
+    const email = document.getElementById("email").value.trim();
+    const msg = document.getElementById("emailMsg");
+    if(!email || !email.includes("@")) {
+      msg.textContent = "Digite um e-mail válido 🙂";
+      return;
+    }
+    // Aqui você faria um POST para seu endpoint / ferramenta de e-mail.
+    // Exemplo: fetch("https://seu-endpoint.com/subscribe", {method:"POST", headers:{...}, body: JSON.stringify({email})})
+    msg.textContent = "Perfeito! Em breve você recebe o plano de 7 dias no seu e-mail.";
+    document.getElementById("email").value = "";
+  });
+
+  document.getElementById("restartBtn").addEventListener("click", () => {
+    state.i = 0;
+    state.score = { colerico:0, fleumatico:0, sanguineo:0, melancolico:0 };
+    screenResult.style.display = "none";
+    screenQuiz.style.display = "block";
+    renderQuestion();
+  });
+
+  renderQuestion();
+</script>
+</body>
+</html>
