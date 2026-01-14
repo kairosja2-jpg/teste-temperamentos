@@ -40,4 +40,640 @@
       inset:0;
       pointer-events:none;
       opacity:.55;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='900'%3E%3Cdefs%3E%3CradialGradient id='g1' cx='30%25' cy='30%25' r='60%25'%3E%3Cstop offset='0%25' stop-color='%2378C7FF' stop-opacity='0.40'/%3E%3Cstop offset='70%25' st
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='900'%3E%3Cdefs%3E%3CradialGradient id='g1' cx='30%25' cy='30%25' r='60%25'%3E%3Cstop offset='0%25' stop-color='%2378C7FF' stop-opacity='0.40'/%3E%3Cstop offset='70%25' stop-color='%23070B14' stop-opacity='0'/%3E%3C/radialGradient%3E%3CradialGradient id='g2' cx='75%25' cy='20%25' r='55%25'%3E%3Cstop offset='0%25' stop-color='%23A6FFCB' stop-opacity='0.28'/%3E%3Cstop offset='70%25' stop-color='%23070B14' stop-opacity='0'/%3E%3C/radialGradient%3E%3CradialGradient id='g3' cx='65%25' cy='85%25' r='60%25'%3E%3Cstop offset='0%25' stop-color='%23AA78FF' stop-opacity='0.22'/%3E%3Cstop offset='70%25' stop-color='%23070B14' stop-opacity='0'/%3E%3C/radialGradient%3E%3Cfilter id='blur'%3E%3CfeGaussianBlur stdDeviation='18'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='1600' height='900' fill='url(%23g1)'/%3E%3Crect width='1600' height='900' fill='url(%23g2)'/%3E%3Crect width='1600' height='900' fill='url(%23g3)'/%3E%3Cg filter='url(%23blur)' opacity='0.55'%3E%3Ccircle cx='210' cy='620' r='160' fill='%2378C7FF' fill-opacity='0.12'/%3E%3Ccircle cx='1280' cy='520' r='220' fill='%23A6FFCB' fill-opacity='0.10'/%3E%3Ccircle cx='980' cy='180' r='180' fill='%23AA78FF' fill-opacity='0.10'/%3E%3C/g%3E%3C/svg%3E");
+      background-size:cover;
+      background-position:center;
+      mix-blend-mode:screen;
+    }
+
+    .wrap{
+      max-width:980px;
+      margin:0 auto;
+      padding:28px 18px 56px;
+      position:relative;
+      z-index:1;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:16px;
+      flex-wrap:wrap;
+    }
+
+    .brand h1{
+      margin:0;
+      font-size:26px;
+      letter-spacing:-0.5px;
+    }
+
+    .brand p{
+      margin:6px 0 0;
+      color:var(--muted);
+      line-height:1.4;
+      font-size:14px;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--stroke);
+      background: rgba(0,0,0,.18);
+      font-size:12px;
+      color: rgba(255,255,255,.86);
+    }
+
+    .shell{
+      border:1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .hero{
+      padding:22px 18px 16px;
+      border-bottom:1px solid var(--stroke);
+      display:flex;
+      gap:18px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    .headline{
+      font-size:22px;
+      margin:0 0 8px;
+      line-height:1.2;
+      letter-spacing:-0.4px;
+    }
+
+    .sub{
+      margin:0;
+      color:var(--muted);
+      line-height:1.5;
+      font-size:14px;
+    }
+
+    .btn{
+      appearance:none;
+      border:1px solid var(--stroke);
+      background: rgba(0,0,0,.18);
+      color:var(--text);
+      padding:11px 14px;
+      border-radius:14px;
+      cursor:pointer;
+      font-weight:800;
+      transition: transform .08s ease, border-color .15s ease, filter .15s ease;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      user-select:none;
+    }
+    .btn:hover{border-color: rgba(120,199,255,.55); transform: translateY(-1px);}
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(120,199,255,.95), rgba(166,255,203,.85));
+      color:#061023;
+      border-color: rgba(255,255,255,.25);
+    }
+    .btn.primary:hover{filter:brightness(1.02);}
+    .btn[disabled]{opacity:.55; cursor:not-allowed; transform:none !important;}
+
+    .content{padding:18px;}
+
+    .progress{
+      height:10px;
+      border-radius:999px;
+      overflow:hidden;
+      background: rgba(0,0,0,.25);
+      border:1px solid var(--stroke);
+      margin: 2px 0 16px;
+    }
+    .bar{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transition: width .25s ease;
+    }
+
+    .qline{
+      font-size:16px;
+      margin: 2px 0 12px;
+    }
+
+    .opts{
+      display:grid;
+      gap:10px;
+      margin-bottom: 10px;
+    }
+
+    .opt{
+      text-align:left;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid var(--stroke);
+      background: rgba(0,0,0,.18);
+      color:var(--text);
+      cursor:pointer;
+      transition: transform .08s ease, border-color .15s ease, background .15s ease;
+    }
+    .opt:hover{
+      transform: translateY(-1px);
+      border-color: rgba(120,199,255,.55);
+      background: rgba(0,0,0,.24);
+    }
+
+    .help{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.5;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:14px;
+    }
+    @media (max-width: 860px){
+      .grid{grid-template-columns: 1fr;}
+    }
+
+    .panel{
+      border:1px solid var(--stroke);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.06);
+      padding:16px;
+    }
+
+    .resultTitle{
+      font-size:22px;
+      font-weight:900;
+      margin:0 0 6px;
+      letter-spacing:-0.5px;
+    }
+
+    .muted{color:var(--muted);}
+
+    .pills{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;}
+    .pill{
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid var(--stroke);
+      background: rgba(0,0,0,.18);
+      font-size:12px;
+      color: rgba(255,255,255,.86);
+    }
+
+    .bookTitle{font-weight:900; margin:0 0 6px; font-size:15px;}
+    .bookSub{margin:0 0 12px; color:var(--muted); line-height:1.45; font-size:13px;}
+
+    .emailRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;}
+    input{
+      padding:12px;
+      border-radius:14px;
+      border:1px solid var(--stroke);
+      background: rgba(0,0,0,.18);
+      color: var(--text);
+      min-width: 260px;
+      outline:none;
+    }
+    input:focus{border-color: rgba(120,199,255,.55);}
+
+    .tiny{font-size:12px; color: var(--muted); margin-top:8px; line-height:1.5;}
+    .divider{height:1px; background: var(--stroke); margin:12px 0;}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <h1>Teste de Temperamento</h1>
+        <p>25 perguntas • resultado imediato • recomendação do livro ideal</p>
+      </div>
+      <div class="badge" title="Observação importante">
+        <span>ℹ️</span>
+        <span>Não é diagnóstico clínico — é um retrato de tendência.</span>
+      </div>
+    </div>
+
+    <div class="shell" id="app">
+      <div class="hero">
+        <div style="min-width:280px; flex:1 1 520px;">
+          <p class="headline">Descubra seu temperamento dominante e tenha um caminho prático para o equilíbrio emocional.</p>
+          <p class="sub">Responda do jeito mais honesto possível. No final, você verá seu resultado, pontos-chave e o livro recomendado para começar.</p>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+          <button type="button" class="btn" id="restartBtnTop" style="display:none;">Refazer</button>
+          <button type="button" class="btn primary" id="startBtn">Começar agora</button>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="progress" aria-label="Progresso do teste">
+          <div class="bar" id="bar"></div>
+        </div>
+
+        <div id="screen-quiz" style="display:none;">
+          <div class="qline" id="question"></div>
+          <div class="opts" id="options"></div>
+          <div class="help">Dica: responda como você é <b>na maior parte do tempo</b> (não apenas em um dia específico).</div>
+        </div>
+
+        <div id="screen-result" style="display:none;">
+          <div class="grid">
+            <div class="panel">
+              <div class="resultTitle" id="resultTitle"></div>
+              <div class="muted" id="resultText"></div>
+              <div class="pills" id="traits"></div>
+
+              <div class="divider"></div>
+
+              <div class="muted" style="font-size:13px;">
+                Quer receber um “plano de 7 dias” do seu temperamento por e-mail?
+              </div>
+
+              <div class="emailRow">
+                <input id="email" type="email" placeholder="Seu e-mail" />
+                <button type="button" class="btn" id="saveEmailBtn">Quero o plano</button>
+              </div>
+              <div class="tiny" id="emailMsg"></div>
+              <div class="tiny">Ao enviar, você concorda em receber e-mails e pode sair quando quiser.</div>
+            </div>
+
+            <div class="panel">
+              <div class="bookTitle">Livro recomendado</div>
+              <div id="bookCard"></div>
+              <div class="tiny">Dica de conversão: ofereça um bônus “envie o comprovante” (PDF extra) para quem comprar.</div>
+            </div>
+          </div>
+
+          <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+            <button type="button" class="btn" id="restartBtn">Refazer teste</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // ===== Links Amazon =====
+  const BOOKS = {
+    colerico: {
+      title: "O Guia Prático do Temperamento Colérico",
+      subtitle: "Intensidade, liderança e equilíbrio emocional",
+      amazonUrl: "https://www.amazon.com.br/Guia-Pr%C3%A1tico-Temperamento-Col%C3%A9rico-Intensidade-ebook/dp/B0GG5RRJS7/ref=sr_1_2?dib=eyJ2IjoiMSJ9.jxJeviaVbqiytA9F0ZmQSxwZbFs29UWkTg6QHJYm5xAap5gnJwXAz1qWxITh2hpKb2-G_4xucb_Nk88xbr7np856oXNi6J2FDDpUqgGwHfA.eEfWnrnqyWUeOwn0yApI7Wip0cYjEVgv7ZQJO-kXxVM&dib_tag=se&qid=1768350307&refinements=p_27%3ALEONARDO+MONTEIRO+DE+OLIVEIRA+BARRETO&s=digital-text&sr=1-2&text=LEONARDO+MONTEIRO+DE+OLIVEIRA+BARRETO"
+    },
+    fleumatico: {
+      title: "O Guia Prático do Temperamento Fleumático",
+      subtitle: "Constância, presença e equilíbrio emocional",
+      amazonUrl: "https://www.amazon.com.br/dp/B0GG6GKNKR/ref=mp_s_a_1_3?dib=eyJ2IjoiMSJ9.B3tayrTchttv12uLe8GPuKr1KIYz8Yfr8c3UNucO0v8IsycbAph4IOUTRC4obqhhJFp93o4JKJgjvssxAGkTbw.16R1wntnc6otqWsY3Is5UBb43DmiFRH8gJJqwCv7AuI&dib_tag=se&qid=1768130117&refinements=p_27%3ALeonardo+Monteiro+de+Oliveira+barreto&s=digital-text&sr=1-3&text=Leonardo+Monteiro+de+Oliveira+barreto"
+    },
+    sanguineo: {
+      title: "O Guia Prático do Temperamento Sanguíneo",
+      subtitle: "Energia, presença e equilíbrio emocional",
+      amazonUrl: "https://www.amazon.com.br/GUIA-PR%C3%81TICO-TEMPERAMENTO-SANGU%C3%8DNEO-equil%C3%ADbrio-ebook/dp/B0GG7RX9D4/ref=sr_1_3?dib=eyJ2IjoiMSJ9.jxJeviaVbqiytA9F0ZmQSxwZbFs29UWkTg6QHJYm5xAap5gnJwXAz1qWxITh2hpKb2-G_4xucb_Nk88xbr7np856oXNi6J2FDDpUqgGwHfA.eEfWnrnqyWUeOwn0yApI7Wip0cYjEVgv7ZQJO-kXxVM&dib_tag=se&qid=1768350330&refinements=p_27%3ALeonardo+Monteiro+de+Oliveira+barreto&s=digital-text&sr=1-3&text=Leonardo+Monteiro+de+Oliveira+barreto"
+    },
+    melancolico: {
+      title: "O Guia Prático do Temperamento Melancólico",
+      subtitle: "Profundidade, direção e equilíbrio emocional",
+      amazonUrl: null,
+      comingSoon: "Publicação: 17 de janeiro"
+    }
+  };
+
+  // ===== 25 perguntas =====
+  const QUESTIONS = [
+    { q:"Quando surge um problema, minha primeira reação é…", o:[
+      {t:"Resolver rápido e assumir a direção.", k:"colerico"},
+      {t:"Analisar com calma antes de agir.", k:"melancolico"},
+      {t:"Conversar e aliviar o clima enquanto penso.", k:"sanguineo"},
+      {t:"Evitar estresse e agir no meu ritmo.", k:"fleumatico"},
+    ]},
+    { q:"Sob pressão, eu tendo a…", o:[
+      {t:"Ficar direto e impaciente.", k:"colerico"},
+      {t:"Travar por excesso de pensamento/autoexigência.", k:"melancolico"},
+      {t:"Dispersar e buscar estímulo/novidade.", k:"sanguineo"},
+      {t:"Me fechar e adiar decisões.", k:"fleumatico"},
+    ]},
+    { q:"No trabalho/estudo, eu me identifico mais com…", o:[
+      {t:"Meta, resultado e execução.", k:"colerico"},
+      {t:"Qualidade, detalhe e padrão alto.", k:"melancolico"},
+      {t:"Ideias, conexão e comunicação.", k:"sanguineo"},
+      {t:"Constância, estabilidade e rotina.", k:"fleumatico"},
+    ]},
+    { q:"Em conflitos, normalmente eu…", o:[
+      {t:"Enfrento e falo na hora.", k:"colerico"},
+      {t:"Reflito demais e depois penso no que deveria ter dito.", k:"melancolico"},
+      {t:"Tento aliviar com humor, mas às vezes exagero.", k:"sanguineo"},
+      {t:"Evito confronto e cedo para manter a paz.", k:"fleumatico"},
+    ]},
+    { q:"Meu maior risco emocional tende a ser…", o:[
+      {t:"Explodir, controlar demais ou endurecer.", k:"colerico"},
+      {t:"Auto-crítica, pessimismo ou peso emocional.", k:"melancolico"},
+      {t:"Impulsividade, instabilidade e excesso de estímulo.", k:"sanguineo"},
+      {t:"Acomodação, procrastinação e baixa urgência.", k:"fleumatico"},
+    ]},
+    { q:"Quando penso em mudar um hábito, eu…", o:[
+      {t:"Crio meta e vou pra cima (às vezes exagero).", k:"colerico"},
+      {t:"Planejo tudo e demoro a começar.", k:"melancolico"},
+      {t:"Começo animado e depois perco consistência.", k:"sanguineo"},
+      {t:"Quero mudar, mas a inércia me segura.", k:"fleumatico"},
+    ]},
+    { q:"Meu estilo de decisão é mais…", o:[
+      {t:"Rápido e assertivo.", k:"colerico"},
+      {t:"Cauteloso e criterioso.", k:"melancolico"},
+      {t:"Intuitivo e influenciado pelo momento.", k:"sanguineo"},
+      {t:"Lento, buscando o caminho mais confortável.", k:"fleumatico"},
+    ]},
+    { q:"Quando algo sai do plano, eu…", o:[
+      {t:"Ajusto e sigo, sem muita paciência.", k:"colerico"},
+      {t:"Sinto incômodo e quero entender o porquê.", k:"melancolico"},
+      {t:"Improviso e tento tornar leve.", k:"sanguineo"},
+      {t:"Fico desconfortável e tento evitar mudanças.", k:"fleumatico"},
+    ]},
+    { q:"Minha energia social costuma ser…", o:[
+      {t:"Direta: falo pouco, mas objetivo.", k:"colerico"},
+      {t:"Reservada: escolho bem com quem me abro.", k:"melancolico"},
+      {t:"Alta: gosto de conversar e estar com gente.", k:"sanguineo"},
+      {t:"Baixa: prefiro paz e poucos estímulos.", k:"fleumatico"},
+    ]},
+    { q:"Quando alguém me critica, eu…", o:[
+      {t:"Rebato ou justifico na hora.", k:"colerico"},
+      {t:"Levo pro pessoal e fico remoendo.", k:"melancolico"},
+      {t:"Desvio com humor, mas posso sentir depois.", k:"sanguineo"},
+      {t:"Concordo para encerrar e evitar atrito.", k:"fleumatico"},
+    ]},
+    { q:"O que mais me move é…", o:[
+      {t:"Conquista e progresso.", k:"colerico"},
+      {t:"Significado e profundidade.", k:"melancolico"},
+      {t:"Experiências e conexão.", k:"sanguineo"},
+      {t:"Tranquilidade e estabilidade.", k:"fleumatico"},
+    ]},
+    { q:"Quando tenho tempo livre, eu prefiro…", o:[
+      {t:"Adiantar tarefas e metas.", k:"colerico"},
+      {t:"Ler/pensar/organizar algo com calma.", k:"melancolico"},
+      {t:"Sair, ver gente, fazer algo divertido.", k:"sanguineo"},
+      {t:"Descansar e ficar em paz.", k:"fleumatico"},
+    ]},
+    { q:"Meu padrão em projetos é…", o:[
+      {t:"Começar rápido e cobrar ritmo.", k:"colerico"},
+      {t:"Começar quando estiver bem planejado.", k:"melancolico"},
+      {t:"Começar empolgado e mudar fácil de foco.", k:"sanguineo"},
+      {t:"Demorar para iniciar, mas manter quando vira rotina.", k:"fleumatico"},
+    ]},
+    { q:"Minha comunicação tende a ser…", o:[
+      {t:"Direta e firme.", k:"colerico"},
+      {t:"Cuidadosa e precisa.", k:"melancolico"},
+      {t:"Expressiva e espontânea.", k:"sanguineo"},
+      {t:"Calma e econômica.", k:"fleumatico"},
+    ]},
+    { q:"Quando alguém demora para agir, eu…", o:[
+      {t:"Fico irritado e acelero a pessoa.", k:"colerico"},
+      {t:"Me preocupo com qualidade e critério.", k:"melancolico"},
+      {t:"Puxo assunto e tento animar.", k:"sanguineo"},
+      {t:"Entendo e deixo acontecer no tempo.", k:"fleumatico"},
+    ]},
+    { q:"Meu ritmo ideal de vida seria…", o:[
+      {t:"Intenso e com metas claras.", k:"colerico"},
+      {t:"Organizado e com espaço para profundidade.", k:"melancolico"},
+      {t:"Leve, social e com novidades.", k:"sanguineo"},
+      {t:"Estável, previsível e tranquilo.", k:"fleumatico"},
+    ]},
+    { q:"Quando estou triste, eu…", o:[
+      {t:"Tento “resolver” a tristeza rápido.", k:"colerico"},
+      {t:"Mergulho nos pensamentos e emoções.", k:"melancolico"},
+      {t:"Procuro distração e gente.", k:"sanguineo"},
+      {t:"Me desligo e fico quieto.", k:"fleumatico"},
+    ]},
+    { q:"Ao lidar com imprevistos, eu…", o:[
+      {t:"Assumo o controle e redefino o caminho.", k:"colerico"},
+      {t:"Busco entender causas e prevenir repetição.", k:"melancolico"},
+      {t:"Improviso e sigo com flexibilidade.", k:"sanguineo"},
+      {t:"Espero baixar a poeira e faço o básico.", k:"fleumatico"},
+    ]},
+    { q:"Em grupo, geralmente eu sou…", o:[
+      {t:"Quem puxa decisão e direção.", k:"colerico"},
+      {t:"Quem enxerga detalhes e riscos.", k:"melancolico"},
+      {t:"Quem anima e conecta as pessoas.", k:"sanguineo"},
+      {t:"Quem mantém a harmonia e dá suporte.", k:"fleumatico"},
+    ]},
+    { q:"Meu ponto forte mais natural é…", o:[
+      {t:"Coragem para agir.", k:"colerico"},
+      {t:"Profundidade e sensibilidade.", k:"melancolico"},
+      {t:"Carisma e criatividade.", k:"sanguineo"},
+      {t:"Calma e constância.", k:"fleumatico"},
+    ]},
+    { q:"Em tarefas chatas/repetitivas, eu…", o:[
+      {t:"Faço rápido para acabar logo.", k:"colerico"},
+      {t:"Faço com capricho (mesmo sendo chato).", k:"melancolico"},
+      {t:"Enrolo e procuro algo mais interessante.", k:"sanguineo"},
+      {t:"Faço melhor quando vira rotina estável.", k:"fleumatico"},
+    ]},
+    { q:"Quando estou ansioso, eu…", o:[
+      {t:"Viro ação e tentativa de controle.", k:"colerico"},
+      {t:"Viro ruminação e excesso de cenário mental.", k:"melancolico"},
+      {t:"Viro agitação e busca por distração.", k:"sanguineo"},
+      {t:"Viro apatia e adiamento.", k:"fleumatico"},
+    ]},
+    { q:"Meu maior desafio de crescimento é…", o:[
+      {t:"Ser mais paciente e presente.", k:"colerico"},
+      {t:"Ser mais leve e menos exigente comigo.", k:"melancolico"},
+      {t:"Ser mais consistente e focado.", k:"sanguineo"},
+      {t:"Ser mais proativo e urgente quando precisa.", k:"fleumatico"},
+    ]},
+    { q:"Quando penso em equilíbrio emocional, eu preciso mais de…", o:[
+      {t:"Desacelerar e dominar impulsos.", k:"colerico"},
+      {t:"Soltar o peso e ganhar direção prática.", k:"melancolico"},
+      {t:"Canalizar energia e manter constância.", k:"sanguineo"},
+      {t:"Ativar iniciativa e sair da inércia.", k:"fleumatico"},
+    ]},
+    { q:"No fim do dia, o que mais me dá sensação de “vida em ordem” é…", o:[
+      {t:"Ter avançado nas metas.", k:"colerico"},
+      {t:"Ter feito algo com significado e qualidade.", k:"melancolico"},
+      {t:"Ter vivido algo leve e conectado.", k:"sanguineo"},
+      {t:"Ter mantido paz e estabilidade.", k:"fleumatico"},
+    ]},
+  ];
+
+  // ===== Estado =====
+  const state = {
+    started:false,
+    i: 0,
+    score: { colerico:0, fleumatico:0, sanguineo:0, melancolico:0 },
+    picks: { colerico:0, fleumatico:0, sanguineo:0, melancolico:0 }
+  };
+
+  // ===== Elementos =====
+  const elBar = document.getElementById("bar");
+  const elQ = document.getElementById("question");
+  const elO = document.getElementById("options");
+  const screenQuiz = document.getElementById("screen-quiz");
+  const screenResult = document.getElementById("screen-result");
+  const startBtn = document.getElementById("startBtn");
+  const restartBtn = document.getElementById("restartBtn");
+  const restartBtnTop = document.getElementById("restartBtnTop");
+  const emailInput = document.getElementById("email");
+  const emailMsg = document.getElementById("emailMsg");
+
+  function setProgress(){
+    const p = Math.round((state.i / QUESTIONS.length) * 100);
+    elBar.style.width = p + "%";
+  }
+
+  function reset(){
+    state.started = false;
+    state.i = 0;
+    state.score = { colerico:0, fleumatico:0, sanguineo:0, melancolico:0 };
+    state.picks = { colerico:0, fleumatico:0, sanguineo:0, melancolico:0 };
+
+    elBar.style.width = "0%";
+    screenQuiz.style.display = "none";
+    screenResult.style.display = "none";
+    startBtn.style.display = "inline-flex";
+    restartBtnTop.style.display = "none";
+    emailMsg.textContent = "";
+    emailInput.value = "";
+  }
+
+  function renderQuestion(){
+    setProgress();
+    const item = QUESTIONS[state.i];
+    elQ.innerHTML = `<b>${state.i+1}/${QUESTIONS.length}</b> — ${item.q}`;
+    elO.innerHTML = "";
+
+    item.o.forEach((opt) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "opt";
+      btn.textContent = opt.t;
+      btn.addEventListener("click", () => {
+        state.score[opt.k] += 2;
+        state.picks[opt.k] += 1;
+        state.i += 1;
+
+        if(state.i >= QUESTIONS.length) showResult();
+        else renderQuestion();
+      });
+      elO.appendChild(btn);
+    });
+  }
+
+  function dominantTemper(){
+    const entries = Object.entries(state.score).sort((a,b) => b[1]-a[1]);
+    const topScore = entries[0][1];
+    const tied = entries.filter(e => e[1] === topScore).map(e => e[0]);
+
+    if(tied.length === 1) return tied[0];
+
+    // desempate por picks
+    tied.sort((a,b) => state.picks[b]-state.picks[a]);
+    const topPick = state.picks[tied[0]];
+    const tied2 = tied.filter(k => state.picks[k] === topPick);
+
+    const order = ["colerico","melancolico","sanguineo","fleumatico"];
+    tied2.sort((a,b) => order.indexOf(a)-order.indexOf(b));
+    return tied2[0];
+  }
+
+  function resultCopy(key){
+    const map = {
+      colerico: {
+        title: "Seu temperamento dominante é: Colérico",
+        text: "Você tende a agir com intensidade, direção e foco em resultado. Seu crescimento vem de equilibrar força com presença, paciência e autocontrole — sem perder sua potência.",
+        traits: ["Decisão e liderança", "Urgência e ação", "Risco: impaciência/controle", "Crescimento: presença e autocontrole"]
+      },
+      melancolico: {
+        title: "Seu temperamento dominante é: Melancólico",
+        text: "Você tem profundidade, sensibilidade e um olhar refinado. Seu crescimento vem de transformar exigência em direção prática — sem carregar peso desnecessário por tanto tempo.",
+        traits: ["Profundidade e análise", "Senso de qualidade", "Risco: autoexigência/travar", "Crescimento: direção e leveza"]
+      },
+      sanguineo: {
+        title: "Seu temperamento dominante é: Sanguíneo",
+        text: "Você é energia, presença e conexão. Seu crescimento vem de canalizar entusiasmo em constância — escolhendo melhor onde colocar sua atenção, sem apagar sua espontaneidade.",
+        traits: ["Carisma e comunicação", "Criatividade e entusiasmo", "Risco: dispersão/impulsos", "Crescimento: consistência"]
+      },
+      fleumatico: {
+        title: "Seu temperamento dominante é: Fleumático",
+        text: "Você tende à calma e estabilidade quando tem um trilho claro. Seu crescimento vem de ativar iniciativa e urgência quando necessário — sem perder a paz e o equilíbrio.",
+        traits: ["Calma e equilíbrio", "Estabilidade na rotina", "Risco: acomodação/procrastinação", "Crescimento: iniciativa e urgência"]
+      }
+    };
+    return map[key];
+  }
+
+  function renderBookCard(key){
+    const b = BOOKS[key];
+
+    if(key === "melancolico" && !b.amazonUrl){
+      return `
+        <div class="bookTitle">${b.title}</div>
+        <div class="bookSub">${b.subtitle}</div>
+        <div class="pill" style="border-color: rgba(120,199,255,.45);">${b.comingSoon}</div>
+        <div style="margin-top:12px;">
+          <button type="button" class="btn" disabled>Em breve na Amazon</button>
+        </div>
+      `;
+    }
+
+    return `
+      <div class="bookTitle">${b.title}</div>
+      <div class="bookSub">${b.subtitle}</div>
+      <a class="btn primary" href="${b.amazonUrl}" target="_blank" rel="noopener">Ver na Amazon</a>
+    `;
+  }
+
+  function showResult(){
+    elBar.style.width = "100%";
+    const key = dominantTemper();
+    const copy = resultCopy(key);
+
+    document.getElementById("resultTitle").textContent = copy.title;
+    document.getElementById("resultText").textContent = copy.text;
+    document.getElementById("traits").innerHTML = copy.traits.map(t => `<span class="pill">${t}</span>`).join("");
+    document.getElementById("bookCard").innerHTML = renderBookCard(key);
+
+    screenQuiz.style.display = "none";
+    screenResult.style.display = "block";
+  }
+
+  function start(){
+    state.started = true;
+    startBtn.style.display = "none";
+    restartBtnTop.style.display = "inline-flex";
+    screenResult.style.display = "none";
+    screenQuiz.style.display = "block";
+    renderQuestion();
+  }
+
+  // email (demo)
+  document.getElementById("saveEmailBtn").addEventListener("click", () => {
+    const email = emailInput.value.trim();
+    if(!email || !email.includes("@")) {
+      emailMsg.textContent = "Digite um e-mail válido 🙂";
+      return;
+    }
+    emailMsg.textContent = "Perfeito! Em breve você recebe o plano de 7 dias no seu e-mail.";
+    emailInput.value = "";
+  });
+
+  // botões
+  startBtn.addEventListener("click", start);
+  restartBtn.addEventListener("click", () => { reset(); start(); });
+  restartBtnTop.addEventListener("click", () => { reset(); start(); });
+
+  // estado inicial
+  reset();
+});
+</script>
+</body>
+</html>
