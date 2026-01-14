@@ -47,7 +47,7 @@
     }
 
     .wrap{
-      max-width:980px;
+      max-width:1020px;
       margin:0 auto;
       padding:28px 18px 56px;
       position:relative;
@@ -134,6 +134,7 @@
       text-decoration:none;
       display:inline-flex;
       align-items:center;
+      justify-content:center;
       gap:10px;
       user-select:none;
     }
@@ -198,7 +199,7 @@
 
     .grid{
       display:grid;
-      grid-template-columns: 1.2fr .8fr;
+      grid-template-columns: 1.1fr .9fr;
       gap:14px;
     }
     @media (max-width: 860px){
@@ -234,6 +235,24 @@
     .bookTitle{font-weight:900; margin:0 0 6px; font-size:15px;}
     .bookSub{margin:0 0 12px; color:var(--muted); line-height:1.45; font-size:13px;}
 
+    .proof{
+      margin-top:12px;
+      padding:12px;
+      border-radius:16px;
+      border:1px solid var(--stroke);
+      background: rgba(0,0,0,.14);
+      color: rgba(255,255,255,.86);
+      line-height:1.5;
+      font-size:13px;
+    }
+
+    .bullets{
+      margin:10px 0 0;
+      padding-left:18px;
+      color: rgba(255,255,255,.84);
+    }
+    .bullets li{margin:6px 0;}
+
     .emailRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;}
     input{
       padding:12px;
@@ -248,6 +267,19 @@
 
     .tiny{font-size:12px; color: var(--muted); margin-top:8px; line-height:1.5;}
     .divider{height:1px; background: var(--stroke); margin:12px 0;}
+
+    .ctaRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+    .ctaBig{
+      width:100%;
+      padding:14px 16px;
+      font-size:14px;
+      border-radius:16px;
+    }
   </style>
 </head>
 
@@ -266,7 +298,7 @@
 
     <div class="shell" id="app">
       <div class="hero">
-        <div style="min-width:280px; flex:1 1 520px;">
+        <div style="min-width:280px; flex:1 1 540px;">
           <p class="headline">Descubra seu temperamento dominante e tenha um caminho prático para o equilíbrio emocional.</p>
           <p class="sub">Responda do jeito mais honesto possível. No final, você verá seu resultado, pontos-chave e o livro recomendado para começar.</p>
         </div>
@@ -294,24 +326,42 @@
               <div class="muted" id="resultText"></div>
               <div class="pills" id="traits"></div>
 
+              <!-- Prova/autoridade (sem inventar) -->
+              <div class="proof" id="proofBox">
+                <b>Coleção de guias práticos por temperamento</b> — focada em clareza, hábitos e equilíbrio emocional.
+                <ul class="bullets">
+                  <li>Entenda seu padrão (sem culpa) e o “ponto de ajuste” mais importante.</li>
+                  <li>Estratégias simples e aplicáveis no dia a dia.</li>
+                  <li>Leitura direta, com foco em mudança prática.</li>
+                </ul>
+              </div>
+
               <div class="divider"></div>
 
               <div class="muted" style="font-size:13px;">
-                Quer receber um “plano de 7 dias” do seu temperamento por e-mail?
+                Quer receber o <b>Plano de 7 Dias</b> do seu temperamento?
+                <br><span style="font-size:12px;">(1 tarefa por dia • 3–5 minutos • sem enrolação)</span>
               </div>
 
               <div class="emailRow">
                 <input id="email" type="email" placeholder="Seu e-mail" />
-                <button type="button" class="btn" id="saveEmailBtn">Quero o plano</button>
+                <button type="button" class="btn" id="saveEmailBtn">Receber plano</button>
               </div>
               <div class="tiny" id="emailMsg"></div>
               <div class="tiny">Ao enviar, você concorda em receber e-mails e pode sair quando quiser.</div>
+
+              <!-- CTA duplicado (alto impacto) -->
+              <div class="ctaRow">
+                <a class="btn primary ctaBig" id="ctaBig" href="#" target="_blank" rel="noopener">
+                  Quero o guia do meu temperamento na Amazon
+                </a>
+              </div>
             </div>
 
             <div class="panel">
               <div class="bookTitle">Livro recomendado</div>
               <div id="bookCard"></div>
-              <div class="tiny">Dica de conversão: ofereça um bônus “envie o comprovante” (PDF extra) para quem comprar.</div>
+              <div class="tiny">Dica: ofereça um bônus “envie o comprovante” (PDF extra) para quem comprar.</div>
             </div>
           </div>
 
@@ -326,7 +376,42 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  // ===== Links Amazon =====
+  // =========================
+  // PARA ONDE VÃO OS E-MAILS?
+  // - GitHub Pages é estático: sem servidor.
+  // - Para capturar de verdade, você precisa de um endpoint externo.
+  // =========================
+  // OPÇÃO MAIS FÁCIL: Formspree
+  // 1) Crie conta em Formspree e crie um form
+  // 2) Ele te dá um endpoint tipo: https://formspree.io/f/xxxxxxx
+  // 3) Cole aqui:
+  const EMAIL_ENDPOINT = ""; // <- COLE AQUI (ex.: "https://formspree.io/f/xxxxxxx")
+
+  // ==========================
+  // RASTREIO (UTM) nos links
+  // ==========================
+  const UTM_BASE = {
+    utm_source: "teste_temperamentos",
+    utm_medium: "site",
+    utm_campaign: "resultado",
+  };
+
+  function withParams(url, params){
+    try{
+      const u = new URL(url);
+      Object.entries(params).forEach(([k,v]) => u.searchParams.set(k, v));
+      return u.toString();
+    } catch(e){
+      // fallback simples (caso URL já esteja com coisas estranhas)
+      const sep = url.includes("?") ? "&" : "?";
+      const q = Object.entries(params).map(([k,v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`).join("&");
+      return url + sep + q;
+    }
+  }
+
+  // ==========================
+  // LINKS DA AMAZON
+  // ==========================
   const BOOKS = {
     colerico: {
       title: "O Guia Prático do Temperamento Colérico",
@@ -351,7 +436,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // ===== 25 perguntas =====
+  // ==========================
+  // 25 perguntas
+  // ==========================
   const QUESTIONS = [
     { q:"Quando surge um problema, minha primeira reação é…", o:[
       {t:"Resolver rápido e assumir a direção.", k:"colerico"},
@@ -507,10 +594,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ===== Estado =====
   const state = {
-    started:false,
     i: 0,
     score: { colerico:0, fleumatico:0, sanguineo:0, melancolico:0 },
-    picks: { colerico:0, fleumatico:0, sanguineo:0, melancolico:0 }
+    picks: { colerico:0, fleumatico:0, sanguineo:0, melancolico:0 },
+    lastKey: null
   };
 
   // ===== Elementos =====
@@ -524,6 +611,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const restartBtnTop = document.getElementById("restartBtnTop");
   const emailInput = document.getElementById("email");
   const emailMsg = document.getElementById("emailMsg");
+  const ctaBig = document.getElementById("ctaBig");
 
   function setProgress(){
     const p = Math.round((state.i / QUESTIONS.length) * 100);
@@ -531,10 +619,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function reset(){
-    state.started = false;
     state.i = 0;
     state.score = { colerico:0, fleumatico:0, sanguineo:0, melancolico:0 };
     state.picks = { colerico:0, fleumatico:0, sanguineo:0, melancolico:0 };
+    state.lastKey = null;
 
     elBar.style.width = "0%";
     screenQuiz.style.display = "none";
@@ -543,6 +631,8 @@ document.addEventListener("DOMContentLoaded", () => {
     restartBtnTop.style.display = "none";
     emailMsg.textContent = "";
     emailInput.value = "";
+    ctaBig.href = "#";
+    ctaBig.textContent = "Quero o guia do meu temperamento na Amazon";
   }
 
   function renderQuestion(){
@@ -580,6 +670,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const topPick = state.picks[tied[0]];
     const tied2 = tied.filter(k => state.picks[k] === topPick);
 
+    // ordem fixa para desempate final
     const order = ["colerico","melancolico","sanguineo","fleumatico"];
     tied2.sort((a,b) => order.indexOf(a)-order.indexOf(b));
     return tied2[0];
@@ -611,6 +702,13 @@ document.addEventListener("DOMContentLoaded", () => {
     return map[key];
   }
 
+  function amazonLinkFor(key){
+    const b = BOOKS[key];
+    if(!b || !b.amazonUrl) return null;
+    const utm = {...UTM_BASE, utm_content: key};
+    return withParams(b.amazonUrl, utm);
+  }
+
   function renderBookCard(key){
     const b = BOOKS[key];
 
@@ -625,29 +723,44 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
     }
 
+    const link = amazonLinkFor(key);
     return `
       <div class="bookTitle">${b.title}</div>
       <div class="bookSub">${b.subtitle}</div>
-      <a class="btn primary" href="${b.amazonUrl}" target="_blank" rel="noopener">Ver na Amazon</a>
+      <a class="btn primary" href="${link}" target="_blank" rel="noopener">Ver na Amazon</a>
     `;
   }
 
   function showResult(){
     elBar.style.width = "100%";
     const key = dominantTemper();
-    const copy = resultCopy(key);
+    state.lastKey = key;
 
+    const copy = resultCopy(key);
     document.getElementById("resultTitle").textContent = copy.title;
     document.getElementById("resultText").textContent = copy.text;
     document.getElementById("traits").innerHTML = copy.traits.map(t => `<span class="pill">${t}</span>`).join("");
     document.getElementById("bookCard").innerHTML = renderBookCard(key);
+
+    // CTA grande (duplicado)
+    const link = amazonLinkFor(key);
+    if(link){
+      ctaBig.href = link;
+      ctaBig.textContent = "Quero o guia do meu temperamento na Amazon";
+      ctaBig.style.pointerEvents = "auto";
+      ctaBig.style.opacity = "1";
+    } else {
+      ctaBig.href = "#";
+      ctaBig.textContent = "Melancólico: publicação dia 17 de janeiro";
+      ctaBig.style.pointerEvents = "none";
+      ctaBig.style.opacity = ".75";
+    }
 
     screenQuiz.style.display = "none";
     screenResult.style.display = "block";
   }
 
   function start(){
-    state.started = true;
     startBtn.style.display = "none";
     restartBtnTop.style.display = "inline-flex";
     screenResult.style.display = "none";
@@ -655,15 +768,47 @@ document.addEventListener("DOMContentLoaded", () => {
     renderQuestion();
   }
 
-  // email (demo)
-  document.getElementById("saveEmailBtn").addEventListener("click", () => {
+  // ===== Captura de e-mail =====
+  async function submitEmail(email){
+    // Se não configurar endpoint, não envia pra lugar nenhum (explica isso no feedback)
+    if(!EMAIL_ENDPOINT){
+      return {ok:false, msg:"(Ainda não configurado) No momento, o site não está enviando seus e-mails para uma lista. Se você quiser, eu te explico como ligar isso ao Formspree / Brevo / Mailchimp."};
+    }
+
+    // Exemplo Formspree: aceita JSON
+    const payload = {
+      email,
+      source: "site_teste_temperamentos",
+      result: state.lastKey || "",
+      page: location.href
+    };
+
+    const res = await fetch(EMAIL_ENDPOINT, {
+      method: "POST",
+      headers: {"Content-Type":"application/json", "Accept":"application/json"},
+      body: JSON.stringify(payload)
+    });
+
+    if(!res.ok){
+      return {ok:false, msg:"Não consegui enviar agora. Tente novamente em instantes."};
+    }
+    return {ok:true, msg:"Perfeito! Te envio o Plano de 7 Dias no seu e-mail."};
+  }
+
+  document.getElementById("saveEmailBtn").addEventListener("click", async () => {
     const email = emailInput.value.trim();
     if(!email || !email.includes("@")) {
       emailMsg.textContent = "Digite um e-mail válido 🙂";
       return;
     }
-    emailMsg.textContent = "Perfeito! Em breve você recebe o plano de 7 dias no seu e-mail.";
-    emailInput.value = "";
+    emailMsg.textContent = "Enviando…";
+    try{
+      const r = await submitEmail(email);
+      emailMsg.textContent = r.msg;
+      if(r.ok) emailInput.value = "";
+    } catch(e){
+      emailMsg.textContent = "Falha ao enviar. Tente novamente.";
+    }
   });
 
   // botões
