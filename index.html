@@ -432,7 +432,7 @@ document.addEventListener("DOMContentLoaded", () => {
     melancolico: {
       title: "O Guia Prático do Temperamento Melancólico",
       subtitle: "Profundidade, direção e equilíbrio emocional",
-      amazonUrl: null,
+      amazonUrl: "https://www.amazon.com.br/dp/B0GGM288VK/ref=sr_1_2?dib=eyJ2IjoiMSJ9.PnVCv_TezXDKSYHtDSEnvKE0s4lPkpJWlRyWP3lMxkPQpuetp6XoesqOjbl4mgTLZuCS3niVI260gnMVl1YPMv7MmjG5ykrs3byv1NrSmTk.QPofqJ4OlErn_2glsyNESglHhxYzyv0qo9Op4SvjNlo&dib_tag=se&qid=1768356725&refinements=p_27%3ALEONARDO+MONTEIRO+DE+OLIVEIRA+BARRETO&s=digital-text&sr=1-2&text=LEONARDO+MONTEIRO+DE+OLIVEIRA+BARRETO",
       comingSoon: "Publicação: 17 de janeiro",
       coverSrc: "covers/melancolico.webp"
     }
@@ -682,11 +682,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // NOVO: pega top1 e top2
   function topTwoTemperaments(){
-    const ranked = rankTemperaments();
-    const primary = ranked[0];
-    const secondary = ranked.find(k => k !== primary) || ranked[1] || primary;
-    return [primary, secondary];
+  const ranked = rankTemperaments();
+  const primary = ranked[0];
+
+  // Regra especial: se marcou 25/25 no mesmo temperamento, use o par como alternativa
+  const allSame = state.picks[primary] === QUESTIONS.length;
+  const pairMap = {
+    melancolico: "fleumatico",
+    fleumatico: "melancolico",
+    colerico: "sanguineo",
+    sanguineo: "colerico",
+  };
+
+  if(allSame){
+    return [primary, pairMap[primary] || ranked[1] || primary];
   }
+
+  const secondary = ranked.find(k => k !== primary) || ranked[1] || primary;
+  return [primary, secondary];
+}
 
   function resultCopy(key){
     const map = {
@@ -851,3 +865,4 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 </body>
 </html>
+
