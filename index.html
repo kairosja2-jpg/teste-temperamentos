@@ -33,6 +33,7 @@
       overflow-x:hidden;
     }
 
+    /* Fundo abstrato embutido */
     body:before{
       content:"";
       position:fixed;
@@ -350,7 +351,7 @@
             <div class="panel">
               <div class="bookTitle">Livro recomendado</div>
               <div id="bookCard"></div>
-              <div class="tiny">A capa aparece aqui (você precisa upar as imagens na pasta <b>covers</b>).</div>
+              <div class="tiny">Se a capa não aparecer, confira se os arquivos estão em <b>covers/</b> com os nomes corretos.</div>
             </div>
           </div>
 
@@ -365,7 +366,7 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  // UTM simples (rastreamento)
+  // Rastreamento simples (UTM) - não atrapalha o link e ajuda você a medir
   const UTM_BASE = { utm_source: "teste_temperamentos", utm_medium: "site", utm_campaign: "resultado" };
 
   function withParams(url, params){
@@ -627,7 +628,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const entries = Object.entries(state.score).sort((a,b) => b[1]-a[1]);
     const topScore = entries[0][1];
     const tied = entries.filter(e => e[1] === topScore).map(e => e[0]);
-
     if(tied.length === 1) return tied[0];
 
     tied.sort((a,b) => state.picks[b]-state.picks[a]);
@@ -674,10 +674,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderBookCard(key){
     const b = BOOKS[key];
+
     const cover = b.coverSrc ? `
       <div class="cover">
         <img src="${b.coverSrc}" alt="Capa do livro: ${b.title}"
-             onerror="this.onerror=null; this.src=''; this.parentElement.style.display='none';">
+             loading="lazy"
+             onerror="this.onerror=null; this.parentElement.style.display='none';">
       </div>
     ` : "";
 
