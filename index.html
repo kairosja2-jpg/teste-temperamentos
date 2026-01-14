@@ -284,6 +284,17 @@
 
     .tiny{font-size:12px; color: var(--muted); margin-top:8px; line-height:1.5;}
     .divider{height:1px; background: var(--stroke); margin:12px 0;}
+
+    /* NOVO: organização da recomendação */
+    .sectionTitle{
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      color: rgba(255,255,255,.70);
+      margin:0 0 10px;
+    }
+    .miniDivider{height:1px; background: var(--stroke); margin:14px 0;}
+    .toggleRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;}
   </style>
 </head>
 
@@ -345,12 +356,31 @@
                 </a>
               </div>
 
-              <div class="tiny">Se o seu resultado for Melancólico, o livro entra no ar em <b>17 de janeiro</b>.</div>
+              <!-- NOVO: nota aparece só quando o principal for Melancólico -->
+              <div class="tiny" id="melNote" style="display:none;">
+                Se o seu resultado for Melancólico, o livro entra no ar em <b>17 de janeiro</b>.
+              </div>
             </div>
 
             <div class="panel">
-              <div class="bookTitle">Livro recomendado</div>
-              <div id="bookCard"></div>
+              <div class="bookTitle">Recomendação</div>
+
+              <div class="sectionTitle">Principal (seu temperamento dominante)</div>
+              <div id="bookPrimary"></div>
+
+              <div class="miniDivider"></div>
+
+              <div class="sectionTitle">Alternativa (segundo mais provável)</div>
+              <div id="bookSecondary"></div>
+
+              <div class="toggleRow">
+                <button type="button" class="btn" id="toggleAll">Ver coleção completa</button>
+              </div>
+
+              <div id="allBooks" style="display:none; margin-top:12px;">
+                <div class="divider"></div>
+                <div id="bookAll"></div>
+              </div>
             </div>
           </div>
 
@@ -578,6 +608,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const restartBtnTop = document.getElementById("restartBtnTop");
   const ctaBig = document.getElementById("ctaBig");
 
+  // NOVO: containers dos cards
+  const elBookPrimary = document.getElementById("bookPrimary");
+  const elBookSecondary = document.getElementById("bookSecondary");
+  const elBookAll = document.getElementById("bookAll");
+  const toggleAllBtn = document.getElementById("toggleAll");
+  const allBooksBox = document.getElementById("allBooks");
+  const melNote = document.getElementById("melNote");
+
   function setProgress(){
     const p = Math.round((state.i / QUESTIONS.length) * 100);
     elBar.style.width = p + "%";
@@ -594,10 +632,19 @@ document.addEventListener("DOMContentLoaded", () => {
     screenResult.style.display = "none";
     startBtn.style.display = "inline-flex";
     restartBtnTop.style.display = "none";
+
     ctaBig.href = "#";
     ctaBig.textContent = "Quero o guia do meu temperamento na Amazon";
     ctaBig.style.pointerEvents = "none";
     ctaBig.style.opacity = ".75";
+
+    // NOVO: reset dos blocos de recomendação
+    elBookPrimary.innerHTML = "";
+    elBookSecondary.innerHTML = "";
+    elBookAll.innerHTML = "";
+    allBooksBox.style.display = "none";
+    toggleAllBtn.textContent = "Ver coleção completa";
+    melNote.style.display = "none";
   }
 
   function renderQuestion(){
@@ -623,19 +670,22 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function dominantTemper(){
-    const entries = Object.entries(state.score).sort((a,b) => b[1]-a[1]);
-    const topScore = entries[0][1];
-    const tied = entries.filter(e => e[1] === topScore).map(e => e[0]);
-    if(tied.length === 1) return tied[0];
-
-    tied.sort((a,b) => state.picks[b]-state.picks[a]);
-    const topPick = state.picks[tied[0]];
-    const tied2 = tied.filter(k => state.picks[k] === topPick);
-
+  // NOVO: ranking determinístico (score > picks > ordem fixa)
+  function rankTemperaments(){
     const order = ["colerico","melancolico","sanguineo","fleumatico"];
-    tied2.sort((a,b) => order.indexOf(a)-order.indexOf(b));
-    return tied2[0];
+    return order.slice().sort((a,b) => {
+      if(state.score[b] !== state.score[a]) return state.score[b] - state.score[a];
+      if(state.picks[b] !== state.picks[a]) return state.picks[b] - state.picks[a];
+      return order.indexOf(a) - order.indexOf(b);
+    });
+  }
+
+  // NOVO: pega top1 e top2
+  function topTwoTemperaments(){
+    const ranked = rankTemperaments();
+    const primary = ranked[0];
+    const secondary = ranked.find(k => k !== primary) || ranked[1] || primary;
+    return [primary, secondary];
   }
 
   function resultCopy(key){
@@ -671,8 +721,9 @@ document.addEventListener("DOMContentLoaded", () => {
     return withParams(b.amazonUrl, utm);
   }
 
-  function renderBookCard(key){
+  function renderBookCard(key, opts = {}){
     const b = BOOKS[key];
+    const buttonLabel = opts.buttonLabel || "Ver na Amazon";
 
     const cover = b.coverSrc ? `
       <div class="cover">
@@ -705,35 +756,63 @@ document.addEventListener("DOMContentLoaded", () => {
         <div style="flex:1 1 220px; min-width:220px;">
           <div class="bookTitle">${b.title}</div>
           <div class="bookSub">${b.subtitle}</div>
-          <a class="btn primary" href="${link}" target="_blank" rel="noopener">Ver na Amazon</a>
+          <a class="btn primary" href="${link}" target="_blank" rel="noopener">${buttonLabel}</a>
         </div>
       </div>
     `;
   }
 
+  // NOVO: coleção completa (apenas quando expandir)
+  function renderAllBooks(){
+    const keys = ["colerico","fleumatico","sanguineo","melancolico"];
+    return keys.map(k => {
+      return `
+        <div style="margin-bottom:14px;">
+          ${renderBookCard(k, { buttonLabel: "Ver na Amazon" })}
+        </div>
+      `;
+    }).join("");
+  }
+
   function showResult(){
     elBar.style.width = "100%";
-    const key = dominantTemper();
-    state.lastKey = key;
 
-    const copy = resultCopy(key);
+    const [primary, secondary] = topTwoTemperaments();
+    state.lastKey = primary;
+
+    // Resultado textual segue o dominante (primary)
+    const copy = resultCopy(primary);
     document.getElementById("resultTitle").textContent = copy.title;
     document.getElementById("resultText").textContent = copy.text;
     document.getElementById("traits").innerHTML = copy.traits.map(t => `<span class="pill">${t}</span>`).join("");
-    document.getElementById("bookCard").innerHTML = renderBookCard(key);
 
-    const link = amazonLinkFor(key);
-    if(link){
-      ctaBig.href = link;
+    // NOVO: 1 recomendado + 1 alternativa
+    elBookPrimary.innerHTML = renderBookCard(primary, { buttonLabel: "Ver na Amazon" });
+    elBookSecondary.innerHTML = renderBookCard(secondary, { buttonLabel: "Ver na Amazon" });
+
+    // CTA grande: prioriza o principal; se principal não tiver link (Melancólico), usa alternativa se existir
+    const linkPrimary = amazonLinkFor(primary);
+    const linkSecondary = amazonLinkFor(secondary);
+
+    if(linkPrimary){
+      ctaBig.href = linkPrimary;
       ctaBig.textContent = "Quero o guia do meu temperamento na Amazon";
+      ctaBig.style.pointerEvents = "auto";
+      ctaBig.style.opacity = "1";
+    } else if(linkSecondary){
+      ctaBig.href = linkSecondary;
+      ctaBig.textContent = "Meu principal está em breve — ver alternativa na Amazon";
       ctaBig.style.pointerEvents = "auto";
       ctaBig.style.opacity = "1";
     } else {
       ctaBig.href = "#";
-      ctaBig.textContent = "Melancólico: publicação dia 17 de janeiro";
+      ctaBig.textContent = "Em breve na Amazon";
       ctaBig.style.pointerEvents = "none";
       ctaBig.style.opacity = ".75";
     }
+
+    // Nota do Melancólico (só aparece se o dominante for melancólico)
+    melNote.style.display = (primary === "melancolico") ? "block" : "none";
 
     screenQuiz.style.display = "none";
     screenResult.style.display = "block";
@@ -747,6 +826,22 @@ document.addEventListener("DOMContentLoaded", () => {
     renderQuestion();
   }
 
+  // NOVO: toggle coleção completa
+  toggleAllBtn.addEventListener("click", () => {
+    const isOpen = allBooksBox.style.display === "block";
+    if(isOpen){
+      allBooksBox.style.display = "none";
+      toggleAllBtn.textContent = "Ver coleção completa";
+      return;
+    }
+    // Só renderiza quando abrir (melhor performance)
+    if(!elBookAll.innerHTML.trim()){
+      elBookAll.innerHTML = renderAllBooks();
+    }
+    allBooksBox.style.display = "block";
+    toggleAllBtn.textContent = "Ocultar coleção";
+  });
+
   startBtn.addEventListener("click", start);
   restartBtn.addEventListener("click", () => { reset(); start(); });
   restartBtnTop.addEventListener("click", () => { reset(); start(); });
@@ -756,4 +851,3 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 </body>
 </html>
-
