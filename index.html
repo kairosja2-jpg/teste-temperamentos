@@ -17,415 +17,470 @@
 
   <style>
     :root{
-      --bg1:#070B14;
-      --bg2:#0B1630;
-      --stroke:rgba(255,255,255,.12);
-      --text:rgba(255,255,255,.92);
-      --muted:rgba(255,255,255,.72);
-      --accent:#78C7FF;
-      --accent2:#A6FFCB;
-      --radius:18px;
-      --shadow: 0 18px 50px rgba(0,0,0,.45);
+      --bg:#050607;
+      --bg2:#0b0e10;
+      --stroke: rgba(255,255,255,.12);
+      --text: rgba(255,255,255,.94);
+      --muted: rgba(255,255,255,.75);
+
+      --accent: #ff4d2e;
+      --accent2: #ff7a45;
+
+      --radius: 18px;
+      --shadow: 0 18px 55px rgba(0,0,0,.55);
+      --shadow2: 0 12px 40px rgba(0,0,0,.35);
+      --max: 1140px;
     }
 
     *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
     body{
       margin:0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--text);
       background:
-        radial-gradient(1200px 700px at 20% 10%, rgba(120,199,255,.16), transparent 60%),
-        radial-gradient(900px 600px at 80% 20%, rgba(166,255,203,.12), transparent 55%),
-        radial-gradient(900px 700px at 60% 90%, rgba(170,120,255,.10), transparent 55%),
-        linear-gradient(180deg, var(--bg1), var(--bg2));
+        radial-gradient(1000px 700px at 18% 12%, rgba(255,77,46,.10), transparent 58%),
+        radial-gradient(900px 650px at 82% 18%, rgba(255,122,69,.08), transparent 55%),
+        radial-gradient(1100px 900px at 60% 95%, rgba(255,255,255,.05), transparent 55%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
       min-height:100vh;
       overflow-x:hidden;
+
+      /* ✅ base grande (65+) */
+      font-size: 18px;
+      line-height: 1.7;
     }
 
-    /* Fundo abstrato embutido */
-    body:before{
-      content:"";
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      opacity:.55;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='900'%3E%3Cdefs%3E%3CradialGradient id='g1' cx='30%25' cy='30%25' r='60%25'%3E%3Cstop offset='0%25' stop-color='%2378C7FF' stop-opacity='0.40'/%3E%3Cstop offset='70%25' stop-color='%23070B14' stop-opacity='0'/%3E%3C/radialGradient%3E%3CradialGradient id='g2' cx='75%25' cy='20%25' r='55%25'%3E%3Cstop offset='0%25' stop-color='%23A6FFCB' stop-opacity='0.28'/%3E%3Cstop offset='70%25' stop-color='%23070B14' stop-opacity='0'/%3E%3C/radialGradient%3E%3CradialGradient id='g3' cx='65%25' cy='85%25' r='60%25'%3E%3Cstop offset='0%25' stop-color='%23AA78FF' stop-opacity='0.22'/%3E%3Cstop offset='70%25' stop-color='%23070B14' stop-opacity='0'/%3E%3C/radialGradient%3E%3Cfilter id='blur'%3E%3CfeGaussianBlur stdDeviation='18'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='1600' height='900' fill='url(%23g1)'/%3E%3Crect width='1600' height='900' fill='url(%23g2)'/%3E%3Crect width='1600' height='900' fill='url(%23g3)'/%3E%3Cg filter='url(%23blur)' opacity='0.55'%3E%3Ccircle cx='210' cy='620' r='160' fill='%2378C7FF' fill-opacity='0.12'/%3E%3Ccircle cx='1280' cy='520' r='220' fill='%23A6FFCB' fill-opacity='0.10'/%3E%3Ccircle cx='980' cy='180' r='180' fill='%23AA78FF' fill-opacity='0.10'/%3E%3C/g%3E%3C/svg%3E");
-      background-size:cover;
-      background-position:center;
-      mix-blend-mode:screen;
-    }
-
-    .wrap{
-      max-width:1020px;
-      margin:0 auto;
-      padding:28px 18px 56px;
-      position:relative;
-      z-index:1;
-    }
+    a{color:inherit}
+    .wrap{max-width:var(--max); margin:0 auto; padding:26px 18px 64px; position:relative; z-index:1;}
 
     .topbar{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:12px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
       margin-bottom:16px;
-      flex-wrap:wrap;
     }
-
-    .brand h1{
-      margin:0;
-      font-size:26px;
-      letter-spacing:-0.5px;
-    }
-
-    .brand p{
-      margin:6px 0 0;
-      color:var(--muted);
-      line-height:1.4;
-      font-size:14px;
-    }
+    .brand{display:flex; flex-direction:column; gap:6px;}
+    .brand h1{margin:0; font-size:18px; letter-spacing:-.2px;}
+    .brand p{margin:0; color:var(--muted); font-size:15px; line-height:1.45;}
 
     .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:6px 10px;
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px;
       border-radius:999px;
       border:1px solid var(--stroke);
-      background: rgba(0,0,0,.18);
-      font-size:12px;
-      color: rgba(255,255,255,.86);
-    }
-
-    .shell{
-      border:1px solid var(--stroke);
-      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
+      background: rgba(0,0,0,.25);
+      font-size:14px;
+      color: rgba(255,255,255,.90);
       backdrop-filter: blur(10px);
-    }
-
-    .hero{
-      padding:22px 18px 16px;
-      border-bottom:1px solid var(--stroke);
-      display:flex;
-      gap:18px;
-      flex-wrap:wrap;
-      align-items:flex-start;
-      justify-content:space-between;
-    }
-
-    /* ✅ NOVO: primeira dobra (mais claro e maior) */
-    .heroTitle{
-      font-size:30px;
-      line-height:1.15;
-      letter-spacing:-0.6px;
-      margin:0 0 10px;
-      font-weight:950;
-    }
-    @media (max-width: 520px){
-      .heroTitle{font-size:26px;}
-    }
-
-    .heroSub{
-      margin:0 0 14px;
-      color:var(--muted);
-      line-height:1.55;
-      font-size:15px;
-      max-width: 56ch;
+      box-shadow: var(--shadow2);
     }
 
     .btn{
       appearance:none;
       border:1px solid var(--stroke);
-      background: rgba(0,0,0,.18);
+      background: rgba(0,0,0,.22);
       color:var(--text);
-      padding:11px 14px;
-      border-radius:14px;
+      padding:14px 18px;
+      border-radius:18px;
       cursor:pointer;
-      font-weight:900;
-      transition: transform .08s ease, border-color .15s ease, filter .15s ease;
+      font-weight:950;
+      transition: transform .08s ease, border-color .15s ease, filter .15s ease, background .15s ease;
       text-decoration:none;
       display:inline-flex;
       align-items:center;
       justify-content:center;
       gap:10px;
       user-select:none;
+      box-shadow: 0 10px 28px rgba(0,0,0,.25);
+      font-size: 16px;
     }
-    .btn:hover{border-color: rgba(120,199,255,.55); transform: translateY(-1px);}
+    .btn:hover{border-color: rgba(255,77,46,.55); transform: translateY(-1px);}
     .btn.primary{
-      background: linear-gradient(135deg, rgba(120,199,255,.95), rgba(166,255,203,.85));
-      color:#061023;
-      border-color: rgba(255,255,255,.25);
+      background: linear-gradient(135deg, rgba(255,77,46,.98), rgba(255,122,69,.92));
+      color:#120505;
+      border-color: rgba(255,255,255,.18);
     }
     .btn.primary:hover{filter:brightness(1.02);}
+    .btn.big{
+      padding:18px 20px;
+      font-size:18px;
+      border-radius:20px;
+      width: min(560px, 100%);
+    }
     .btn[disabled]{opacity:.55; cursor:not-allowed; transform:none !important;}
 
-    /* ✅ NOVO: CTA grande (65+) */
-    .btn.bigCta{
-      padding:16px 18px;
-      font-size:16px;
-      border-radius:16px;
-      width: min(420px, 100%);
-      justify-content:center;
-      box-shadow: 0 14px 34px rgba(0,0,0,.28);
+    .hero{
+      border:1px solid var(--stroke);
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      backdrop-filter: blur(12px);
+    }
+    .heroInner{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:18px;
+      padding:28px 22px;
+      align-items:center;
+    }
+    @media (max-width: 980px){
+      .heroInner{grid-template-columns:1fr; padding:22px 16px;}
     }
 
-    .content{padding:18px;}
+    .kicker{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid var(--stroke);
+      background: rgba(0,0,0,.20);
+      color: rgba(255,255,255,.88);
+      font-size:14px;
+      margin-bottom:14px;
+    }
+    .kdot{
+      width:9px; height:9px; border-radius:999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      box-shadow: 0 0 0 5px rgba(255,77,46,.12);
+    }
 
+    .heroTitle{
+      margin:0 0 12px;
+      font-weight:1000;
+      letter-spacing:-1.0px;
+      line-height:1.06;
+      font-size: clamp(36px, 4.3vw, 54px);
+    }
+    .heroTitle .accent{color:var(--accent)}
+    .heroSub{
+      margin:0 0 16px;
+      color:var(--muted);
+      line-height:1.7;
+      font-size:18px;
+      max-width:60ch;
+    }
+
+    .heroBullets{
+      margin:0;
+      padding-left:20px;
+      color: rgba(255,255,255,.90);
+      line-height:1.7;
+      font-size:16px;
+    }
+    .heroBullets li{margin:10px 0;}
+    .heroBullets b{color: rgba(255,255,255,.98);}
+
+    .ctaRow{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+      margin-top:18px;
+    }
+    .tiny{
+      margin-top:12px;
+      font-size:14px;
+      color: var(--muted);
+      line-height:1.65;
+    }
+
+    .mock{
+      position:relative;
+      border-radius: 26px;
+      border: 1px solid var(--stroke);
+      background: rgba(0,0,0,.18);
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+      min-height: 340px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 12px;
+    }
+    .mock:before{
+      content:"";
+      position:absolute; inset:-120px;
+      background:
+        radial-gradient(600px 420px at 30% 25%, rgba(255,77,46,.22), transparent 60%),
+        radial-gradient(520px 420px at 75% 35%, rgba(255,122,69,.16), transparent 60%);
+      filter: blur(10px);
+      opacity:.9;
+    }
+    .mock img{
+      position:relative;
+      width:min(760px, 98%);
+      height:auto;
+      display:block;
+      border-radius: 18px;
+      filter: drop-shadow(0 18px 40px rgba(0,0,0,.55));
+    }
+    .mockNote{
+      position:absolute;
+      left:14px; right:14px; bottom:12px;
+      font-size:14px;
+      color: rgba(255,255,255,.80);
+      background: rgba(0,0,0,.32);
+      border:1px solid var(--stroke);
+      border-radius: 16px;
+      padding:12px 12px;
+      backdrop-filter: blur(10px);
+    }
+
+    .section{
+      margin-top:18px;
+      border:1px solid var(--stroke);
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+      backdrop-filter: blur(12px);
+    }
+    .sectionInner{padding:22px 18px;}
+    .sectionTitle{
+      margin:0 0 10px;
+      font-weight:1000;
+      letter-spacing:-.4px;
+      font-size:20px;
+    }
+    .sectionText{margin:0; color:var(--muted); line-height:1.7; font-size:16px;}
+
+    .cards{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:12px;
+    }
+    @media (max-width: 980px){
+      .cards{grid-template-columns:1fr;}
+    }
+    .card{
+      border:1px solid var(--stroke);
+      border-radius: 20px;
+      background: rgba(0,0,0,.18);
+      padding:16px;
+    }
+    .card h3{margin:0 0 8px; font-size:16px; letter-spacing:-.2px;}
+    .card p{margin:0; color:var(--muted); font-size:15px; line-height:1.7;}
+
+    .faq{margin-top:14px; display:grid; gap:10px;}
+    details{
+      border:1px solid var(--stroke);
+      border-radius: 20px;
+      background: rgba(0,0,0,.18);
+      padding:14px 14px;
+    }
+    summary{
+      cursor:pointer;
+      font-weight:950;
+      list-style:none;
+      outline:none;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      font-size:16px;
+    }
+    summary::-webkit-details-marker{display:none}
+    .chev{
+      width:34px; height:34px;
+      border-radius:999px;
+      border:1px solid var(--stroke);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      background: rgba(255,255,255,.04);
+      flex:0 0 auto;
+      font-size:18px;
+    }
+    details[open] .chev{border-color: rgba(255,77,46,.45)}
+    .faqBody{
+      margin-top:10px;
+      color: rgba(255,255,255,.88);
+      line-height:1.75;
+      font-size:15px;
+    }
+
+    .appShell{
+      margin-top:18px;
+      border:1px solid var(--stroke);
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+      backdrop-filter: blur(12px);
+    }
+    .appHeader{
+      padding:18px;
+      border-bottom:1px solid var(--stroke);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .appHeader h2{margin:0; font-size:20px; letter-spacing:-.3px;}
+    .appHeader p{margin:6px 0 0; color:var(--muted); font-size:15px; line-height:1.6;}
+
+    .content{padding:18px;}
     .progress{
-      height:10px;
+      height:12px;
       border-radius:999px;
       overflow:hidden;
       background: rgba(0,0,0,.25);
       border:1px solid var(--stroke);
-      margin: 2px 0 10px;
+      margin: 6px 0 10px;
     }
-    .bar{
-      height:100%;
-      width:0%;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      transition: width .25s ease;
-    }
+    .bar{height:100%; width:0%; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width .25s ease;}
+    .progressText{font-size:15px; color: rgba(255,255,255,.82); line-height:1.6; margin: 0 0 14px;}
+    .progressText b{color: rgba(255,255,255,.96);}
 
-    /* ✅ texto motivador do progresso */
-    .progressText{
-      font-size:12px;
-      color: rgba(255,255,255,.78);
-      line-height:1.5;
-      margin: 0 0 16px;
-    }
-    .progressText b{color: rgba(255,255,255,.92);}
+    .qline{font-size:20px; margin: 6px 0 10px; font-weight:900;}
+    .micro{font-size:15px; color: rgba(255,255,255,.82); line-height:1.7; margin: 0 0 12px;}
 
-    .qline{
-      font-size:16px;
-      margin: 2px 0 10px;
-    }
-
-    /* micro reforço na pergunta 1 */
-    .micro{
-      font-size:12px;
-      color: rgba(255,255,255,.78);
-      line-height:1.5;
-      margin: 0 0 12px;
-    }
-
-    /* ✅ NOVO: checklist anti-ansiedade */
-    .checklist{
-      margin-top:12px;
-      padding:12px 12px;
-      border-radius:16px;
-      border:1px solid var(--stroke);
-      background: rgba(0,0,0,.14);
-      color: rgba(255,255,255,.86);
-      font-size:13px;
-      line-height:1.55;
-      max-width: 520px;
-    }
-    .checklist ul{margin:0; padding-left:18px;}
-    .checklist li{margin:6px 0;}
-
-    /* ✅ NOVO: prova de confiança */
-    .trust{
-      margin-top:12px;
-      padding:14px;
-      border-radius: var(--radius);
-      border:1px solid var(--stroke);
-      background: rgba(255,255,255,.06);
-      max-width: 720px;
-    }
-    .trustTitle{
-      margin:0 0 6px;
-      font-weight:950;
-      letter-spacing:-0.2px;
-      font-size:14px;
-    }
-    .trustText{
-      margin:0;
-      color: rgba(255,255,255,.82);
-      line-height:1.55;
-      font-size:13px;
-    }
-
-    .opts{
-      display:grid;
-      gap:10px;
-      margin-bottom: 10px;
-    }
-
+    .opts{display:grid; gap:12px; margin-bottom: 10px;}
     .opt{
       text-align:left;
-      padding:12px 12px;
-      border-radius:14px;
+      padding:16px 14px;
+      border-radius:20px;
       border:1px solid var(--stroke);
       background: rgba(0,0,0,.18);
       color:var(--text);
       cursor:pointer;
       transition: transform .08s ease, border-color .15s ease, background .15s ease;
+      font-weight:900;
+      font-size:18px;
+      line-height:1.55;
     }
-    .opt:hover{
-      transform: translateY(-1px);
-      border-color: rgba(120,199,255,.55);
-      background: rgba(0,0,0,.24);
-    }
+    .opt:hover{transform: translateY(-1px); border-color: rgba(255,77,46,.55); background: rgba(0,0,0,.24);}
 
-    .help{
-      font-size:12px;
-      color:var(--muted);
-      line-height:1.5;
-    }
+    .help{font-size:15px; color:var(--muted); line-height:1.7;}
+    .navRow{display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between; margin-top:12px;}
 
-    .navRow{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-      justify-content:space-between;
-      margin-top:12px;
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap:14px;
-    }
-    @media (max-width: 860px){
-      .grid{grid-template-columns: 1fr;}
-    }
+    .grid{display:grid; grid-template-columns: 1.1fr .9fr; gap:14px;}
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr;} }
 
     .panel{
       border:1px solid var(--stroke);
-      border-radius: var(--radius);
-      background: rgba(255,255,255,.06);
+      border-radius: 24px;
+      background: rgba(0,0,0,.18);
       padding:16px;
     }
+    .resultTitle{font-size:22px; font-weight:1000; margin:0 0 8px; letter-spacing:-0.5px;}
+    .muted{color:var(--muted); font-size:16px; line-height:1.75;}
 
-    .resultTitle{
-      font-size:22px;
-      font-weight:950;
-      margin:0 0 6px;
-      letter-spacing:-0.5px;
-    }
+    .pills{display:flex; flex-wrap:wrap; gap:10px; margin-top:12px;}
+    .pill{padding:9px 12px; border-radius:999px; border:1px solid var(--stroke); background: rgba(0,0,0,.18); font-size:14px; color: rgba(255,255,255,.90);}
 
-    .muted{color:var(--muted);}
-
-    .pills{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;}
-    .pill{
-      padding:7px 10px;
-      border-radius:999px;
+    .bridge{
+      margin-top:12px;
+      padding:14px;
+      border-radius:20px;
       border:1px solid var(--stroke);
-      background: rgba(0,0,0,.18);
-      font-size:12px;
-      color: rgba(255,255,255,.86);
+      background: rgba(255,255,255,.04);
+      color: rgba(255,255,255,.92);
+      line-height:1.75;
+      font-size:15px;
     }
 
     .proof{
       margin-top:12px;
-      padding:12px;
-      border-radius:16px;
+      padding:14px;
+      border-radius:20px;
       border:1px solid var(--stroke);
       background: rgba(0,0,0,.14);
-      color: rgba(255,255,255,.86);
-      line-height:1.5;
-      font-size:13px;
+      color: rgba(255,255,255,.90);
+      line-height:1.75;
+      font-size:15px;
     }
+    .bullets2{margin:10px 0 0; padding-left:20px; color: rgba(255,255,255,.90); font-size:15px;}
+    .bullets2 li{margin:8px 0;}
 
-    .bullets{margin:10px 0 0; padding-left:18px; color: rgba(255,255,255,.84);}
-    .bullets li{margin:6px 0;}
-
-    /* ✅ NOVO: transição resultado -> livro */
-    .bridge{
-      margin-top:12px;
-      padding:12px;
-      border-radius:16px;
-      border:1px solid var(--stroke);
-      background: rgba(0,0,0,.12);
-      color: rgba(255,255,255,.88);
-      line-height:1.55;
-      font-size:13px;
-    }
-    .bridge b{color: rgba(255,255,255,.95);}
-
-    .bookTitle{font-weight:950; margin:0 0 6px; font-size:15px;}
-    .bookSub{margin:0 0 12px; color:var(--muted); line-height:1.45; font-size:13px;}
-
-    .coverWrap{
-      display:flex;
-      gap:14px;
-      align-items:flex-start;
-      flex-wrap:wrap;
-    }
-
+    .bookTitle{font-weight:1000; margin:0 0 8px; font-size:16px;}
+    .bookSub{margin:0 0 12px; color:var(--muted); line-height:1.65; font-size:15px;}
+    .coverWrap{display:flex; gap:14px; align-items:flex-start; flex-wrap:wrap;}
     .cover{
-      width:170px;
-      max-width:45vw;
+      width:190px; max-width:55vw;
       aspect-ratio: 2 / 3;
-      border-radius:14px;
+      border-radius:18px;
       border:1px solid var(--stroke);
       background: rgba(0,0,0,.18);
       overflow:hidden;
       box-shadow: 0 14px 34px rgba(0,0,0,.35);
       flex:0 0 auto;
     }
-    .cover img{
+    .cover img{width:100%; height:100%; object-fit:cover; display:block;}
+
+    .ctaBig{width:100%; padding:16px 18px; font-size:17px; border-radius:20px;}
+    .ctaBigText{display:flex; align-items:center; justify-content:center; gap:10px;}
+    .divider{height:1px; background: var(--stroke); margin:12px 0;}
+    .miniDivider{height:1px; background: var(--stroke); margin:14px 0;}
+    .toggleRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;}
+
+    .igBox{
+      margin-top:14px;
+      padding:16px;
+      border-radius: 24px;
+      border:1px solid var(--stroke);
+      background: rgba(0,0,0,.14);
+    }
+    .igRow{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;}
+    .igText{margin:0; color: var(--muted); line-height:1.7; font-size:15px; flex:1 1 360px; min-width:240px;}
+
+    /* ✅ Coleção completa (tile igual ao print) */
+    .collectionGrid{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap:14px;
+    }
+    @media (max-width: 980px){
+      .collectionGrid{grid-template-columns:1fr;}
+    }
+    .bookTile{
+      border:1px solid var(--stroke);
+      border-radius: 24px;
+      background: rgba(0,0,0,.18);
+      padding:16px;
+      box-shadow: 0 12px 34px rgba(0,0,0,.25);
+    }
+    .bookTag{
+      display:inline-block;
+      font-size:13px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color: rgba(255,255,255,.72);
+      margin-bottom:10px;
+    }
+    .bookTileCover{
+      width:100%;
+      aspect-ratio: 2 / 3;
+      border-radius:18px;
+      overflow:hidden;
+      border:1px solid var(--stroke);
+      background: rgba(0,0,0,.18);
+    }
+    .bookTileCover img{
       width:100%;
       height:100%;
       object-fit:cover;
       display:block;
     }
-
-    .ctaRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;}
-    .ctaBig{
-      width:100%;
-      padding:14px 16px;
-      font-size:14px;
-      border-radius:16px;
+    .bookTileTitle{
+      margin:14px 0 6px;
+      font-size:20px;
+      font-weight:1000;
+      letter-spacing:-.4px;
+      line-height:1.2;
     }
-
-    /* ✅ NOVO: CTA suave */
-    .ctaBigText{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
-    }
-
-    .tiny{font-size:12px; color: var(--muted); margin-top:8px; line-height:1.5;}
-    .divider{height:1px; background: var(--stroke); margin:12px 0;}
-
-    .sectionTitle{
-      font-size:12px;
-      text-transform:uppercase;
-      letter-spacing:.12em;
-      color: rgba(255,255,255,.70);
-      margin:0 0 10px;
-    }
-    .miniDivider{height:1px; background: var(--stroke); margin:14px 0;}
-    .toggleRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;}
-
-    /* ✅ Instagram */
-    .igBox{
-      margin-top:14px;
-      padding:14px;
-      border-radius: var(--radius);
-      border:1px solid var(--stroke);
-      background: rgba(0,0,0,.14);
-    }
-    .igRow{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-    .igText{
-      margin:0;
+    .bookTileSub{
+      margin:0 0 12px;
       color: var(--muted);
-      line-height:1.5;
-      font-size:13px;
-      flex:1 1 360px;
-      min-width:240px;
+      font-size:16px;
+      line-height:1.6;
+    }
+
+    footer{
+      margin-top:16px;
+      color: rgba(255,255,255,.68);
+      font-size:14px;
+      line-height:1.7;
+      text-align:center;
     }
   </style>
 </head>
@@ -435,7 +490,7 @@
     <div class="topbar">
       <div class="brand">
         <h1>Teste de Temperamento</h1>
-        <p>25 perguntas • resultado imediato • recomendação do livro ideal</p>
+        <p>25 perguntas • resultado imediato • recomendação do guia ideal</p>
       </div>
       <div class="badge" title="Observação importante">
         <span>ℹ️</span>
@@ -443,63 +498,152 @@
       </div>
     </div>
 
-    <div class="shell" id="app">
-      <div class="hero">
-        <div style="min-width:280px; flex:1 1 620px;">
-          <!-- ✅ 1) Primeira dobra (modelo pronto) -->
-          <h2 class="heroTitle">Descubra seu temperamento dominante em poucos minutos</h2>
-          <p class="heroSub">Um teste simples de 25 perguntas com resultado imediato, baseado no modelo clássico dos temperamentos.</p>
+    <!-- HERO -->
+    <section class="hero" aria-label="Apresentação">
+      <div class="heroInner">
+        <div>
+          <div class="kicker"><span class="kdot"></span> Leitura simples • aplicação prática • sem enrolação</div>
 
-          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-            <button type="button" class="btn" id="restartBtnTop" style="display:none;">Refazer</button>
+          <h2 class="heroTitle">
+            Acesse o <span class="accent">livro</span> de qualquer lugar.
+          </h2>
 
-            <!-- ✅ Botão principal grande e claro -->
-            <button type="button" class="btn primary bigCta" id="startBtn">👉 Começar o teste agora</button>
+          <p class="heroSub">
+            Faça o teste, descubra seu temperamento dominante e escolha o guia certo para aplicar no dia a dia.
+            Depois da compra na Amazon, você pode ler no celular, tablet ou computador — <b>onde e quando quiser</b>.
+          </p>
+
+          <ul class="heroBullets">
+            <li><b>Resultado imediato</b> ao finalizar o teste</li>
+            <li><b>Escolha rápida</b> do livro recomendado</li>
+            <li><b>Compartilhe</b> o teste com alguém pelo WhatsApp</li>
+          </ul>
+
+          <div class="ctaRow">
+            <a class="btn primary big" href="#teste" id="heroCta">👉 Começar o teste agora</a>
+            <a class="btn" href="#colecao" id="collectionBtn">📚 Ver coleção completa</a>
+            <a class="btn" id="shareLink" href="#" target="_blank" rel="noopener">📲 Compartilhar no WhatsApp</a>
           </div>
 
-          <!-- ✅ 2) reduzir ansiedade -->
-          <div class="checklist" id="preChecklist">
-            <ul>
-              <li>✔️ Leva cerca de 2 minutos</li>
-              <li>✔️ Resultado aparece no final</li>
-              <li>✔️ Sem cadastro obrigatório</li>
-              <li>✔️ Você pode sair quando quiser</li>
-            </ul>
-          </div>
-
-          <!-- ✅ 3) prova de confiança -->
-          <div class="trust" id="trustBox">
-            <p class="trustTitle">Por que confiar?</p>
-            <p class="trustText">
-              Criado por <b>Leonardo Monteiro</b>, autor da série <b>O Guia Prático dos Temperamentos</b>.
-              Baseado no <b>modelo clássico dos quatro temperamentos</b>, usado há séculos para autoconhecimento.
-            </p>
+          <div class="tiny">
+            Criado por <b>Leonardo Monteiro</b>, autor da série <b>O Guia Prático dos Temperamentos</b>.
           </div>
         </div>
 
-        <div style="min-width:240px; flex:0 0 260px; display:flex; justify-content:flex-end; align-items:flex-start;">
-          <div class="badge" title="Observação importante" style="margin-top:6px;">
-            <span>✅</span>
-            <span>Resultado imediato (sem cadastro)</span>
+        <div class="mock" aria-label="Imagem com livros no celular">
+          <!-- ✅ coloque sua imagem em assets/phones.png -->
+          <img src="assets/phones.png" alt="Coleção: colérico, fleumático, melancólico e sanguíneo no celular" loading="lazy"
+               onerror="this.style.display='none'; this.parentElement.querySelector('.mockNote').innerHTML='Coloque sua imagem em <b>assets/phones.png</b>.';">
+          <div class="mockNote">
+            Após comprar na Amazon, você lê no Kindle (celular/tablet/PC) — <b>em qualquer lugar</b>.
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMO FUNCIONA -->
+    <section class="section" aria-label="Como funciona">
+      <div class="sectionInner">
+        <h3 class="sectionTitle">Como funciona</h3>
+        <p class="sectionText">
+          Você responde 25 perguntas, vê o resultado na hora e recebe a recomendação do guia ideal para começar.
+        </p>
+
+        <div class="cards">
+          <div class="card">
+            <h3>1) Faça o teste</h3>
+            <p>Responda como você é na maior parte do tempo (sem pensar demais).</p>
+          </div>
+          <div class="card">
+            <h3>2) Veja seu resultado</h3>
+            <p>Você recebe o temperamento dominante e o segundo mais provável.</p>
+          </div>
+          <div class="card">
+            <h3>3) Escolha seu livro</h3>
+            <p>Selecione o guia recomendado e abra na Amazon.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ (sem “guardam respostas”) -->
+    <section class="section" id="faq" aria-label="Perguntas frequentes">
+      <div class="sectionInner">
+        <h3 class="sectionTitle">Perguntas frequentes</h3>
+        <p class="sectionText">Respostas claras e rápidas.</p>
+
+        <div class="faq">
+          <details>
+            <summary>Quanto tempo leva? <span class="chev">▾</span></summary>
+            <div class="faqBody">
+              Em média <b>2 minutos</b>. São 25 perguntas e o resultado aparece imediatamente no final.
+            </div>
+          </details>
+
+          <details>
+            <summary>Precisa de cadastro? <span class="chev">▾</span></summary>
+            <div class="faqBody">
+              Não. Você pode fazer o teste <b>sem cadastro obrigatório</b>.
+            </div>
+          </details>
+
+          <details>
+            <summary>Onde eu leio o livro? <span class="chev">▾</span></summary>
+            <div class="faqBody">
+              <b>Em qualquer lugar.</b> Depois da compra na Amazon, o livro fica na sua biblioteca Kindle.
+              Você pode ler no <b>celular</b>, <b>tablet</b> ou <b>computador</b> — quando quiser.
+            </div>
+          </details>
+
+          <details>
+            <summary>Isso é diagnóstico clínico? <span class="chev">▾</span></summary>
+            <div class="faqBody">
+              Não. É um teste de <b>autoconhecimento</b> baseado no modelo clássico dos quatro temperamentos.
+            </div>
+          </details>
+
+          <details>
+            <summary>Por que aparece “segundo mais provável”? <span class="chev">▾</span></summary>
+            <div class="faqBody">
+              Muita gente tem um temperamento dominante e um “secundário” que aparece em situações específicas.
+              Por isso mostramos duas recomendações.
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- APP / TESTE -->
+    <section class="appShell" id="teste" aria-label="Teste de temperamento">
+      <div class="appHeader">
+        <div>
+          <h2>Faça o teste agora</h2>
+          <p>25 perguntas • resultado imediato • recomendação do guia ideal</p>
+        </div>
+        <div class="badge" title="Observação importante">
+          <span>✅</span>
+          <span>Resultado imediato (sem cadastro)</span>
         </div>
       </div>
 
       <div class="content">
+        <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:10px;">
+          <button type="button" class="btn" id="restartBtnTop" style="display:none;">Refazer</button>
+          <button type="button" class="btn primary" id="startBtn">👉 Começar o teste</button>
+        </div>
+
         <div class="progress" aria-label="Progresso do teste">
           <div class="bar" id="bar"></div>
         </div>
-
         <div class="progressText" id="progressText" style="display:none;"></div>
 
         <div id="screen-quiz" style="display:none;">
           <div class="qline" id="question"></div>
           <div class="micro" id="microHint" style="display:none;"></div>
-
           <div class="opts" id="options"></div>
 
           <div class="navRow">
-            <div class="help">Dica: responda como você é <b>na maior parte do tempo</b> (não apenas em um dia específico).</div>
+            <div class="help">Dica: responda como você é <b>na maior parte do tempo</b>.</div>
             <button type="button" class="btn" id="backBtn" disabled>⬅️ Voltar 1</button>
           </div>
         </div>
@@ -511,42 +655,50 @@
               <div class="muted" id="resultText"></div>
               <div class="pills" id="traits"></div>
 
-              <!-- ✅ 4) transição resultado -> livro -->
               <div class="bridge">
                 <b>Quer aprofundar esse resultado?</b><br>
-                Muitas pessoas sentem que o teste revela <b>o que são</b>, mas o livro mostra <b>como lidar com isso no dia a dia</b>.
+                O guia te ajuda a aplicar isso no dia a dia com clareza e direção.
               </div>
 
               <div class="proof">
-                <b>Um guia prático, direto</b> — pensado para leitura simples e aplicação no dia a dia.
-                <ul class="bullets">
-                  <li>Entenda seu padrão (sem culpa) e o “ponto de ajuste” mais importante.</li>
-                  <li>Estratégias simples e aplicáveis no dia a dia.</li>
-                  <li><b>Compra segura pela Amazon</b>.</li>
+                <b>Guia prático e direto</b>
+                <ul class="bullets2">
+                  <li>Entenda seu padrão e o ponto de ajuste mais importante.</li>
+                  <li>Estratégias simples e aplicáveis.</li>
+                  <li><b>Compra segura</b> pela Amazon.</li>
                 </ul>
               </div>
 
-              <div class="ctaRow">
-                <!-- ✅ 6) CTA suave (não "Comprar agora") -->
+              <div class="ctaRow" style="margin-top:12px;">
                 <a class="btn primary ctaBig" id="ctaBig" href="#" target="_blank" rel="noopener">
-                  <span class="ctaBigText">✨ Continuar minha jornada (ver o guia recomendado)</span>
+                  <span class="ctaBigText">✨ Ver o guia recomendado</span>
                 </a>
               </div>
 
               <div class="tiny" id="melNote" style="display:none;">
                 Se o seu resultado for Melancólico, o livro entra no ar em <b>17 de janeiro</b>.
               </div>
+
+              <div class="ctaRow" style="margin-top:12px;">
+                <a class="btn" href="#colecao">📚 Ver coleção completa</a>
+                <a class="btn" id="shareLink2" href="#" target="_blank" rel="noopener">📲 Compartilhar no WhatsApp</a>
+              </div>
             </div>
 
             <div class="panel">
               <div class="bookTitle">Recomendação</div>
 
-              <div class="sectionTitle">Principal (seu temperamento dominante)</div>
+              <div class="divider"></div>
+              <div style="font-size:14px; letter-spacing:.10em; text-transform:uppercase; color: rgba(255,255,255,.72); margin-bottom:10px;">
+                Principal
+              </div>
               <div id="bookPrimary"></div>
 
               <div class="miniDivider"></div>
 
-              <div class="sectionTitle">Alternativa (segundo mais provável)</div>
+              <div style="font-size:14px; letter-spacing:.10em; text-transform:uppercase; color: rgba(255,255,255,.72); margin-bottom:10px;">
+                Alternativa
+              </div>
               <div id="bookSecondary"></div>
 
               <div class="toggleRow">
@@ -563,8 +715,7 @@
           <div class="igBox">
             <div class="igRow">
               <p class="igText">
-                Quer mais conteúdo prático (hábitos, clareza emocional e bastidores da coleção)?
-                Me acompanhe no Instagram:
+                Quer mais conteúdo prático e bastidores da coleção? Me acompanhe no Instagram:
               </p>
               <a class="btn" id="igLink" href="#" target="_blank" rel="noopener">📷 @leonardomobarreto</a>
             </div>
@@ -576,11 +727,38 @@
         </div>
 
       </div>
-    </div>
+    </section>
+
+    <!-- COLEÇÃO COMPLETA (tile igual ao print) -->
+    <section class="section" id="colecao" aria-label="Coleção completa">
+      <div class="sectionInner">
+        <h3 class="sectionTitle">Coleção completa</h3>
+        <p class="sectionText">Escolha direto o livro que você quer.</p>
+
+        <div class="collectionGrid">
+          <div class="bookTile" id="c-colerico"></div>
+          <div class="bookTile" id="c-fleumatico"></div>
+          <div class="bookTile" id="c-melancolico"></div>
+          <div class="bookTile" id="c-sanguineo"></div>
+        </div>
+
+        <div class="ctaRow" style="margin-top:14px;">
+          <a class="btn primary big" href="#teste">👉 Voltar para o teste</a>
+          <a class="btn" id="shareLink3" href="#" target="_blank" rel="noopener">📲 Compartilhar no WhatsApp</a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      © <span id="year"></span> Leonardo Monteiro • Conteúdo para autoconhecimento •
+      <span style="opacity:.85">Este site não substitui avaliação profissional.</span>
+    </footer>
   </div>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("year").textContent = new Date().getFullYear();
+
   // ✅ Instagram
   const INSTAGRAM_URL = "https://instagram.com/leonardomobarreto";
   const INSTAGRAM_HANDLE = "@leonardomobarreto";
@@ -588,7 +766,7 @@ document.addEventListener("DOMContentLoaded", () => {
   igLink.href = INSTAGRAM_URL;
   igLink.textContent = "📷 " + INSTAGRAM_HANDLE;
 
-  // ✅ GA4
+  // ✅ GA4 helper
   function track(name, params){
     try{
       if(typeof gtag === "function"){
@@ -597,6 +775,19 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch(e){}
   }
 
+  // ✅ WhatsApp share (link direto, sem popup)
+  function buildWhatsAppLink(){
+    const url = window.location.href;
+    const msg = "Fiz esse teste de temperamento (resultado na hora). Faz também: " + url;
+    return "https://wa.me/?text=" + encodeURIComponent(msg);
+  }
+  const shareUrl = buildWhatsAppLink();
+  ["shareLink","shareLink2","shareLink3"].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.href = shareUrl;
+  });
+
+  // ✅ UTM base
   const UTM_BASE = { utm_source: "teste_temperamentos", utm_medium: "site", utm_campaign: "resultado" };
 
   function withParams(url, params){
@@ -610,39 +801,6 @@ document.addEventListener("DOMContentLoaded", () => {
       return url + sep + q;
     }
   }
-
-  function getBookKeyFromAnchor(a){
-    if(!a) return null;
-    const dk = a.getAttribute("data-book");
-    if(dk) return dk;
-    try{
-      const u = new URL(a.href);
-      return u.searchParams.get("utm_content");
-    } catch(e){
-      const m = String(a.href || "").match(/utm_content=([^&]+)/i);
-      return m ? decodeURIComponent(m[1]) : null;
-    }
-  }
-
-  // ✅ cliques (Amazon + Instagram) com book_key
-  document.addEventListener("click", (e) => {
-    const a = e.target && e.target.closest ? e.target.closest("a") : null;
-    if(!a || !a.href) return;
-
-    if(a.href.includes("amazon.com.br")){
-      const book_key = getBookKeyFromAnchor(a) || (a.id === "ctaBig" ? (state.lastKey || null) : null);
-
-      track("amazon_click", {
-        link_url: a.href,
-        placement: (a.id === "ctaBig") ? "cta_big" : "book_card",
-        book_key: book_key || "unknown"
-      });
-    }
-
-    if(a.id === "igLink" || a.href.includes("instagram.com")){
-      track("instagram_click", { link_url: a.href });
-    }
-  });
 
   const BOOKS = {
     colerico: {
@@ -667,11 +825,78 @@ document.addEventListener("DOMContentLoaded", () => {
       title: "O Guia Prático do Temperamento Melancólico",
       subtitle: "Profundidade, direção e equilíbrio emocional",
       amazonUrl: "https://www.amazon.com.br/dp/B0GGM288VK/ref=sr_1_2?dib=eyJ2IjoiMSJ9.PnVCv_TezXDKSYHtDSEnvKE0s4lPkpJWlRyWP3lMxkPQpuetp6XoesqOjbl4mgTLZuCS3niVI260gnMVl1YPMv7MmjG5ykrs3byv1NrSmTk.QPofqJ4OlErn_2glsyNESglHhxYzyv0qo9Op4SvjNlo&dib_tag=se&qid=1768356725&refinements=p_27%3ALEONARDO+MONTEIRO+DE+OLIVEIRA+BARRETO&s=digital-text&sr=1-2&text=LEONARDO+MONTEIRO+DE+OLIVEIRA+BARRETO",
-      comingSoon: "Publicação: 17 de janeiro",
-      coverSrc: "covers/melancolico.webp"
+      coverSrc: "covers/melancolico.webp",
+      comingSoon: "Publicação: 17 de janeiro"
     }
   };
 
+  function amazonLinkFor(key){
+    const b = BOOKS[key];
+    if(!b || !b.amazonUrl) return null;
+    const utm = {...UTM_BASE, utm_content: key};
+    return withParams(b.amazonUrl, utm);
+  }
+
+  function renderBookCardInline(key, label){
+    const b = BOOKS[key];
+    const link = amazonLinkFor(key);
+    return `
+      <div class="coverWrap">
+        <div class="cover">
+          <img src="${b.coverSrc}" alt="Capa do livro: ${b.title}" loading="lazy">
+        </div>
+        <div style="flex:1 1 240px; min-width:240px;">
+          <div class="bookTitle">${b.title}</div>
+          <div class="bookSub">${b.subtitle}</div>
+          <a class="btn primary" style="width:100%;" data-book="${key}" href="${link}" target="_blank" rel="noopener">${label}</a>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderAllBooks(){
+    const keys = ["colerico","fleumatico","sanguineo","melancolico"];
+    return keys.map(k => `<div style="margin-bottom:14px;">${renderBookCardInline(k,"Ver na Amazon")}</div>`).join("");
+  }
+
+  // ✅ Coleção completa (tile estilo print)
+  function renderCollectionTile(key){
+    const b = BOOKS[key];
+    const link = amazonLinkFor(key);
+    return `
+      <div class="bookTag">LIVRO</div>
+      <div class="bookTileCover">
+        <img src="${b.coverSrc}" alt="Capa do livro: ${b.title}" loading="lazy">
+      </div>
+      <div class="bookTileTitle">${b.title}</div>
+      <div class="bookTileSub">${b.subtitle}</div>
+      <a class="btn primary" style="width:100%;" data-book="${key}" href="${link}" target="_blank" rel="noopener">
+        Ver na Amazon
+      </a>
+    `;
+  }
+
+  document.getElementById("c-colerico").innerHTML    = renderCollectionTile("colerico");
+  document.getElementById("c-fleumatico").innerHTML  = renderCollectionTile("fleumatico");
+  document.getElementById("c-melancolico").innerHTML = renderCollectionTile("melancolico");
+  document.getElementById("c-sanguineo").innerHTML   = renderCollectionTile("sanguineo");
+
+  // ✅ Clique Amazon tracking
+  document.addEventListener("click", (e) => {
+    const a = e.target && e.target.closest ? e.target.closest("a") : null;
+    if(!a || !a.href) return;
+    if(a.href.includes("amazon.com.br")){
+      const key = a.getAttribute("data-book") || "unknown";
+      track("amazon_click", { link_url: a.href, book_key: key });
+    }
+    if(a.href.includes("instagram.com")){
+      track("instagram_click", { link_url: a.href });
+    }
+  });
+
+  // =====================
+  // QUIZ (FUNCIONANDO)
+  // =====================
   const QUESTIONS = [
     { q:"Quando surge um problema, minha primeira reação é…", o:[
       {t:"Resolver rápido e assumir a direção.", k:"colerico"},
@@ -861,15 +1086,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const remaining = Math.max(QUESTIONS.length - state.i, 0);
     if(screenQuiz.style.display === "block"){
       progressText.style.display = "block";
-      let msg = `Faltam <b>${remaining}</b> perguntas para ver seu resultado.`;
-      if(state.i === 9) msg += ` <b>Você está indo bem</b> — continue!`;
-      if(state.i === 17) msg += ` Falta pouco. <b>Segura mais um pouco</b> 🙂`;
-      progressText.innerHTML = msg;
+      progressText.innerHTML = `Faltam <b>${remaining}</b> perguntas para ver seu resultado.`;
     } else {
       progressText.style.display = "none";
       progressText.innerHTML = "";
     }
-
     backBtn.disabled = state.answers.length === 0;
   }
 
@@ -890,7 +1111,6 @@ document.addEventListener("DOMContentLoaded", () => {
     restartBtnTop.style.display = "none";
 
     ctaBig.href = "#";
-    ctaBig.textContent = "✨ Continuar minha jornada (ver o guia recomendado)";
     ctaBig.style.pointerEvents = "none";
     ctaBig.style.opacity = ".75";
     ctaBig.removeAttribute("data-book");
@@ -911,12 +1131,12 @@ document.addEventListener("DOMContentLoaded", () => {
     setProgress();
     const item = QUESTIONS[state.i];
 
-    elQ.innerHTML = `<b>${state.i+1}/${QUESTIONS.length}</b> — ${item.q}`;
+    elQ.textContent = `${state.i+1}/${QUESTIONS.length} — ${item.q}`;
     elO.innerHTML = "";
 
     if(state.i === 0){
       microHint.style.display = "block";
-      microHint.innerHTML = `Leva ~<b>2 minutos</b>. No final você recebe o <b>livro ideal</b> para começar.`;
+      microHint.innerHTML = `Leva cerca de <b>2 minutos</b>. No final você recebe o <b>guia recomendado</b>.`;
     } else {
       microHint.style.display = "none";
       microHint.innerHTML = "";
@@ -966,19 +1186,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function topTwoTemperaments(){
     const ranked = rankTemperaments();
     const primary = ranked[0];
-
-    const allSame = state.picks[primary] === QUESTIONS.length;
-    const pairMap = {
-      melancolico: "fleumatico",
-      fleumatico: "melancolico",
-      colerico: "sanguineo",
-      sanguineo: "colerico",
-    };
-
-    if(allSame){
-      return [primary, pairMap[primary] || ranked[1] || primary];
-    }
-
     const secondary = ranked.find(k => k !== primary) || ranked[1] || primary;
     return [primary, secondary];
   }
@@ -1009,49 +1216,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return map[key];
   }
 
-  function amazonLinkFor(key){
-    const b = BOOKS[key];
-    if(!b || !b.amazonUrl) return null;
-    const utm = {...UTM_BASE, utm_content: key};
-    return withParams(b.amazonUrl, utm);
-  }
-
-  function renderBookCard(key, opts = {}){
-    const b = BOOKS[key];
-    const buttonLabel = opts.buttonLabel || "Ver o guia recomendado";
-
-    const cover = b.coverSrc ? `
-      <div class="cover">
-        <img src="${b.coverSrc}" alt="Capa do livro: ${b.title}"
-             loading="lazy"
-             onerror="this.onerror=null; this.parentElement.style.display='none';">
-      </div>
-    ` : "";
-
-    const link = amazonLinkFor(key);
-    return `
-      <div class="coverWrap">
-        ${cover}
-        <div style="flex:1 1 220px; min-width:220px;">
-          <div class="bookTitle">${b.title}</div>
-          <div class="bookSub">${b.subtitle}</div>
-          <a class="btn primary" data-book="${key}" href="${link}" target="_blank" rel="noopener">${buttonLabel}</a>
-        </div>
-      </div>
-    `;
-  }
-
-  function renderAllBooks(){
-    const keys = ["colerico","fleumatico","sanguineo","melancolico"];
-    return keys.map(k => {
-      return `
-        <div style="margin-bottom:14px;">
-          ${renderBookCard(k, { buttonLabel: "Ver o guia recomendado" })}
-        </div>
-      `;
-    }).join("");
-  }
-
   function showResult(){
     elBar.style.width = "100%";
     progressText.style.display = "none";
@@ -1065,31 +1229,14 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("resultText").textContent = copy.text;
     document.getElementById("traits").innerHTML = copy.traits.map(t => `<span class="pill">${t}</span>`).join("");
 
-    elBookPrimary.innerHTML = renderBookCard(primary, { buttonLabel: "Ver o guia recomendado" });
-    elBookSecondary.innerHTML = renderBookCard(secondary, { buttonLabel: "Ver o guia recomendado" });
+    elBookPrimary.innerHTML = renderBookCardInline(primary,"Ver o guia recomendado");
+    elBookSecondary.innerHTML = renderBookCardInline(secondary,"Ver alternativa");
 
     const linkPrimary = amazonLinkFor(primary);
-    const linkSecondary = amazonLinkFor(secondary);
-
-    if(linkPrimary){
-      ctaBig.href = linkPrimary;
-      ctaBig.setAttribute("data-book", primary);
-      ctaBig.innerHTML = `<span class="ctaBigText">✨ Quero aprofundar meu temperamento (ver o guia recomendado)</span>`;
-      ctaBig.style.pointerEvents = "auto";
-      ctaBig.style.opacity = "1";
-    } else if(linkSecondary){
-      ctaBig.href = linkSecondary;
-      ctaBig.setAttribute("data-book", secondary);
-      ctaBig.innerHTML = `<span class="ctaBigText">✨ Meu principal está em breve — ver o guia recomendado</span>`;
-      ctaBig.style.pointerEvents = "auto";
-      ctaBig.style.opacity = "1";
-    } else {
-      ctaBig.href = "#";
-      ctaBig.removeAttribute("data-book");
-      ctaBig.innerHTML = `<span class="ctaBigText">Em breve na Amazon</span>`;
-      ctaBig.style.pointerEvents = "none";
-      ctaBig.style.opacity = ".75";
-    }
+    ctaBig.href = linkPrimary || "#";
+    ctaBig.setAttribute("data-book", primary);
+    ctaBig.style.pointerEvents = linkPrimary ? "auto" : "none";
+    ctaBig.style.opacity = linkPrimary ? "1" : ".75";
 
     melNote.style.display = (primary === "melancolico") ? "block" : "none";
 
@@ -1106,6 +1253,7 @@ document.addEventListener("DOMContentLoaded", () => {
     screenQuiz.style.display = "block";
     setProgress();
     renderQuestion();
+    track("test_start", { placement: "app" });
   }
 
   toggleAllBtn.addEventListener("click", () => {
@@ -1123,7 +1271,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   backBtn.addEventListener("click", goBackOne);
-
   startBtn.addEventListener("click", start);
   restartBtn.addEventListener("click", () => { reset(); start(); });
   restartBtnTop.addEventListener("click", () => { reset(); start(); });
