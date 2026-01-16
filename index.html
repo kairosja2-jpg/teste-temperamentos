@@ -294,15 +294,21 @@
       font-size:15px;
     }
 
+    /* ✅ AQUI: borda laranja ao redor do TESTE (mesmo tom do botão) */
     .appShell{
       margin-top:18px;
-      border:1px solid var(--stroke);
+      position: relative; /* necessário para glow ficar certinho */
+      border: 2px solid rgba(255, 77, 46, 0.78); /* laranja do botão */
       border-radius: 28px;
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-      box-shadow: var(--shadow2);
+      box-shadow:
+        0 0 0 1px rgba(255, 77, 46, 0.28),
+        0 0 42px rgba(255, 77, 46, 0.20),
+        var(--shadow2);
       overflow:hidden;
       backdrop-filter: blur(12px);
     }
+
     .appHeader{
       padding:18px;
       border-bottom:1px solid var(--stroke);
@@ -820,7 +826,7 @@ document.addEventListener("DOMContentLoaded", () => {
     melancolico: {
       title: "O Guia Prático do Temperamento Melancólico",
       subtitle: "Profundidade, direção e equilíbrio emocional",
-      amazonUrl: "https://www.amazon.com.br/dp/B0GGM288VK/ref=sr_1_2?dib=eyJ2IjoiMSJ9.PnVCv_TezXDKSYHtDSEnvKE0s4lPkpJWlRyWP3lMxkPQpuetp6XoesqOjbl4mgTLZuCS3niVI260gnMVl1YPMv7MmjG5ykrs3byv1NrSmTk.QPofqJ4OlErn_2glsyNESglHhxYzyv0qo9Op4SvjNlo&dib_tag=se&qid=1768356725&refinements=p_27%3ALEONARDO+MONTEIRO+DE+OLIVEIRA+BARRETO&s=digital-text&sr=1-2&text=LEONARDO+MONTEIRO+DE+OLIVEIRA+BARRETO",
+      amazonUrl: "https://www.amazon.com.br/dp/B0GGM288VK/ref=sr_1_2?dib=eyJ2IjoiMSJ9.PnVCv_TezXDKSYHtDSEnvKE0s4lPkpJWlRyWP3lMxkPQpuetp6XoesqOjbl4mgTLZuCS3niVI260gnMVl1YPMv7MmjG5ykrs3byv1NrSmTk.QPofqJ4OlErn_n2glsyNESglHhxYzyv0qo9Op4SvjNlo&dib_tag=se&qid=1768356725&refinements=p_27%3ALEONARDO+MONTEIRO+DE+OLIVEIRA+BARRETO&s=digital-text&sr=1-2&text=LEONARDO+MONTEIRO+DE+OLIVEIRA+BARRETO",
       coverSrc: "covers/melancolico.webp",
       comingSoon: "Publicação: 17 de janeiro"
     }
@@ -1051,11 +1057,7 @@ document.addEventListener("DOMContentLoaded", () => {
     picks: { colerico:0, fleumatico:0, sanguineo:0, melancolico:0 },
     answers: [],
     lastKey: null,
-
-    // ✅ evita duplicar question_step (se voltar)
     seenQuestionStep: {},
-
-    // ✅ evita iniciar o teste 2x
     started: false
   };
 
@@ -1149,7 +1151,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const qIndex = state.i + 1;
     const stepGroup = stepGroupForIndex(qIndex);
 
-    // ✅ GA4 — marca onde a pessoa chegou (evasão)
     if(!state.seenQuestionStep[qIndex]){
       track("question_step", { step_group: stepGroup, question_index: qIndex });
       state.seenQuestionStep[qIndex] = true;
