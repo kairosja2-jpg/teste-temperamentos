@@ -45,8 +45,6 @@
         linear-gradient(180deg, var(--bg), var(--bg2));
       min-height:100vh;
       overflow-x:hidden;
-
-      /* ✅ base grande (65+) */
       font-size: 18px;
       line-height: 1.7;
     }
@@ -422,7 +420,6 @@
     .igRow{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;}
     .igText{margin:0; color: var(--muted); line-height:1.7; font-size:15px; flex:1 1 360px; min-width:240px;}
 
-    /* ✅ Coleção completa (tile igual ao print) */
     .collectionGrid{
       margin-top:14px;
       display:grid;
@@ -531,7 +528,6 @@
         </div>
 
         <div class="mock" aria-label="Imagem com livros no celular">
-          <!-- ✅ coloque sua imagem em assets/phones.png -->
           <img src="assets/phones.png" alt="Coleção: colérico, fleumático, melancólico e sanguíneo no celular" loading="lazy"
                onerror="this.style.display='none'; this.parentElement.querySelector('.mockNote').innerHTML='Coloque sua imagem em <b>assets/phones.png</b>.';">
           <div class="mockNote">
@@ -566,7 +562,7 @@
       </div>
     </section>
 
-    <!-- FAQ (sem “guardam respostas”) -->
+    <!-- FAQ -->
     <section class="section" id="faq" aria-label="Perguntas frequentes">
       <div class="sectionInner">
         <h3 class="sectionTitle">Perguntas frequentes</h3>
@@ -627,9 +623,9 @@
       </div>
 
       <div class="content">
+        <!-- ✅ botão interno removido (sem 2 cliques) -->
         <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:10px;">
           <button type="button" class="btn" id="restartBtnTop" style="display:none;">Refazer</button>
-          <button type="button" class="btn primary" id="startBtn">👉 Começar o teste</button>
         </div>
 
         <div class="progress" aria-label="Progresso do teste">
@@ -729,7 +725,7 @@
       </div>
     </section>
 
-    <!-- COLEÇÃO COMPLETA (tile igual ao print) -->
+    <!-- COLEÇÃO COMPLETA -->
     <section class="section" id="colecao" aria-label="Coleção completa">
       <div class="sectionInner">
         <h3 class="sectionTitle">Coleção completa</h3>
@@ -859,7 +855,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return keys.map(k => `<div style="margin-bottom:14px;">${renderBookCardInline(k,"Ver na Amazon")}</div>`).join("");
   }
 
-  // ✅ Coleção completa (tile estilo print)
   function renderCollectionTile(key){
     const b = BOOKS[key];
     const link = amazonLinkFor(key);
@@ -895,158 +890,158 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // =====================
-  // QUIZ (FUNCIONANDO)
+  // QUIZ (25 curtas + GA step + auto-start)
   // =====================
   const QUESTIONS = [
-    { q:"Quando surge um problema, minha primeira reação é…", o:[
-      {t:"Resolver rápido e assumir a direção.", k:"colerico"},
-      {t:"Analisar com calma antes de agir.", k:"melancolico"},
-      {t:"Conversar e aliviar o clima enquanto penso.", k:"sanguineo"},
-      {t:"Evitar estresse e agir no meu ritmo.", k:"fleumatico"},
+    { q:"Quando preciso decidir algo…", o:[
+      {t:"Decido rápido", k:"colerico"},
+      {t:"Converso antes", k:"sanguineo"},
+      {t:"Analiso bem", k:"melancolico"},
+      {t:"Espero", k:"fleumatico"},
     ]},
-    { q:"Sob pressão, eu tendo a…", o:[
-      {t:"Ficar direto e impaciente.", k:"colerico"},
-      {t:"Travar por excesso de pensamento/autoexigência.", k:"melancolico"},
-      {t:"Dispersar e buscar estímulo/novidade.", k:"sanguineo"},
-      {t:"Me fechar e adiar decisões.", k:"fleumatico"},
+    { q:"Em grupos, eu…", o:[
+      {t:"Assumo a liderança", k:"colerico"},
+      {t:"Animo o ambiente", k:"sanguineo"},
+      {t:"Organizo tudo", k:"melancolico"},
+      {t:"Mantenho a harmonia", k:"fleumatico"},
     ]},
-    { q:"No trabalho/estudo, eu me identifico mais com…", o:[
-      {t:"Meta, resultado e execução.", k:"colerico"},
-      {t:"Qualidade, detalhe e padrão alto.", k:"melancolico"},
-      {t:"Ideias, conexão e comunicação.", k:"sanguineo"},
-      {t:"Constância, estabilidade e rotina.", k:"fleumatico"},
+    { q:"Quando algo dá errado…", o:[
+      {t:"Reajo e resolvo", k:"colerico"},
+      {t:"Tento aliviar", k:"sanguineo"},
+      {t:"Me incomodo", k:"melancolico"},
+      {t:"Evito conflito", k:"fleumatico"},
     ]},
-    { q:"Em conflitos, normalmente eu…", o:[
-      {t:"Enfrento e falo na hora.", k:"colerico"},
-      {t:"Reflito demais e depois penso no que deveria ter dito.", k:"melancolico"},
-      {t:"Tento aliviar com humor, mas às vezes exagero.", k:"sanguineo"},
-      {t:"Evito confronto e cedo para manter a paz.", k:"fleumatico"},
+    { q:"Meu ritmo natural é…", o:[
+      {t:"Acelerado", k:"colerico"},
+      {t:"Variável", k:"sanguineo"},
+      {t:"Controlado", k:"melancolico"},
+      {t:"Constante", k:"fleumatico"},
     ]},
-    { q:"Meu maior risco emocional tende a ser…", o:[
-      {t:"Explodir, controlar demais ou endurecer.", k:"colerico"},
-      {t:"Auto-crítica, pessimismo ou peso emocional.", k:"melancolico"},
-      {t:"Impulsividade, instabilidade e excesso de estímulo.", k:"sanguineo"},
-      {t:"Acomodação, procrastinação e baixa urgência.", k:"fleumatico"},
+    { q:"O que mais me incomoda…", o:[
+      {t:"Lentidão", k:"colerico"},
+      {t:"Rotina", k:"sanguineo"},
+      {t:"Erros", k:"melancolico"},
+      {t:"Pressão", k:"fleumatico"},
     ]},
-    { q:"Quando penso em mudar um hábito, eu…", o:[
-      {t:"Crio meta e vou pra cima (às vezes exagero).", k:"colerico"},
-      {t:"Planejo tudo e demoro a começar.", k:"melancolico"},
-      {t:"Começo animado e depois perco consistência.", k:"sanguineo"},
-      {t:"Quero mudar, mas a inércia me segura.", k:"fleumatico"},
+    { q:"Sob estresse, eu…", o:[
+      {t:"Quero controle", k:"colerico"},
+      {t:"Falo mais", k:"sanguineo"},
+      {t:"Me fecho", k:"melancolico"},
+      {t:"Me mantenho calmo", k:"fleumatico"},
     ]},
-    { q:"Meu estilo de decisão é mais…", o:[
-      {t:"Rápido e assertivo.", k:"colerico"},
-      {t:"Cauteloso e criterioso.", k:"melancolico"},
-      {t:"Intuitivo e influenciado pelo momento.", k:"sanguineo"},
-      {t:"Lento, buscando o caminho mais confortável.", k:"fleumatico"},
+    { q:"No trabalho, foco em…", o:[
+      {t:"Resultado", k:"colerico"},
+      {t:"Pessoas", k:"sanguineo"},
+      {t:"Qualidade", k:"melancolico"},
+      {t:"Estabilidade", k:"fleumatico"},
     ]},
-    { q:"Quando algo sai do plano, eu…", o:[
-      {t:"Ajusto e sigo, sem muita paciência.", k:"colerico"},
-      {t:"Sinto incômodo e quero entender o porquê.", k:"melancolico"},
-      {t:"Improviso e tento tornar leve.", k:"sanguineo"},
-      {t:"Fico desconfortável e tento evitar mudanças.", k:"fleumatico"},
+    { q:"Quando discordo, eu…", o:[
+      {t:"Enfrento", k:"colerico"},
+      {t:"Argumento", k:"sanguineo"},
+      {t:"Analiso", k:"melancolico"},
+      {t:"Evito", k:"fleumatico"},
     ]},
-    { q:"Minha energia social costuma ser…", o:[
-      {t:"Direta: falo pouco, mas objetivo.", k:"colerico"},
-      {t:"Reservada: escolho bem com quem me abro.", k:"melancolico"},
-      {t:"Alta: gosto de conversar e estar com gente.", k:"sanguineo"},
-      {t:"Baixa: prefiro paz e poucos estímulos.", k:"fleumatico"},
+    { q:"Sou conhecido por…", o:[
+      {t:"Determinação", k:"colerico"},
+      {t:"Entusiasmo", k:"sanguineo"},
+      {t:"Organização", k:"melancolico"},
+      {t:"Equilíbrio", k:"fleumatico"},
     ]},
-    { q:"Quando alguém me critica, eu…", o:[
-      {t:"Rebato ou justifico na hora.", k:"colerico"},
-      {t:"Levo pro pessoal e fico remoendo.", k:"melancolico"},
-      {t:"Desvio com humor, mas posso sentir depois.", k:"sanguineo"},
-      {t:"Concordo para encerrar e evitar atrito.", k:"fleumatico"},
+    { q:"Em mudanças, eu…", o:[
+      {t:"Ajo rápido", k:"colerico"},
+      {t:"Me empolgo", k:"sanguineo"},
+      {t:"Planejo", k:"melancolico"},
+      {t:"Prefiro segurança", k:"fleumatico"},
     ]},
-    { q:"O que mais me move é…", o:[
-      {t:"Conquista e progresso.", k:"colerico"},
-      {t:"Significado e profundidade.", k:"melancolico"},
-      {t:"Experiências e conexão.", k:"sanguineo"},
-      {t:"Tranquilidade e estabilidade.", k:"fleumatico"},
+    { q:"Em relacionamentos, eu…", o:[
+      {t:"Sou intenso", k:"colerico"},
+      {t:"Sou expressivo", k:"sanguineo"},
+      {t:"Sou profundo", k:"melancolico"},
+      {t:"Sou constante", k:"fleumatico"},
     ]},
-    { q:"Quando tenho tempo livre, eu prefiro…", o:[
-      {t:"Adiantar tarefas e metas.", k:"colerico"},
-      {t:"Ler/pensar/organizar algo com calma.", k:"melancolico"},
-      {t:"Sair, ver gente, fazer algo divertido.", k:"sanguineo"},
-      {t:"Descansar e ficar em paz.", k:"fleumatico"},
+    { q:"Quando algo está mal feito…", o:[
+      {t:"Corrijo na hora", k:"colerico"},
+      {t:"Levo na esportiva", k:"sanguineo"},
+      {t:"Fico incomodado", k:"melancolico"},
+      {t:"Evito me envolver", k:"fleumatico"},
     ]},
-    { q:"Meu padrão em projetos é…", o:[
-      {t:"Começar rápido e cobrar ritmo.", k:"colerico"},
-      {t:"Começar quando estiver bem planejado.", k:"melancolico"},
-      {t:"Começar empolgado e mudar fácil de foco.", k:"sanguineo"},
-      {t:"Demorar para iniciar, mas manter quando vira rotina.", k:"fleumatico"},
+    { q:"Minha comunicação é…", o:[
+      {t:"Direta", k:"colerico"},
+      {t:"Animada", k:"sanguineo"},
+      {t:"Cuidadosa", k:"melancolico"},
+      {t:"Suave", k:"fleumatico"},
     ]},
-    { q:"Minha comunicação tende a ser…", o:[
-      {t:"Direta e firme.", k:"colerico"},
-      {t:"Cuidadosa e precisa.", k:"melancolico"},
-      {t:"Expressiva e espontânea.", k:"sanguineo"},
-      {t:"Calma e econômica.", k:"fleumatico"},
+    { q:"Com prazos, eu…", o:[
+      {t:"Pressiono para cumprir", k:"colerico"},
+      {t:"Deixo fluir", k:"sanguineo"},
+      {t:"Planejo bem", k:"melancolico"},
+      {t:"Me adapto", k:"fleumatico"},
     ]},
-    { q:"Quando alguém demora para agir, eu…", o:[
-      {t:"Fico irritado e acelero a pessoa.", k:"colerico"},
-      {t:"Me preocupo com qualidade e critério.", k:"melancolico"},
-      {t:"Puxo assunto e tento animar.", k:"sanguineo"},
-      {t:"Entendo e deixo acontecer no tempo.", k:"fleumatico"},
+    { q:"Em conflitos, eu…", o:[
+      {t:"Enfrento", k:"colerico"},
+      {t:"Tento conciliar", k:"sanguineo"},
+      {t:"Analiso tudo", k:"melancolico"},
+      {t:"Prefiro evitar", k:"fleumatico"},
     ]},
-    { q:"Meu ritmo ideal de vida seria…", o:[
-      {t:"Intenso e com metas claras.", k:"colerico"},
-      {t:"Organizado e com espaço para profundidade.", k:"melancolico"},
-      {t:"Leve, social e com novidades.", k:"sanguineo"},
-      {t:"Estável, previsível e tranquilo.", k:"fleumatico"},
+    { q:"Meu ponto forte é…", o:[
+      {t:"Decisão", k:"colerico"},
+      {t:"Carisma", k:"sanguineo"},
+      {t:"Organização", k:"melancolico"},
+      {t:"Paciência", k:"fleumatico"},
     ]},
-    { q:"Quando estou triste, eu…", o:[
-      {t:"Tento “resolver” a tristeza rápido.", k:"colerico"},
-      {t:"Mergulho nos pensamentos e emoções.", k:"melancolico"},
-      {t:"Procuro distração e gente.", k:"sanguineo"},
-      {t:"Me desligo e fico quieto.", k:"fleumatico"},
+    { q:"Meu maior desafio é…", o:[
+      {t:"Impaciência", k:"colerico"},
+      {t:"Distração", k:"sanguineo"},
+      {t:"Autocrítica", k:"melancolico"},
+      {t:"Procrastinação", k:"fleumatico"},
     ]},
-    { q:"Ao lidar com imprevistos, eu…", o:[
-      {t:"Assumo o controle e redefino o caminho.", k:"colerico"},
-      {t:"Busco entender causas e prevenir repetição.", k:"melancolico"},
-      {t:"Improviso e sigo com flexibilidade.", k:"sanguineo"},
-      {t:"Espero baixar a poeira e faço o básico.", k:"fleumatico"},
+    { q:"Em tarefas longas, eu…", o:[
+      {t:"Quero agilidade", k:"colerico"},
+      {t:"Me canso fácil", k:"sanguineo"},
+      {t:"Mantenho foco", k:"melancolico"},
+      {t:"Vou no meu ritmo", k:"fleumatico"},
     ]},
-    { q:"Em grupo, geralmente eu sou…", o:[
-      {t:"Quem puxa decisão e direção.", k:"colerico"},
-      {t:"Quem enxerga detalhes e riscos.", k:"melancolico"},
-      {t:"Quem anima e conecta as pessoas.", k:"sanguineo"},
-      {t:"Quem mantém a harmonia e dá suporte.", k:"fleumatico"},
+    { q:"Quando alguém me contraria…", o:[
+      {t:"Reajo", k:"colerico"},
+      {t:"Falo bastante", k:"sanguineo"},
+      {t:"Me retraio", k:"melancolico"},
+      {t:"Me silencio", k:"fleumatico"},
     ]},
-    { q:"Meu ponto forte mais natural é…", o:[
-      {t:"Coragem para agir.", k:"colerico"},
-      {t:"Profundidade e sensibilidade.", k:"melancolico"},
-      {t:"Carisma e criatividade.", k:"sanguineo"},
-      {t:"Calma e constância.", k:"fleumatico"},
+    { q:"No geral, eu sou…", o:[
+      {t:"Determinado", k:"colerico"},
+      {t:"Comunicativo", k:"sanguineo"},
+      {t:"Cuidadoso", k:"melancolico"},
+      {t:"Tranquilo", k:"fleumatico"},
     ]},
-    { q:"Em tarefas chatas/repetitivas, eu…", o:[
-      {t:"Faço rápido para acabar logo.", k:"colerico"},
-      {t:"Faço com capricho (mesmo sendo chato).", k:"melancolico"},
-      {t:"Enrolo e procuro algo mais interessante.", k:"sanguineo"},
-      {t:"Faço melhor quando vira rotina estável.", k:"fleumatico"},
+    { q:"Quando tenho uma ideia…", o:[
+      {t:"Executo na hora", k:"colerico"},
+      {t:"Conto pra alguém", k:"sanguineo"},
+      {t:"Penso nos detalhes", k:"melancolico"},
+      {t:"Espero o momento", k:"fleumatico"},
     ]},
-    { q:"Quando estou ansioso, eu…", o:[
-      {t:"Viro ação e tentativa de controle.", k:"colerico"},
-      {t:"Viro ruminação e excesso de cenário mental.", k:"melancolico"},
-      {t:"Viro agitação e busca por distração.", k:"sanguineo"},
-      {t:"Viro apatia e adiamento.", k:"fleumatico"},
+    { q:"Em conversas, eu…", o:[
+      {t:"Vou ao ponto", k:"colerico"},
+      {t:"Falo bastante", k:"sanguineo"},
+      {t:"Ouço e pondero", k:"melancolico"},
+      {t:"Falo pouco", k:"fleumatico"},
     ]},
-    { q:"Meu maior desafio de crescimento é…", o:[
-      {t:"Ser mais paciente e presente.", k:"colerico"},
-      {t:"Ser mais leve e menos exigente comigo.", k:"melancolico"},
-      {t:"Ser mais consistente e focado.", k:"sanguineo"},
-      {t:"Ser mais proativo e urgente quando precisa.", k:"fleumatico"},
+    { q:"Quando preciso me organizar…", o:[
+      {t:"Organizo por meta", k:"colerico"},
+      {t:"Deixo flexível", k:"sanguineo"},
+      {t:"Faço checklist", k:"melancolico"},
+      {t:"Faço o básico", k:"fleumatico"},
     ]},
-    { q:"Quando penso em equilíbrio emocional, eu preciso mais de…", o:[
-      {t:"Desacelerar e dominar impulsos.", k:"colerico"},
-      {t:"Soltar o peso e ganhar direção prática.", k:"melancolico"},
-      {t:"Canalizar energia e manter constância.", k:"sanguineo"},
-      {t:"Ativar iniciativa e sair da inércia.", k:"fleumatico"},
+    { q:"Quando algo me frustra…", o:[
+      {t:"Reajo rápido", k:"colerico"},
+      {t:"Procuro distrair", k:"sanguineo"},
+      {t:"Fico pensando", k:"melancolico"},
+      {t:"Deixo passar", k:"fleumatico"},
     ]},
-    { q:"No fim do dia, o que mais me dá sensação de “vida em ordem” é…", o:[
-      {t:"Ter avançado nas metas.", k:"colerico"},
-      {t:"Ter feito algo com significado e qualidade.", k:"melancolico"},
-      {t:"Ter vivido algo leve e conectado.", k:"sanguineo"},
-      {t:"Ter mantido paz e estabilidade.", k:"fleumatico"},
+    { q:"Em decisões importantes…", o:[
+      {t:"Assumo risco", k:"colerico"},
+      {t:"Peço opinião", k:"sanguineo"},
+      {t:"Avalio prós/contras", k:"melancolico"},
+      {t:"Prefiro segurança", k:"fleumatico"},
     ]},
   ];
 
@@ -1055,7 +1050,13 @@ document.addEventListener("DOMContentLoaded", () => {
     score: { colerico:0, fleumatico:0, sanguineo:0, melancolico:0 },
     picks: { colerico:0, fleumatico:0, sanguineo:0, melancolico:0 },
     answers: [],
-    lastKey: null
+    lastKey: null,
+
+    // ✅ evita duplicar question_step (se voltar)
+    seenQuestionStep: {},
+
+    // ✅ evita iniciar o teste 2x
+    started: false
   };
 
   const elBar = document.getElementById("bar");
@@ -1063,7 +1064,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const elO = document.getElementById("options");
   const screenQuiz = document.getElementById("screen-quiz");
   const screenResult = document.getElementById("screen-result");
-  const startBtn = document.getElementById("startBtn");
+
+  const startBtn = document.getElementById("startBtn"); // pode ser null
+  const heroCta = document.getElementById("heroCta");
+  const testSection = document.getElementById("teste");
+
   const restartBtn = document.getElementById("restartBtn");
   const restartBtnTop = document.getElementById("restartBtnTop");
   const ctaBig = document.getElementById("ctaBig");
@@ -1078,6 +1083,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const toggleAllBtn = document.getElementById("toggleAll");
   const allBooksBox = document.getElementById("allBooks");
   const melNote = document.getElementById("melNote");
+
+  function stepGroupForIndex(qIndex){
+    if(qIndex <= 5) return "step_1_5";
+    if(qIndex <= 10) return "step_6_10";
+    if(qIndex <= 15) return "step_11_15";
+    if(qIndex <= 20) return "step_16_20";
+    return "step_21_25";
+  }
 
   function setProgress(){
     const p = Math.round((state.i / QUESTIONS.length) * 100);
@@ -1100,6 +1113,8 @@ document.addEventListener("DOMContentLoaded", () => {
     state.picks = { colerico:0, fleumatico:0, sanguineo:0, melancolico:0 };
     state.answers = [];
     state.lastKey = null;
+    state.seenQuestionStep = {};
+    state.started = false;
 
     elBar.style.width = "0%";
     progressText.style.display = "none";
@@ -1107,7 +1122,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     screenQuiz.style.display = "none";
     screenResult.style.display = "none";
-    startBtn.style.display = "inline-flex";
+
+    if(startBtn) startBtn.style.display = "none";
     restartBtnTop.style.display = "none";
 
     ctaBig.href = "#";
@@ -1130,8 +1146,16 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderQuestion(){
     setProgress();
     const item = QUESTIONS[state.i];
+    const qIndex = state.i + 1;
+    const stepGroup = stepGroupForIndex(qIndex);
 
-    elQ.textContent = `${state.i+1}/${QUESTIONS.length} — ${item.q}`;
+    // ✅ GA4 — marca onde a pessoa chegou (evasão)
+    if(!state.seenQuestionStep[qIndex]){
+      track("question_step", { step_group: stepGroup, question_index: qIndex });
+      state.seenQuestionStep[qIndex] = true;
+    }
+
+    elQ.textContent = `${qIndex}/${QUESTIONS.length} — ${item.q}`;
     elO.innerHTML = "";
 
     if(state.i === 0){
@@ -1148,7 +1172,7 @@ document.addEventListener("DOMContentLoaded", () => {
       btn.className = "opt";
       btn.textContent = opt.t;
       btn.addEventListener("click", () => {
-        track("question_answer", { q_index: state.i + 1, choice: opt.k });
+        track("question_answer", { q_index: qIndex, step_group: stepGroup, choice: opt.k });
 
         state.answers.push(opt.k);
         state.score[opt.k] += 2;
@@ -1246,14 +1270,19 @@ document.addEventListener("DOMContentLoaded", () => {
     track("result_view", { primary: primary, secondary: secondary });
   }
 
-  function start(){
-    startBtn.style.display = "none";
+  function start(opts){
+    if(state.started) return;
+    state.started = true;
+
+    if(startBtn) startBtn.style.display = "none";
     restartBtnTop.style.display = "inline-flex";
     screenResult.style.display = "none";
     screenQuiz.style.display = "block";
+
     setProgress();
     renderQuestion();
-    track("test_start", { placement: "app" });
+
+    track("test_start", { placement: (opts && opts.placement) ? opts.placement : "auto_view" });
   }
 
   toggleAllBtn.addEventListener("click", () => {
@@ -1271,9 +1300,35 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   backBtn.addEventListener("click", goBackOne);
-  startBtn.addEventListener("click", start);
-  restartBtn.addEventListener("click", () => { reset(); start(); });
-  restartBtnTop.addEventListener("click", () => { reset(); start(); });
+
+  // ✅ refazer
+  restartBtn.addEventListener("click", () => { reset(); start({ placement: "restart" }); });
+  restartBtnTop.addEventListener("click", () => { reset(); start({ placement: "restart_top" }); });
+
+  // ✅ clique no CTA do topo: rola e inicia
+  if(heroCta){
+    heroCta.addEventListener("click", () => {
+      setTimeout(() => start({ placement: "hero" }), 200);
+    });
+  }
+
+  // ✅ auto-inicia quando a seção do teste entrar na tela (remove 2º clique)
+  if(testSection){
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if(en.isIntersecting){
+          start({ placement: "auto_view" });
+          io.disconnect();
+        }
+      });
+    }, { threshold: 0.35 });
+    io.observe(testSection);
+  }
+
+  // ✅ se abrir direto com #teste
+  if(window.location.hash === "#teste"){
+    setTimeout(() => start({ placement: "hash" }), 200);
+  }
 
   reset();
 });
