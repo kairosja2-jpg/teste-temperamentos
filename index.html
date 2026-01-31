@@ -15,6 +15,21 @@
     gtag('config', 'G-N6CCVJ31HY');
   </script>
 
+  <!-- ✅ Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '911477001339673');
+  fbq('track', 'PageView');
+  </script>
+  <!-- End Meta Pixel Code -->
+
   <style>
     :root{
       --bg:#050607;
@@ -511,6 +526,13 @@
 </head>
 
 <body>
+  <!-- ✅ Meta Pixel (noscript) -->
+  <noscript>
+    <img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=911477001339673&ev=PageView&noscript=1"
+    />
+  </noscript>
+
   <div class="wrap">
     <div class="topbar">
       <div class="brand">
@@ -791,6 +813,15 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch(e){}
   }
 
+  // ✅ Meta Pixel helper
+  function trackMeta(name, params){
+    try{
+      if(typeof fbq === "function"){
+        fbq("trackCustom", name, params || {});
+      }
+    } catch(e){}
+  }
+
   // ✅ UTM base
   const UTM_BASE = { utm_source: "teste_temperamentos", utm_medium: "site", utm_campaign: "resultado" };
 
@@ -884,16 +915,27 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("c-melancolico").innerHTML = renderCollectionTile("melancolico");
   document.getElementById("c-sanguineo").innerHTML   = renderCollectionTile("sanguineo");
 
-  // ✅ Clique Amazon tracking
+  // ✅ Clique Amazon + Instagram tracking (GA4 + Meta Pixel)
   document.addEventListener("click", (e) => {
     const a = e.target && e.target.closest ? e.target.closest("a") : null;
     if(!a || !a.href) return;
+
     if(a.href.includes("amazon.com.br")){
       const key = a.getAttribute("data-book") || "unknown";
+
+      // GA4
       track("amazon_click", { link_url: a.href, book_key: key });
+
+      // Meta Pixel
+      trackMeta("amazon_click", { link_url: a.href, book_key: key });
     }
+
     if(a.href.includes("instagram.com")){
+      // GA4
       track("instagram_click", { link_url: a.href });
+
+      // Meta Pixel (opcional, mas já deixei)
+      trackMeta("instagram_click", { link_url: a.href });
     }
   });
 
@@ -1282,7 +1324,9 @@ document.addEventListener("DOMContentLoaded", () => {
     screenQuiz.style.display = "none";
     screenResult.style.display = "block";
 
+    // ✅ Evento: ver resultado (GA4 + Meta Pixel)
     track("result_view", { primary: primary, secondary: secondary });
+    trackMeta("result_view", { primary: primary, secondary: secondary });
   }
 
   function start(opts){
@@ -1296,7 +1340,11 @@ document.addEventListener("DOMContentLoaded", () => {
     setProgress();
     renderQuestion();
 
-    track("test_start", { placement: (opts && opts.placement) ? opts.placement : "auto_view" });
+    const payload = { placement: (opts && opts.placement) ? opts.placement : "auto_view" };
+
+    // ✅ Evento: iniciar teste (GA4 + Meta Pixel)
+    track("test_start", payload);
+    trackMeta("test_start", payload);
 
     toggleSticky();
   }
