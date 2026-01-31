@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Teste de Temperamento — Resultado + Livro recomendado</title>
-  <meta name="description" content="Faça o teste de temperamento (25 perguntas) e veja seu resultado com recomendação do livro ideal." />
+  <meta name="description" content="Descubra seu temperamento em 2 minutos (25 perguntas). Resultado imediato e recomendação do guia ideal." />
 
   <!-- ✅ Google Analytics 4 (GA4) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-N6CCVJ31HY"></script>
@@ -50,23 +50,23 @@
     }
 
     a{color:inherit}
-    .wrap{max-width:var(--max); margin:0 auto; padding:26px 18px 64px; position:relative; z-index:1;}
+    .wrap{max-width:var(--max); margin:0 auto; padding:20px 18px 84px; position:relative; z-index:1;}
 
     .topbar{
       display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
-      margin-bottom:16px;
+      margin-bottom:14px;
     }
-    .brand{display:flex; flex-direction:column; gap:6px;}
-    .brand h1{margin:0; font-size:18px; letter-spacing:-.2px;}
-    .brand p{margin:0; color:var(--muted); font-size:15px; line-height:1.45;}
+    .brand{display:flex; flex-direction:column; gap:4px;}
+    .brand h1{margin:0; font-size:16px; letter-spacing:-.2px;}
+    .brand p{margin:0; color:var(--muted); font-size:14px; line-height:1.45;}
 
     .badge{
       display:inline-flex; align-items:center; gap:8px;
-      padding:10px 12px;
+      padding:9px 12px;
       border-radius:999px;
       border:1px solid var(--stroke);
       background: rgba(0,0,0,.25);
-      font-size:14px;
+      font-size:13px;
       color: rgba(255,255,255,.90);
       backdrop-filter: blur(10px);
       box-shadow: var(--shadow2);
@@ -118,11 +118,11 @@
       display:grid;
       grid-template-columns: 1.05fr .95fr;
       gap:18px;
-      padding:28px 22px;
+      padding:24px 18px;
       align-items:center;
     }
     @media (max-width: 980px){
-      .heroInner{grid-template-columns:1fr; padding:22px 16px;}
+      .heroInner{grid-template-columns:1fr; padding:18px 14px;}
     }
 
     .kicker{
@@ -142,19 +142,19 @@
     }
 
     .heroTitle{
-      margin:0 0 12px;
+      margin:0 0 10px;
       font-weight:1000;
       letter-spacing:-1.0px;
       line-height:1.06;
-      font-size: clamp(36px, 4.3vw, 54px);
+      font-size: clamp(34px, 4.3vw, 52px);
     }
     .heroTitle .accent{color:var(--accent)}
     .heroSub{
-      margin:0 0 16px;
+      margin:0 0 14px;
       color:var(--muted);
       line-height:1.7;
       font-size:18px;
-      max-width:60ch;
+      max-width:62ch;
     }
 
     .heroBullets{
@@ -169,10 +169,10 @@
 
     .ctaRow{
       display:flex; gap:10px; flex-wrap:wrap; align-items:center;
-      margin-top:18px;
+      margin-top:16px;
     }
     .tiny{
-      margin-top:12px;
+      margin-top:10px;
       font-size:14px;
       color: var(--muted);
       line-height:1.65;
@@ -185,7 +185,7 @@
       background: rgba(0,0,0,.18);
       box-shadow: var(--shadow2);
       overflow:hidden;
-      min-height: 340px;
+      min-height: 320px;
       display:flex;
       align-items:center;
       justify-content:center;
@@ -294,11 +294,11 @@
       font-size:15px;
     }
 
-    /* ✅ AQUI: borda laranja ao redor do TESTE (mesmo tom do botão) */
+    /* ✅ AQUI: borda laranja ao redor do TESTE */
     .appShell{
       margin-top:18px;
-      position: relative; /* necessário para glow ficar certinho */
-      border: 2px solid rgba(255, 77, 46, 0.78); /* laranja do botão */
+      position: relative;
+      border: 2px solid rgba(255, 77, 46, 0.78);
       border-radius: 28px;
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
       box-shadow:
@@ -485,6 +485,28 @@
       line-height:1.7;
       text-align:center;
     }
+
+    /* ✅ Sticky CTA (mobile) */
+    .stickyCta{
+      position: fixed;
+      left: 14px;
+      right: 14px;
+      bottom: 14px;
+      z-index: 9999;
+      display:none;
+      pointer-events:auto;
+      filter: drop-shadow(0 16px 30px rgba(0,0,0,.50));
+    }
+    .stickyCta .btn{
+      width:100%;
+      border-radius:22px;
+      padding:18px 18px;
+      font-size:18px;
+      font-weight:1000;
+    }
+    @media (min-width: 980px){
+      .stickyCta{display:none !important;}
+    }
   </style>
 </head>
 
@@ -493,39 +515,38 @@
     <div class="topbar">
       <div class="brand">
         <h1>Teste de Temperamento</h1>
-        <p>25 perguntas • resultado imediato • recomendação do guia ideal</p>
+        <p>2 min • 25 perguntas • resultado imediato</p>
       </div>
       <div class="badge" title="Observação importante">
         <span>ℹ️</span>
-        <span>Não é diagnóstico clínico — é um retrato de tendência.</span>
+        <span>Não é diagnóstico clínico — é uma tendência.</span>
       </div>
     </div>
 
-    <!-- HERO -->
+    <!-- HERO (otimizado para start) -->
     <section class="hero" aria-label="Apresentação">
       <div class="heroInner">
         <div>
-          <div class="kicker"><span class="kdot"></span> Leitura simples • aplicação prática • sem enrolação</div>
+          <div class="kicker"><span class="kdot"></span> 2 minutos • sem cadastro • resultado na hora</div>
 
           <h2 class="heroTitle">
-            Acesse o <span class="accent">livro</span> de qualquer lugar.
+            Descubra seu <span class="accent">temperamento</span> em 2 minutos.
           </h2>
 
           <p class="heroSub">
-            Faça o teste, descubra seu temperamento dominante e escolha o guia certo para aplicar no dia a dia.
-            Depois da compra na Amazon, você pode ler no celular, tablet ou computador — <b>onde e quando quiser</b>.
+            Responda 25 perguntas rápidas e receba <b>seu resultado imediato</b> + a <b>recomendação do guia ideal</b>
+            para aplicar no dia a dia.
           </p>
 
           <ul class="heroBullets">
-            <li><b>Resultado imediato</b> ao finalizar o teste</li>
-            <li><b>Escolha rápida</b> do livro recomendado</li>
-            <li><b>Compartilhe</b> o teste com alguém pelo WhatsApp</li>
+            <li><b>Resultado imediato</b> ao finalizar</li>
+            <li><b>Recomendação direta</b> do livro certo</li>
+            <li><b>Sem cadastro</b> (você começa agora)</li>
           </ul>
 
           <div class="ctaRow">
-            <a class="btn primary big" href="#teste" id="heroCta">👉 Começar o teste agora</a>
-            <a class="btn" href="#colecao" id="collectionBtn">📚 Ver coleção completa</a>
-            <a class="btn" id="shareLink" href="#" target="_blank" rel="noopener">📲 Compartilhar no WhatsApp</a>
+            <a class="btn primary big" href="#teste" id="heroCta">👉 Fazer o teste agora (2 min)</a>
+            <a class="btn" href="#colecao" id="collectionBtn">📚 Ver coleção</a>
           </div>
 
           <div class="tiny">
@@ -537,85 +558,13 @@
           <img src="assets/phones.png" alt="Coleção: colérico, fleumático, melancólico e sanguíneo no celular" loading="lazy"
                onerror="this.style.display='none'; this.parentElement.querySelector('.mockNote').innerHTML='Coloque sua imagem em <b>assets/phones.png</b>.';">
           <div class="mockNote">
-            Após comprar na Amazon, você lê no Kindle (celular/tablet/PC) — <b>em qualquer lugar</b>.
+            No final você recebe a recomendação e pode abrir na Amazon.
           </div>
         </div>
       </div>
     </section>
 
-    <!-- COMO FUNCIONA -->
-    <section class="section" aria-label="Como funciona">
-      <div class="sectionInner">
-        <h3 class="sectionTitle">Como funciona</h3>
-        <p class="sectionText">
-          Você responde 25 perguntas, vê o resultado na hora e recebe a recomendação do guia ideal para começar.
-        </p>
-
-        <div class="cards">
-          <div class="card">
-            <h3>1) Faça o teste</h3>
-            <p>Responda como você é na maior parte do tempo (sem pensar demais).</p>
-          </div>
-          <div class="card">
-            <h3>2) Veja seu resultado</h3>
-            <p>Você recebe o temperamento dominante e o segundo mais provável.</p>
-          </div>
-          <div class="card">
-            <h3>3) Escolha seu livro</h3>
-            <p>Selecione o guia recomendado e abra na Amazon.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- FAQ -->
-    <section class="section" id="faq" aria-label="Perguntas frequentes">
-      <div class="sectionInner">
-        <h3 class="sectionTitle">Perguntas frequentes</h3>
-        <p class="sectionText">Respostas claras e rápidas.</p>
-
-        <div class="faq">
-          <details>
-            <summary>Quanto tempo leva? <span class="chev">▾</span></summary>
-            <div class="faqBody">
-              Em média <b>2 minutos</b>. São 25 perguntas e o resultado aparece imediatamente no final.
-            </div>
-          </details>
-
-          <details>
-            <summary>Precisa de cadastro? <span class="chev">▾</span></summary>
-            <div class="faqBody">
-              Não. Você pode fazer o teste <b>sem cadastro obrigatório</b>.
-            </div>
-          </details>
-
-          <details>
-            <summary>Onde eu leio o livro? <span class="chev">▾</span></summary>
-            <div class="faqBody">
-              <b>Em qualquer lugar.</b> Depois da compra na Amazon, o livro fica na sua biblioteca Kindle.
-              Você pode ler no <b>celular</b>, <b>tablet</b> ou <b>computador</b> — quando quiser.
-            </div>
-          </details>
-
-          <details>
-            <summary>Isso é diagnóstico clínico? <span class="chev">▾</span></summary>
-            <div class="faqBody">
-              Não. É um teste de <b>autoconhecimento</b> baseado no modelo clássico dos quatro temperamentos.
-            </div>
-          </details>
-
-          <details>
-            <summary>Por que aparece “segundo mais provável”? <span class="chev">▾</span></summary>
-            <div class="faqBody">
-              Muita gente tem um temperamento dominante e um “secundário” que aparece em situações específicas.
-              Por isso mostramos duas recomendações.
-            </div>
-          </details>
-        </div>
-      </div>
-    </section>
-
-    <!-- APP / TESTE -->
+    <!-- APP / TESTE (puxado pra cima) -->
     <section class="appShell" id="teste" aria-label="Teste de temperamento">
       <div class="appHeader">
         <div>
@@ -624,12 +573,11 @@
         </div>
         <div class="badge" title="Observação importante">
           <span>✅</span>
-          <span>Resultado imediato (sem cadastro)</span>
+          <span>Comece sem cadastro</span>
         </div>
       </div>
 
       <div class="content">
-        <!-- ✅ botão interno removido (sem 2 cliques) -->
         <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:10px;">
           <button type="button" class="btn" id="restartBtnTop" style="display:none;">Refazer</button>
         </div>
@@ -683,7 +631,6 @@
 
               <div class="ctaRow" style="margin-top:12px;">
                 <a class="btn" href="#colecao">📚 Ver coleção completa</a>
-                <a class="btn" id="shareLink2" href="#" target="_blank" rel="noopener">📲 Compartilhar no WhatsApp</a>
               </div>
             </div>
 
@@ -727,7 +674,70 @@
             <button type="button" class="btn" id="restartBtn">Refazer teste</button>
           </div>
         </div>
+      </div>
+    </section>
 
+    <!-- COMO FUNCIONA (agora depois do teste) -->
+    <section class="section" aria-label="Como funciona">
+      <div class="sectionInner">
+        <h3 class="sectionTitle">Como funciona</h3>
+        <p class="sectionText">
+          Você responde 25 perguntas, vê o resultado na hora e recebe a recomendação do guia ideal para começar.
+        </p>
+
+        <div class="cards">
+          <div class="card">
+            <h3>1) Responda rápido</h3>
+            <p>Responda como você é na maior parte do tempo (sem pensar demais).</p>
+          </div>
+          <div class="card">
+            <h3>2) Veja seu resultado</h3>
+            <p>Você recebe o temperamento dominante e o segundo mais provável.</p>
+          </div>
+          <div class="card">
+            <h3>3) Abra na Amazon</h3>
+            <p>Clique no guia recomendado e vá direto para a página do livro.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section" id="faq" aria-label="Perguntas frequentes">
+      <div class="sectionInner">
+        <h3 class="sectionTitle">Perguntas frequentes</h3>
+        <p class="sectionText">Respostas claras e rápidas.</p>
+
+        <div class="faq">
+          <details>
+            <summary>Quanto tempo leva? <span class="chev">▾</span></summary>
+            <div class="faqBody">
+              Em média <b>2 minutos</b>. São 25 perguntas e o resultado aparece imediatamente no final.
+            </div>
+          </details>
+
+          <details>
+            <summary>Precisa de cadastro? <span class="chev">▾</span></summary>
+            <div class="faqBody">
+              Não. Você pode fazer o teste <b>sem cadastro</b>.
+            </div>
+          </details>
+
+          <details>
+            <summary>Isso é diagnóstico clínico? <span class="chev">▾</span></summary>
+            <div class="faqBody">
+              Não. É um teste de <b>autoconhecimento</b> baseado no modelo clássico dos quatro temperamentos.
+            </div>
+          </details>
+
+          <details>
+            <summary>Por que aparece “segundo mais provável”? <span class="chev">▾</span></summary>
+            <div class="faqBody">
+              Muita gente tem um temperamento dominante e um “secundário” em situações específicas.
+              Por isso mostramos duas recomendações.
+            </div>
+          </details>
+        </div>
       </div>
     </section>
 
@@ -746,7 +756,6 @@
 
         <div class="ctaRow" style="margin-top:14px;">
           <a class="btn primary big" href="#teste">👉 Voltar para o teste</a>
-          <a class="btn" id="shareLink3" href="#" target="_blank" rel="noopener">📲 Compartilhar no WhatsApp</a>
         </div>
       </div>
     </section>
@@ -755,6 +764,11 @@
       © <span id="year"></span> Leonardo Monteiro • Conteúdo para autoconhecimento •
       <span style="opacity:.85">Este site não substitui avaliação profissional.</span>
     </footer>
+  </div>
+
+  <!-- ✅ Sticky CTA (mobile) -->
+  <div class="stickyCta" id="stickyCta">
+    <button type="button" class="btn primary" id="stickyBtn">👉 Fazer o teste (2 min)</button>
   </div>
 
 <script>
@@ -776,18 +790,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     } catch(e){}
   }
-
-  // ✅ WhatsApp share (link direto, sem popup)
-  function buildWhatsAppLink(){
-    const url = window.location.href;
-    const msg = "Fiz esse teste de temperamento (resultado na hora). Faz também: " + url;
-    return "https://wa.me/?text=" + encodeURIComponent(msg);
-  }
-  const shareUrl = buildWhatsAppLink();
-  ["shareLink","shareLink2","shareLink3"].forEach(id => {
-    const el = document.getElementById(id);
-    if(el) el.href = shareUrl;
-  });
 
   // ✅ UTM base
   const UTM_BASE = { utm_source: "teste_temperamentos", utm_medium: "site", utm_campaign: "resultado" };
@@ -896,7 +898,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // =====================
-  // QUIZ (25 curtas + GA step + auto-start)
+  // QUIZ
   // =====================
   const QUESTIONS = [
     { q:"Quando preciso decidir algo…", o:[
@@ -1067,7 +1069,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const screenQuiz = document.getElementById("screen-quiz");
   const screenResult = document.getElementById("screen-result");
 
-  const startBtn = document.getElementById("startBtn"); // pode ser null
   const heroCta = document.getElementById("heroCta");
   const testSection = document.getElementById("teste");
 
@@ -1085,6 +1086,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const toggleAllBtn = document.getElementById("toggleAll");
   const allBooksBox = document.getElementById("allBooks");
   const melNote = document.getElementById("melNote");
+
+  const stickyCta = document.getElementById("stickyCta");
+  const stickyBtn = document.getElementById("stickyBtn");
+  let inTestView = false;
+
+  function toggleSticky(){
+    if(!stickyCta) return;
+    if(state.started || inTestView){
+      stickyCta.style.display = "none";
+      return;
+    }
+    stickyCta.style.display = "block";
+  }
 
   function stepGroupForIndex(qIndex){
     if(qIndex <= 5) return "step_1_5";
@@ -1124,8 +1138,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     screenQuiz.style.display = "none";
     screenResult.style.display = "none";
-
-    if(startBtn) startBtn.style.display = "none";
     restartBtnTop.style.display = "none";
 
     ctaBig.href = "#";
@@ -1143,6 +1155,8 @@ document.addEventListener("DOMContentLoaded", () => {
     microHint.style.display = "none";
     microHint.innerHTML = "";
     backBtn.disabled = true;
+
+    toggleSticky();
   }
 
   function renderQuestion(){
@@ -1275,7 +1289,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if(state.started) return;
     state.started = true;
 
-    if(startBtn) startBtn.style.display = "none";
     restartBtnTop.style.display = "inline-flex";
     screenResult.style.display = "none";
     screenQuiz.style.display = "block";
@@ -1284,6 +1297,8 @@ document.addEventListener("DOMContentLoaded", () => {
     renderQuestion();
 
     track("test_start", { placement: (opts && opts.placement) ? opts.placement : "auto_view" });
+
+    toggleSticky();
   }
 
   toggleAllBtn.addEventListener("click", () => {
@@ -1309,29 +1324,40 @@ document.addEventListener("DOMContentLoaded", () => {
   // ✅ clique no CTA do topo: rola e inicia
   if(heroCta){
     heroCta.addEventListener("click", () => {
-      setTimeout(() => start({ placement: "hero" }), 200);
+      setTimeout(() => start({ placement: "hero" }), 180);
     });
   }
 
-  // ✅ auto-inicia quando a seção do teste entrar na tela (remove 2º clique)
+  // ✅ sticky CTA: rola e inicia
+  if(stickyBtn){
+    stickyBtn.addEventListener("click", () => {
+      track("cta_click", { placement: "sticky" });
+      testSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      setTimeout(() => start({ placement: "sticky" }), 220);
+    });
+  }
+
+  // ✅ auto-inicia quando a seção do teste entrar na tela (mais cedo)
   if(testSection){
     const io = new IntersectionObserver((entries) => {
       entries.forEach((en) => {
+        inTestView = en.isIntersecting;
+        toggleSticky();
         if(en.isIntersecting){
           start({ placement: "auto_view" });
-          io.disconnect();
         }
       });
-    }, { threshold: 0.35 });
+    }, { threshold: 0.15, rootMargin: "0px 0px -10% 0px" });
     io.observe(testSection);
   }
 
   // ✅ se abrir direto com #teste
   if(window.location.hash === "#teste"){
-    setTimeout(() => start({ placement: "hash" }), 200);
+    setTimeout(() => start({ placement: "hash" }), 160);
   }
 
   reset();
+  toggleSticky();
 });
 </script>
 </body>
