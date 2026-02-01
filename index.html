@@ -28,6 +28,11 @@
   fbq('init', '911477001339673');
   fbq('track', 'PageView');
   </script>
+
+  <!-- ✅ Meta Pixel (noscript) -->
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=911477001339673&ev=PageView&noscript=1"
+  /></noscript>
   <!-- End Meta Pixel Code -->
 
   <style>
@@ -526,13 +531,6 @@
 </head>
 
 <body>
-  <!-- ✅ Meta Pixel (noscript) -->
-  <noscript>
-    <img height="1" width="1" style="display:none"
-      src="https://www.facebook.com/tr?id=911477001339673&ev=PageView&noscript=1"
-    />
-  </noscript>
-
   <div class="wrap">
     <div class="topbar">
       <div class="brand">
@@ -920,7 +918,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const a = e.target && e.target.closest ? e.target.closest("a") : null;
     if(!a || !a.href) return;
 
-    if(a.href.includes("amazon.com.br")){
+    const host = (a.hostname || "").toLowerCase();
+
+    // ✅ 3) Normalizar domínio Amazon (amazon.* ou amzn.*)
+    if (host.includes("amazon.") || host.includes("amzn.")) {
       const key = a.getAttribute("data-book") || "unknown";
 
       // GA4
@@ -934,7 +935,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // GA4
       track("instagram_click", { link_url: a.href });
 
-      // Meta Pixel (opcional, mas já deixei)
+      // Meta Pixel
       trackMeta("instagram_click", { link_url: a.href });
     }
   });
@@ -1372,6 +1373,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // ✅ clique no CTA do topo: rola e inicia
   if(heroCta){
     heroCta.addEventListener("click", () => {
+      // ✅ 2) Garantir cta_click também no Meta (hero)
+      track("cta_click", { placement: "hero" });
+      trackMeta("cta_click", { placement: "hero" });
+
       setTimeout(() => start({ placement: "hero" }), 180);
     });
   }
@@ -1380,6 +1385,8 @@ document.addEventListener("DOMContentLoaded", () => {
   if(stickyBtn){
     stickyBtn.addEventListener("click", () => {
       track("cta_click", { placement: "sticky" });
+      trackMeta("cta_click", { placement: "sticky" }); // ✅ 2) Meta também
+
       testSection.scrollIntoView({ behavior: "smooth", block: "start" });
       setTimeout(() => start({ placement: "sticky" }), 220);
     });
