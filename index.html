@@ -314,7 +314,7 @@
       font-size:15px;
     }
 
-    /* ✅ AQUI: borda laranja ao redor do TESTE */
+    /* ✅ borda laranja ao redor do TESTE */
     .appShell{
       margin-top:18px;
       position: relative;
@@ -386,7 +386,7 @@
       padding:16px;
     }
     .resultTitle{font-size:22px; font-weight:1000; margin:0 0 8px; letter-spacing:-0.5px;}
-    .muted{color:var(--muted); font-size:16px; line-height:1.75; white-space:pre-wrap;}
+    .muted{color:var(--muted); font-size:16px; line-height:1.75;}
 
     .pills{display:flex; flex-wrap:wrap; gap:10px; margin-top:12px;}
     .pill{padding:9px 12px; border-radius:999px; border:1px solid var(--stroke); background: rgba(0,0,0,.18); font-size:14px; color: rgba(255,255,255,.90);}
@@ -527,10 +527,23 @@
     @media (min-width: 980px){
       .stickyCta{display:none !important;}
     }
+
+    /* ==========================================================
+       ✅ MODO "FOCO NO TESTE" (pré-start)
+       - Você pediu: liberar o resto só na 3ª resposta
+       - Isso aumenta start rate (menos distração)
+       ========================================================== */
+    body.preStart .hero,
+    body.preStart .section,
+    body.preStart footer{
+      display:none !important;
+    }
+    /* mantém topbar (confiança), mas pode esconder se quiser */
+    /* body.preStart .topbar{display:none !important;} */
   </style>
 </head>
 
-<body>
+<body class="preStart">
   <div class="wrap">
     <div class="topbar">
       <div class="brand">
@@ -543,7 +556,7 @@
       </div>
     </div>
 
-    <!-- HERO (otimizado para start) -->
+    <!-- HERO -->
     <section class="hero" aria-label="Apresentação">
       <div class="heroInner">
         <div>
@@ -584,7 +597,7 @@
       </div>
     </section>
 
-    <!-- APP / TESTE (puxado pra cima) -->
+    <!-- APP / TESTE -->
     <section class="appShell" id="teste" aria-label="Teste de temperamento">
       <div class="appHeader">
         <div>
@@ -625,8 +638,7 @@
               <div class="muted" id="resultText"></div>
               <div class="pills" id="traits"></div>
 
-              <!-- ✅ Bridge dinâmica -->
-              <div class="bridge" id="bridgeText">
+              <div class="bridge">
                 <b>Quer aprofundar esse resultado?</b><br>
                 O guia te ajuda a aplicar isso no dia a dia com clareza e direção.
               </div>
@@ -694,7 +706,7 @@
       </div>
     </section>
 
-    <!-- COMO FUNCIONA (agora depois do teste) -->
+    <!-- COMO FUNCIONA -->
     <section class="section" aria-label="Como funciona">
       <div class="sectionInner">
         <h3 class="sectionTitle">Como funciona</h3>
@@ -920,18 +932,12 @@ document.addEventListener("DOMContentLoaded", () => {
     if (host.includes("amazon.") || host.includes("amzn.")) {
       const key = a.getAttribute("data-book") || "unknown";
 
-      // GA4
       track("amazon_click", { link_url: a.href, book_key: key });
-
-      // Meta Pixel
       trackMeta("amazon_click", { link_url: a.href, book_key: key });
     }
 
     if(a.href.includes("instagram.com")){
-      // GA4
       track("instagram_click", { link_url: a.href });
-
-      // Meta Pixel
       trackMeta("instagram_click", { link_url: a.href });
     }
   });
@@ -1099,7 +1105,8 @@ document.addEventListener("DOMContentLoaded", () => {
     answers: [],
     lastKey: null,
     seenQuestionStep: {},
-    started: false
+    started: false,
+    unlocked: false // ✅ controla liberação do resto do site
   };
 
   const elBar = document.getElementById("bar");
@@ -1124,8 +1131,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const elBookAll = document.getElementById("bookAll");
   const toggleAllBtn = document.getElementById("toggleAll");
   const allBooksBox = document.getElementById("allBooks");
-
-  const bridgeText = document.getElementById("bridgeText");
 
   const stickyCta = document.getElementById("stickyCta");
   const stickyBtn = document.getElementById("stickyBtn");
@@ -1171,6 +1176,10 @@ document.addEventListener("DOMContentLoaded", () => {
     state.lastKey = null;
     state.seenQuestionStep = {};
     state.started = false;
+    state.unlocked = false;
+
+    // ✅ volta para modo foco
+    document.body.classList.add("preStart");
 
     elBar.style.width = "0%";
     progressText.style.display = "none";
@@ -1190,10 +1199,6 @@ document.addEventListener("DOMContentLoaded", () => {
     elBookAll.innerHTML = "";
     allBooksBox.style.display = "none";
     toggleAllBtn.textContent = "Ver coleção completa";
-
-    if(bridgeText){
-      bridgeText.innerHTML = `<b>Quer aprofundar esse resultado?</b><br>O guia te ajuda a aplicar isso no dia a dia com clareza e direção.`;
-    }
 
     microHint.style.display = "none";
     microHint.innerHTML = "";
@@ -1229,17 +1234,33 @@ document.addEventListener("DOMContentLoaded", () => {
       btn.type = "button";
       btn.className = "opt";
       btn.textContent = opt.t;
+
       btn.addEventListener("click", () => {
         track("question_answer", { q_index: qIndex, step_group: stepGroup, choice: opt.k });
 
+        // ✅ registra resposta
         state.answers.push(opt.k);
         state.score[opt.k] += 2;
         state.picks[opt.k] += 1;
         state.i += 1;
 
+        // ✅ LIBERA O RESTO DO SITE NA 3ª RESPOSTA, COM SCROLL-FIX
+        // Motivo: quando o layout "aparece" acima, a página pode "subir".
+        if(!state.unlocked && state.answers.length >= 3){
+          state.unlocked = true;
+
+          const beforeTop = testSection.getBoundingClientRect().top;
+          document.body.classList.remove("preStart");
+          const afterTop = testSection.getBoundingClientRect().top;
+
+          // compensa a mudança de layout sem animação (não dá sensação de pulo)
+          window.scrollBy({ top: (afterTop - beforeTop), left: 0, behavior: "auto" });
+        }
+
         if(state.i >= QUESTIONS.length) showResult();
         else renderQuestion();
       });
+
       elO.appendChild(btn);
     });
   }
@@ -1253,6 +1274,8 @@ document.addEventListener("DOMContentLoaded", () => {
       state.score[last] = Math.max(state.score[last] - 2, 0);
       state.picks[last] = Math.max(state.picks[last] - 1, 0);
     }
+
+    // (não “trava” de volta o site ao voltar — evita mais mudanças visuais)
     renderQuestion();
   }
 
@@ -1272,73 +1295,31 @@ document.addEventListener("DOMContentLoaded", () => {
     return [primary, secondary];
   }
 
-  // ✅ NOVO: copy com dor + promessa + pills-situação
   function resultCopy(key){
     const map = {
       colerico: {
         title: "Seu temperamento dominante é: Colérico",
         text:
-          "Você é direção, intensidade e decisão. E provavelmente já percebeu um custo disso:\n" +
-          "quando alguém é lento, quando as coisas não andam, ou quando você sente que precisa carregar tudo, " +
-          "a sua energia vira tensão.\n\n" +
-          "O guia te mostra como manter sua força sem viver no modo “pressão”: " +
-          "como reduzir irritação, delegar sem perder padrão e ter controle emocional sem perder performance.",
-        traits: [
-          "Decide e executa rápido",
-          "Se irrita com lentidão",
-          "Tende a controlar tudo",
-          "Cobra (e se cobra) demais",
-          "Dificuldade em desacelerar",
-          "Firmeza sem dureza"
-        ]
+          "Você tende a agir com intensidade, direção e foco em resultado. A dor aparece quando a pressa vira tensão: impaciência, controle e cobranças (inclusive com você). O guia te mostra como manter sua força sem perder presença e autocontrole.",
+        traits: ["Decisão e liderança", "Urgência e ação", "Dor: impaciência/controle", "Ajuste: presença e autocontrole"]
       },
       melancolico: {
         title: "Seu temperamento dominante é: Melancólico",
         text:
-          "Você tem profundidade, sensibilidade e um padrão alto. Mas isso quase sempre vem com uma dor silenciosa:\n" +
-          "pensar demais, se cobrar demais e carregar peso por muito tempo.\n\n" +
-          "O guia te ajuda a transformar análise em ação: " +
-          "como parar de travar na perfeição, reduzir autocobrança e criar direção prática sem perder sua qualidade.",
-        traits: [
-          "Pensa em detalhes",
-          "Se incomoda com erros",
-          "Se cobra e se compara",
-          "Trava no perfeito",
-          "Guarda emoções por dentro",
-          "Leveza com padrão"
-        ]
+          "Você tem profundidade, sensibilidade e padrão alto. A dor aparece quando a exigência vira peso: travar, ruminar, se cobrar demais e perder o prazer do caminho. O guia te ajuda a transformar análise em direção prática, com leveza.",
+        traits: ["Profundidade e análise", "Senso de qualidade", "Dor: autoexigência/travar", "Ajuste: direção e leveza"]
       },
       sanguineo: {
         title: "Seu temperamento dominante é: Sanguíneo",
         text:
-          "Você é energia, presença e conexão. E a sua dor costuma ser bem específica:\n" +
-          "você se empolga fácil, começa muita coisa e, quando a rotina chega, perde tração.\n\n" +
-          "O guia te ensina a manter sua leveza com constância: " +
-          "como diminuir dispersão, controlar impulsos e transformar entusiasmo em hábito — sem virar uma pessoa “fria”.",
-        traits: [
-          "Carismático e comunicativo",
-          "Se empolga e começa rápido",
-          "Dispersa com facilidade",
-          "Impulsivo em decisões",
-          "Desanima na rotina",
-          "Foco sem apagar"
-        ]
+          "Você é energia, presença e conexão. A dor aparece quando o impulso vence o foco: dispersão, começar muito e terminar pouco, culpa depois. O guia te ensina a canalizar entusiasmo em constância — sem apagar sua espontaneidade.",
+        traits: ["Carisma e comunicação", "Criatividade e entusiasmo", "Dor: dispersão/impulsos", "Ajuste: consistência"]
       },
       fleumatico: {
         title: "Seu temperamento dominante é: Fleumático",
         text:
-          "Você é calma, estabilidade e boa convivência. Só que existe uma dor que pega muita gente:\n" +
-          "você aguenta, segura, evita conflito… e acaba deixando decisões importantes para depois.\n\n" +
-          "O guia te ajuda a ativar iniciativa sem perder sua paz: " +
-          "como parar de procrastinar, dizer “não” sem culpa e criar urgência saudável quando precisa agir.",
-        traits: [
-          "Calmo e equilibrado",
-          "Evita conflito",
-          "Adia decisões importantes",
-          "Aguenta mais do que devia",
-          "Dificuldade em começar",
-          "Ação sem ansiedade"
-        ]
+          "Você tende à calma, estabilidade e paciência. A dor aparece quando a paz vira inércia: procrastinar, evitar conflito e deixar a vida decidir por você. O guia te ajuda a ativar iniciativa e urgência sem perder o equilíbrio.",
+        traits: ["Calma e equilíbrio", "Estabilidade na rotina", "Dor: acomodação/procrastinação", "Ajuste: iniciativa e urgência"]
       }
     };
     return map[key];
@@ -1357,17 +1338,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("resultText").textContent = copy.text;
     document.getElementById("traits").innerHTML = copy.traits.map(t => `<span class="pill">${t}</span>`).join("");
 
-    // ✅ Bridge dinâmica por temperamento
-    const bridgeCopy = {
-      colerico: "<b>Se você vive no “modo pressão”…</b><br>O guia te mostra como manter performance sem irritação e sem controle excessivo.",
-      melancolico: "<b>Se você pensa demais e trava…</b><br>O guia te dá direção prática sem perder sua profundidade.",
-      sanguineo: "<b>Se você começa muito e termina pouco…</b><br>O guia te ajuda a criar constância sem matar sua leveza.",
-      fleumatico: "<b>Se você adia pra manter a paz…</b><br>O guia te ensina iniciativa e limites sem culpa."
-    };
-    if(bridgeText){
-      bridgeText.innerHTML = bridgeCopy[primary] || bridgeText.innerHTML;
-    }
-
     elBookPrimary.innerHTML = renderBookCardInline(primary,"Ver o guia recomendado");
     elBookSecondary.innerHTML = renderBookCardInline(secondary,"Ver alternativa");
 
@@ -1380,7 +1350,6 @@ document.addEventListener("DOMContentLoaded", () => {
     screenQuiz.style.display = "none";
     screenResult.style.display = "block";
 
-    // ✅ Evento: ver resultado (GA4 + Meta Pixel)
     track("result_view", { primary: primary, secondary: secondary });
     trackMeta("result_view", { primary: primary, secondary: secondary });
   }
@@ -1396,9 +1365,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setProgress();
     renderQuestion();
 
-    const payload = { placement: (opts && opts.placement) ? opts.placement : "auto_view" };
-
-    // ✅ Evento: iniciar teste (GA4 + Meta Pixel)
+    const payload = { placement: (opts && opts.placement) ? opts.placement : "auto_load" };
     track("test_start", payload);
     trackMeta("test_start", payload);
 
@@ -1421,14 +1388,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   backBtn.addEventListener("click", goBackOne);
 
-  // ✅ refazer
   restartBtn.addEventListener("click", () => { reset(); start({ placement: "restart" }); });
   restartBtnTop.addEventListener("click", () => { reset(); start({ placement: "restart_top" }); });
 
   // ✅ clique no CTA do topo: rola e inicia
   if(heroCta){
     heroCta.addEventListener("click", () => {
-      // ✅ Garantir cta_click também no Meta (hero)
       track("cta_click", { placement: "hero" });
       trackMeta("cta_click", { placement: "hero" });
 
@@ -1447,7 +1412,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ✅ auto-inicia quando a seção do teste entrar na tela (mais cedo)
+  // ✅ inicia automaticamente (aumenta start rate)
+  // Você pode ajustar 250–800ms. Mantive 450ms pra carregar layout.
+  setTimeout(() => start({ placement: "auto_load" }), 450);
+
+  // ✅ auto-inicia também quando a seção do teste entrar na tela (redundância boa)
   if(testSection){
     const io = new IntersectionObserver((entries) => {
       entries.forEach((en) => {
@@ -1461,7 +1430,6 @@ document.addEventListener("DOMContentLoaded", () => {
     io.observe(testSection);
   }
 
-  // ✅ se abrir direto com #teste
   if(window.location.hash === "#teste"){
     setTimeout(() => start({ placement: "hash" }), 160);
   }
