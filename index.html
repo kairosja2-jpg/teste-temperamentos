@@ -529,9 +529,9 @@
     }
 
     /* ==========================================================
-       ✅ MODO "FOCO NO TESTE" (pré-start)
-       - Você pediu: liberar o resto só na 3ª resposta
-       - Isso aumenta start rate (menos distração)
+       ✅ MODO "FOCO NO TESTE" (sem distrações)
+       - Agora: NÃO “abre” o resto no meio do teste.
+       - O resto do site só aparece quando o resultado for exibido.
        ========================================================== */
     body.preStart .hero,
     body.preStart .section,
@@ -1105,8 +1105,7 @@ document.addEventListener("DOMContentLoaded", () => {
     answers: [],
     lastKey: null,
     seenQuestionStep: {},
-    started: false,
-    unlocked: false // ✅ controla liberação do resto do site
+    started: false
   };
 
   const elBar = document.getElementById("bar");
@@ -1176,9 +1175,8 @@ document.addEventListener("DOMContentLoaded", () => {
     state.lastKey = null;
     state.seenQuestionStep = {};
     state.started = false;
-    state.unlocked = false;
 
-    // ✅ volta para modo foco
+    // ✅ volta para modo foco (sem distrações)
     document.body.classList.add("preStart");
 
     elBar.style.width = "0%";
@@ -1244,18 +1242,8 @@ document.addEventListener("DOMContentLoaded", () => {
         state.picks[opt.k] += 1;
         state.i += 1;
 
-        // ✅ LIBERA O RESTO DO SITE NA 3ª RESPOSTA, COM SCROLL-FIX
-        // Motivo: quando o layout "aparece" acima, a página pode "subir".
-        if(!state.unlocked && state.answers.length >= 3){
-          state.unlocked = true;
-
-          const beforeTop = testSection.getBoundingClientRect().top;
-          document.body.classList.remove("preStart");
-          const afterTop = testSection.getBoundingClientRect().top;
-
-          // compensa a mudança de layout sem animação (não dá sensação de pulo)
-          window.scrollBy({ top: (afterTop - beforeTop), left: 0, behavior: "auto" });
-        }
+        // ✅ NOVIDADE: NÃO LIBERA NADA NO MEIO DO TESTE (sem “abrir” cabeçalho/hero/sections)
+        // Mantém o usuário focado até o fim.
 
         if(state.i >= QUESTIONS.length) showResult();
         else renderQuestion();
@@ -1275,7 +1263,6 @@ document.addEventListener("DOMContentLoaded", () => {
       state.picks[last] = Math.max(state.picks[last] - 1, 0);
     }
 
-    // (não “trava” de volta o site ao voltar — evita mais mudanças visuais)
     renderQuestion();
   }
 
@@ -1350,8 +1337,29 @@ document.addEventListener("DOMContentLoaded", () => {
     screenQuiz.style.display = "none";
     screenResult.style.display = "block";
 
-    track("result_view", { primary: primary, secondary: secondary });
-    trackMeta("result_view", { primary: primary, secondary: secondary });
+    // ✅ Agora libera o resto do site APENAS ao finalizar, com scroll-fix (sem “pulo”)
+    if(document.body.classList.contains("preStart")){
+      const beforeTop = testSection.getBoundingClientRect().top;
+      document.body.classList.remove("preStart");
+      const afterTop = testSection.getBoundingClientRect().top;
+      window.scrollBy({ top: (afterTop - beforeTop), left: 0, behavior: "auto" });
+    }
+
+    // =========================================================
+    // ✅ TRACKING: ver qual temperamento conclui o teste
+    // - GA4 + Meta:
+    //   1) result_view (com primary/secondary)
+    //   2) test_complete (com primary/secondary)
+    //   3) evento por temperamento: result_colerico, result_melancolico, etc.
+    // =========================================================
+    track("result_view",   { primary, secondary });
+    trackMeta("result_view",{ primary, secondary });
+
+    track("test_complete",   { primary, secondary });
+    trackMeta("test_complete",{ primary, secondary });
+
+    track(`result_${primary}`,   { primary, secondary });
+    trackMeta(`result_${primary}`,{ primary, secondary });
   }
 
   function start(opts){
@@ -1413,7 +1421,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ✅ inicia automaticamente (aumenta start rate)
-  // Você pode ajustar 250–800ms. Mantive 450ms pra carregar layout.
   setTimeout(() => start({ placement: "auto_load" }), 450);
 
   // ✅ auto-inicia também quando a seção do teste entrar na tela (redundância boa)
