@@ -530,7 +530,6 @@
 
     /* ==========================================================
        ✅ MODO "FOCO NO TESTE" (sem distrações)
-       - Agora: NÃO “abre” o resto no meio do teste.
        - O resto do site só aparece quando o resultado for exibido.
        ========================================================== */
     body.preStart .hero,
@@ -538,8 +537,6 @@
     body.preStart footer{
       display:none !important;
     }
-    /* mantém topbar (confiança), mas pode esconder se quiser */
-    /* body.preStart .topbar{display:none !important;} */
   </style>
 </head>
 
@@ -928,10 +925,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const host = (a.hostname || "").toLowerCase();
 
-    // ✅ Normalizar domínio Amazon (amazon.* ou amzn.*)
     if (host.includes("amazon.") || host.includes("amzn.")) {
       const key = a.getAttribute("data-book") || "unknown";
-
       track("amazon_click", { link_url: a.href, book_key: key });
       trackMeta("amazon_click", { link_url: a.href, book_key: key });
     }
@@ -1152,14 +1147,47 @@ document.addEventListener("DOMContentLoaded", () => {
     return "step_21_25";
   }
 
+  // ✅ Reforços: marcos + reta final
+  function microCopyFor(qIndex, remaining){
+    // qIndex: 1..25
+    // remaining: 0..24
+    if(remaining <= 5 && remaining > 0){
+      return `Reta final: faltam <b>${remaining}</b>. O resultado aparece <b>imediatamente</b>.`;
+    }
+    const map = {
+      1:  "Leva cerca de <b>2 minutos</b>. Responda como você é <b>na maior parte do tempo</b>.",
+      5:  "✅ Boa! Você já passou do começo. Continue.",
+      10: "🔥 40% concluído — falta pouco pra ver seu resultado.",
+      15: "💪 Metade já foi. Só manter o ritmo.",
+      20: "🚀 Reta final. Você está bem perto do resultado.",
+      24: "✨ Última! Próxima tela já mostra seu temperamento."
+    };
+    return map[qIndex] || "";
+  }
+
+  // ✅ Progresso “por fase” (sem risco)
+  function phaseProgressCopy(remaining){
+    if(remaining <= 5 && remaining > 0){
+      return `Reta final — faltam <b>${remaining}</b> perguntas.`;
+    }
+    if(remaining <= 9){
+      return `Você está muito perto — faltam <b>${remaining}</b> perguntas.`;
+    }
+    if(remaining <= 18){
+      return `Você está indo bem — faltam <b>${remaining}</b> perguntas.`;
+    }
+    return `Você começou ✅ — faltam <b>${remaining}</b> perguntas para ver seu resultado.`;
+  }
+
   function setProgress(){
     const p = Math.round((state.i / QUESTIONS.length) * 100);
     elBar.style.width = p + "%";
 
     const remaining = Math.max(QUESTIONS.length - state.i, 0);
+
     if(screenQuiz.style.display === "block"){
       progressText.style.display = "block";
-      progressText.innerHTML = `Faltam <b>${remaining}</b> perguntas para ver seu resultado.`;
+      progressText.innerHTML = phaseProgressCopy(remaining);
     } else {
       progressText.style.display = "none";
       progressText.innerHTML = "";
@@ -1210,6 +1238,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const item = QUESTIONS[state.i];
     const qIndex = state.i + 1;
     const stepGroup = stepGroupForIndex(qIndex);
+    const remaining = Math.max(QUESTIONS.length - state.i, 0);
 
     if(!state.seenQuestionStep[qIndex]){
       track("question_step", { step_group: stepGroup, question_index: qIndex });
@@ -1219,9 +1248,11 @@ document.addEventListener("DOMContentLoaded", () => {
     elQ.textContent = `${qIndex}/${QUESTIONS.length} — ${item.q}`;
     elO.innerHTML = "";
 
-    if(state.i === 0){
+    // ✅ Reforços (microHint) em marcos + reta final (≤5)
+    const micro = microCopyFor(qIndex, remaining);
+    if(micro){
       microHint.style.display = "block";
-      microHint.innerHTML = `Leva cerca de <b>2 minutos</b>. No final você recebe o <b>guia recomendado</b>.`;
+      microHint.innerHTML = micro;
     } else {
       microHint.style.display = "none";
       microHint.innerHTML = "";
@@ -1236,14 +1267,10 @@ document.addEventListener("DOMContentLoaded", () => {
       btn.addEventListener("click", () => {
         track("question_answer", { q_index: qIndex, step_group: stepGroup, choice: opt.k });
 
-        // ✅ registra resposta
         state.answers.push(opt.k);
         state.score[opt.k] += 2;
         state.picks[opt.k] += 1;
         state.i += 1;
-
-        // ✅ NOVIDADE: NÃO LIBERA NADA NO MEIO DO TESTE (sem “abrir” cabeçalho/hero/sections)
-        // Mantém o usuário focado até o fim.
 
         if(state.i >= QUESTIONS.length) showResult();
         else renderQuestion();
@@ -1337,7 +1364,7 @@ document.addEventListener("DOMContentLoaded", () => {
     screenQuiz.style.display = "none";
     screenResult.style.display = "block";
 
-    // ✅ Agora libera o resto do site APENAS ao finalizar, com scroll-fix (sem “pulo”)
+    // ✅ libera o resto do site APENAS ao finalizar, com scroll-fix (sem “pulo”)
     if(document.body.classList.contains("preStart")){
       const beforeTop = testSection.getBoundingClientRect().top;
       document.body.classList.remove("preStart");
@@ -1345,20 +1372,14 @@ document.addEventListener("DOMContentLoaded", () => {
       window.scrollBy({ top: (afterTop - beforeTop), left: 0, behavior: "auto" });
     }
 
-    // =========================================================
     // ✅ TRACKING: ver qual temperamento conclui o teste
-    // - GA4 + Meta:
-    //   1) result_view (com primary/secondary)
-    //   2) test_complete (com primary/secondary)
-    //   3) evento por temperamento: result_colerico, result_melancolico, etc.
-    // =========================================================
-    track("result_view",   { primary, secondary });
+    track("result_view",    { primary, secondary });
     trackMeta("result_view",{ primary, secondary });
 
-    track("test_complete",   { primary, secondary });
+    track("test_complete",    { primary, secondary });
     trackMeta("test_complete",{ primary, secondary });
 
-    track(`result_${primary}`,   { primary, secondary });
+    track(`result_${primary}`,    { primary, secondary });
     trackMeta(`result_${primary}`,{ primary, secondary });
   }
 
@@ -1399,17 +1420,14 @@ document.addEventListener("DOMContentLoaded", () => {
   restartBtn.addEventListener("click", () => { reset(); start({ placement: "restart" }); });
   restartBtnTop.addEventListener("click", () => { reset(); start({ placement: "restart_top" }); });
 
-  // ✅ clique no CTA do topo: rola e inicia
   if(heroCta){
     heroCta.addEventListener("click", () => {
       track("cta_click", { placement: "hero" });
       trackMeta("cta_click", { placement: "hero" });
-
       setTimeout(() => start({ placement: "hero" }), 180);
     });
   }
 
-  // ✅ sticky CTA: rola e inicia
   if(stickyBtn){
     stickyBtn.addEventListener("click", () => {
       track("cta_click", { placement: "sticky" });
@@ -1420,10 +1438,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ✅ inicia automaticamente (aumenta start rate)
   setTimeout(() => start({ placement: "auto_load" }), 450);
 
-  // ✅ auto-inicia também quando a seção do teste entrar na tela (redundância boa)
   if(testSection){
     const io = new IntersectionObserver((entries) => {
       entries.forEach((en) => {
