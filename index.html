@@ -386,7 +386,7 @@
       padding:16px;
     }
     .resultTitle{font-size:22px; font-weight:1000; margin:0 0 8px; letter-spacing:-0.5px;}
-    .muted{color:var(--muted); font-size:16px; line-height:1.75;}
+    .muted{color:var(--muted); font-size:16px; line-height:1.75; white-space:pre-wrap;}
 
     .pills{display:flex; flex-wrap:wrap; gap:10px; margin-top:12px;}
     .pill{padding:9px 12px; border-radius:999px; border:1px solid var(--stroke); background: rgba(0,0,0,.18); font-size:14px; color: rgba(255,255,255,.90);}
@@ -625,7 +625,8 @@
               <div class="muted" id="resultText"></div>
               <div class="pills" id="traits"></div>
 
-              <div class="bridge">
+              <!-- ✅ Bridge dinâmica -->
+              <div class="bridge" id="bridgeText">
                 <b>Quer aprofundar esse resultado?</b><br>
                 O guia te ajuda a aplicar isso no dia a dia com clareza e direção.
               </div>
@@ -643,10 +644,6 @@
                 <a class="btn primary ctaBig" id="ctaBig" href="#" target="_blank" rel="noopener">
                   <span class="ctaBigText">✨ Ver o guia recomendado</span>
                 </a>
-              </div>
-
-              <div class="tiny" id="melNote" style="display:none;">
-                Se o seu resultado for Melancólico, o livro entra no ar em <b>17 de janeiro</b>.
               </div>
 
               <div class="ctaRow" style="margin-top:12px;">
@@ -858,8 +855,7 @@ document.addEventListener("DOMContentLoaded", () => {
       title: "O Guia Prático do Temperamento Melancólico",
       subtitle: "Profundidade, direção e equilíbrio emocional",
       amazonUrl: "https://www.amazon.com.br/dp/B0GGM288VK/ref=sr_1_2?dib=eyJ2IjoiMSJ9.PnVCv_TezXDKSYHtDSEnvKE0s4lPkpJWlRyWP3lMxkPQpuetp6XoesqOjbl4mgTLZuCS3niVI260gnMVl1YPMv7MmjG5ykrs3byv1NrSmTk.QPofqJ4OlErn_n2glsyNESglHhxYzyv0qo9Op4SvjNlo&dib_tag=se&qid=1768356725&refinements=p_27%3ALEONARDO+MONTEIRO+DE+OLIVEIRA+BARRETO&s=digital-text&sr=1-2&text=LEONARDO+MONTEIRO+DE+OLIVEIRA+BARRETO",
-      coverSrc: "covers/melancolico.webp",
-      comingSoon: "Publicação: 17 de janeiro"
+      coverSrc: "covers/melancolico.webp"
     }
   };
 
@@ -920,7 +916,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const host = (a.hostname || "").toLowerCase();
 
-    // ✅ 3) Normalizar domínio Amazon (amazon.* ou amzn.*)
+    // ✅ Normalizar domínio Amazon (amazon.* ou amzn.*)
     if (host.includes("amazon.") || host.includes("amzn.")) {
       const key = a.getAttribute("data-book") || "unknown";
 
@@ -1128,7 +1124,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const elBookAll = document.getElementById("bookAll");
   const toggleAllBtn = document.getElementById("toggleAll");
   const allBooksBox = document.getElementById("allBooks");
-  const melNote = document.getElementById("melNote");
+
+  const bridgeText = document.getElementById("bridgeText");
 
   const stickyCta = document.getElementById("stickyCta");
   const stickyBtn = document.getElementById("stickyBtn");
@@ -1193,7 +1190,10 @@ document.addEventListener("DOMContentLoaded", () => {
     elBookAll.innerHTML = "";
     allBooksBox.style.display = "none";
     toggleAllBtn.textContent = "Ver coleção completa";
-    melNote.style.display = "none";
+
+    if(bridgeText){
+      bridgeText.innerHTML = `<b>Quer aprofundar esse resultado?</b><br>O guia te ajuda a aplicar isso no dia a dia com clareza e direção.`;
+    }
 
     microHint.style.display = "none";
     microHint.innerHTML = "";
@@ -1272,27 +1272,73 @@ document.addEventListener("DOMContentLoaded", () => {
     return [primary, secondary];
   }
 
+  // ✅ NOVO: copy com dor + promessa + pills-situação
   function resultCopy(key){
     const map = {
       colerico: {
         title: "Seu temperamento dominante é: Colérico",
-        text: "Você tende a agir com intensidade, direção e foco em resultado. Seu crescimento vem de equilibrar força com presença, paciência e autocontrole — sem perder sua potência.",
-        traits: ["Decisão e liderança", "Urgência e ação", "Risco: impaciência/controle", "Crescimento: presença e autocontrole"]
+        text:
+          "Você é direção, intensidade e decisão. E provavelmente já percebeu um custo disso:\n" +
+          "quando alguém é lento, quando as coisas não andam, ou quando você sente que precisa carregar tudo, " +
+          "a sua energia vira tensão.\n\n" +
+          "O guia te mostra como manter sua força sem viver no modo “pressão”: " +
+          "como reduzir irritação, delegar sem perder padrão e ter controle emocional sem perder performance.",
+        traits: [
+          "Decide e executa rápido",
+          "Se irrita com lentidão",
+          "Tende a controlar tudo",
+          "Cobra (e se cobra) demais",
+          "Dificuldade em desacelerar",
+          "Firmeza sem dureza"
+        ]
       },
       melancolico: {
         title: "Seu temperamento dominante é: Melancólico",
-        text: "Você tem profundidade, sensibilidade e um olhar refinado. Seu crescimento vem de transformar exigência em direção prática — sem carregar peso desnecessário por tanto tempo.",
-        traits: ["Profundidade e análise", "Senso de qualidade", "Risco: autoexigência/travar", "Crescimento: direção e leveza"]
+        text:
+          "Você tem profundidade, sensibilidade e um padrão alto. Mas isso quase sempre vem com uma dor silenciosa:\n" +
+          "pensar demais, se cobrar demais e carregar peso por muito tempo.\n\n" +
+          "O guia te ajuda a transformar análise em ação: " +
+          "como parar de travar na perfeição, reduzir autocobrança e criar direção prática sem perder sua qualidade.",
+        traits: [
+          "Pensa em detalhes",
+          "Se incomoda com erros",
+          "Se cobra e se compara",
+          "Trava no perfeito",
+          "Guarda emoções por dentro",
+          "Leveza com padrão"
+        ]
       },
       sanguineo: {
         title: "Seu temperamento dominante é: Sanguíneo",
-        text: "Você é energia, presença e conexão. Seu crescimento vem de canalizar entusiasmo em constância — escolhendo melhor onde colocar sua atenção, sem apagar sua espontaneidade.",
-        traits: ["Carisma e comunicação", "Criatividade e entusiasmo", "Risco: dispersão/impulsos", "Crescimento: consistência"]
+        text:
+          "Você é energia, presença e conexão. E a sua dor costuma ser bem específica:\n" +
+          "você se empolga fácil, começa muita coisa e, quando a rotina chega, perde tração.\n\n" +
+          "O guia te ensina a manter sua leveza com constância: " +
+          "como diminuir dispersão, controlar impulsos e transformar entusiasmo em hábito — sem virar uma pessoa “fria”.",
+        traits: [
+          "Carismático e comunicativo",
+          "Se empolga e começa rápido",
+          "Dispersa com facilidade",
+          "Impulsivo em decisões",
+          "Desanima na rotina",
+          "Foco sem apagar"
+        ]
       },
       fleumatico: {
         title: "Seu temperamento dominante é: Fleumático",
-        text: "Você tende à calma e estabilidade quando tem um trilho claro. Seu crescimento vem de ativar iniciativa e urgência quando necessário — sem perder a paz e o equilíbrio.",
-        traits: ["Calma e equilíbrio", "Estabilidade na rotina", "Risco: acomodação/procrastinação", "Crescimento: iniciativa e urgência"]
+        text:
+          "Você é calma, estabilidade e boa convivência. Só que existe uma dor que pega muita gente:\n" +
+          "você aguenta, segura, evita conflito… e acaba deixando decisões importantes para depois.\n\n" +
+          "O guia te ajuda a ativar iniciativa sem perder sua paz: " +
+          "como parar de procrastinar, dizer “não” sem culpa e criar urgência saudável quando precisa agir.",
+        traits: [
+          "Calmo e equilibrado",
+          "Evita conflito",
+          "Adia decisões importantes",
+          "Aguenta mais do que devia",
+          "Dificuldade em começar",
+          "Ação sem ansiedade"
+        ]
       }
     };
     return map[key];
@@ -1311,6 +1357,17 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("resultText").textContent = copy.text;
     document.getElementById("traits").innerHTML = copy.traits.map(t => `<span class="pill">${t}</span>`).join("");
 
+    // ✅ Bridge dinâmica por temperamento
+    const bridgeCopy = {
+      colerico: "<b>Se você vive no “modo pressão”…</b><br>O guia te mostra como manter performance sem irritação e sem controle excessivo.",
+      melancolico: "<b>Se você pensa demais e trava…</b><br>O guia te dá direção prática sem perder sua profundidade.",
+      sanguineo: "<b>Se você começa muito e termina pouco…</b><br>O guia te ajuda a criar constância sem matar sua leveza.",
+      fleumatico: "<b>Se você adia pra manter a paz…</b><br>O guia te ensina iniciativa e limites sem culpa."
+    };
+    if(bridgeText){
+      bridgeText.innerHTML = bridgeCopy[primary] || bridgeText.innerHTML;
+    }
+
     elBookPrimary.innerHTML = renderBookCardInline(primary,"Ver o guia recomendado");
     elBookSecondary.innerHTML = renderBookCardInline(secondary,"Ver alternativa");
 
@@ -1319,8 +1376,6 @@ document.addEventListener("DOMContentLoaded", () => {
     ctaBig.setAttribute("data-book", primary);
     ctaBig.style.pointerEvents = linkPrimary ? "auto" : "none";
     ctaBig.style.opacity = linkPrimary ? "1" : ".75";
-
-    melNote.style.display = (primary === "melancolico") ? "block" : "none";
 
     screenQuiz.style.display = "none";
     screenResult.style.display = "block";
@@ -1373,7 +1428,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ✅ clique no CTA do topo: rola e inicia
   if(heroCta){
     heroCta.addEventListener("click", () => {
-      // ✅ 2) Garantir cta_click também no Meta (hero)
+      // ✅ Garantir cta_click também no Meta (hero)
       track("cta_click", { placement: "hero" });
       trackMeta("cta_click", { placement: "hero" });
 
@@ -1385,7 +1440,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if(stickyBtn){
     stickyBtn.addEventListener("click", () => {
       track("cta_click", { placement: "sticky" });
-      trackMeta("cta_click", { placement: "sticky" }); // ✅ 2) Meta também
+      trackMeta("cta_click", { placement: "sticky" });
 
       testSection.scrollIntoView({ behavior: "smooth", block: "start" });
       setTimeout(() => start({ placement: "sticky" }), 220);
