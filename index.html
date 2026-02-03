@@ -680,7 +680,7 @@
 
               <div class="ctaRow" style="margin-top:12px;">
                 <a class="btn primary ctaBig" id="ctaBig" href="#" target="_blank" rel="noopener">
-                  <span class="ctaBigText">✨ Ver o guia recomendado</span>
+                  <span class="ctaBigText">✨ Ver o livro na Amazon</span>
                 </a>
               </div>
 
@@ -751,7 +751,7 @@
           </div>
           <div class="card">
             <h3>3) Abra na Amazon</h3>
-            <p>Clique no guia recomendado e vá direto para a página do livro.</p>
+            <p>Clique no livro recomendado e vá direto para a página do livro.</p>
           </div>
         </div>
       </div>
@@ -939,25 +939,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("c-melancolico").innerHTML = renderCollectionTile("melancolico");
   document.getElementById("c-sanguineo").innerHTML   = renderCollectionTile("sanguineo");
 
-  // ✅ Clique Amazon + Instagram tracking (GA4 + Meta Pixel)
-  document.addEventListener("click", (e) => {
-    const a = e.target && e.target.closest ? e.target.closest("a") : null;
-    if(!a || !a.href) return;
-
-    const host = (a.hostname || "").toLowerCase();
-
-    if (host.includes("amazon.") || host.includes("amzn.")) {
-      const key = a.getAttribute("data-book") || "unknown";
-      track("amazon_click", { link_url: a.href, book_key: key });
-      trackMeta("amazon_click", { link_url: a.href, book_key: key });
-    }
-
-    if(a.href.includes("instagram.com")){
-      track("instagram_click", { link_url: a.href });
-      trackMeta("instagram_click", { link_url: a.href });
-    }
-  });
-
   // =====================
   // QUIZ
   // =====================
@@ -1119,10 +1100,51 @@ document.addEventListener("DOMContentLoaded", () => {
     score: { colerico:0, fleumatico:0, sanguineo:0, melancolico:0 },
     picks: { colerico:0, fleumatico:0, sanguineo:0, melancolico:0 },
     answers: [],
-    lastKey: null,
+    lastKey: null,               // ✅ temperamento final (primário)
     seenQuestionStep: {},
     started: false
   };
+
+  // ✅ Clique Amazon + Instagram tracking (GA4 + Meta Pixel)
+  // IMPORTANTE: amazon_click agora leva "temperamento" (o resultado do teste)
+  document.addEventListener("click", (e) => {
+    const a = e.target && e.target.closest ? e.target.closest("a") : null;
+    if(!a || !a.href) return;
+
+    const host = (a.hostname || "").toLowerCase();
+
+    if (host.includes("amazon.") || host.includes("amzn.")) {
+      const bookKey = a.getAttribute("data-book") || "unknown";
+
+      // ✅ Aqui está o ponto: temperamento = resultado final do teste (state.lastKey)
+      // Se ainda não houver resultado, fica "unknown".
+      const temperamento = state.lastKey || "unknown";
+
+      track("amazon_click", {
+        temperamento,
+        book_key: bookKey,
+        link_url: a.href
+      });
+
+      trackMeta("amazon_click", {
+        temperamento,
+        book_key: bookKey,
+        link_url: a.href
+      });
+    }
+
+    if(a.href.includes("instagram.com")){
+      track("instagram_click", { link_url: a.href });
+      trackMeta("instagram_click", { link_url: a.href });
+    }
+  });
+
+  function amazonLinkFor(key){
+    const b = BOOKS[key];
+    if(!b || !b.amazonUrl) return null;
+    const utm = {...UTM_BASE, utm_content: key};
+    return withParams(b.amazonUrl, utm);
+  }
 
   const elBar = document.getElementById("bar");
   const elQ = document.getElementById("question");
@@ -1153,7 +1175,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function toggleSticky(){
     if(!stickyCta) return;
-    // ✅ Mostra no mobile quando o teste ainda não começou e o usuário não está “em cima” do teste
     if(state.started || inTestView){
       stickyCta.style.display = "none";
       return;
@@ -1241,7 +1262,6 @@ document.addEventListener("DOMContentLoaded", () => {
     allBooksBox.style.display = "none";
     toggleAllBtn.textContent = "Ver coleção completa";
 
-    // ✅ mantém o espaço do microHint SEM empurrar
     microHint.innerHTML = "";
     microHint.style.visibility = "hidden";
 
@@ -1379,7 +1399,7 @@ document.addEventListener("DOMContentLoaded", () => {
     progressText.innerHTML = "";
 
     const [primary, secondary] = topTwoTemperaments();
-    state.lastKey = primary;
+    state.lastKey = primary; // ✅ temperamento final (primário)
 
     const copy = resultCopy(primary);
 
@@ -1387,8 +1407,9 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("traits").innerHTML = copy.traits.map(t => `<li>${t}</li>`).join("");
     document.getElementById("resultText").textContent = copy.text;
 
-    elBookPrimary.innerHTML = renderBookCardInline(primary,"Ver o guia recomendado");
-    elBookSecondary.innerHTML = renderBookCardInline(secondary,"Ver alternativa");
+    // ✅ Botões do card principal/alternativo ajustados
+    elBookPrimary.innerHTML = renderBookCardInline(primary, "Ver o livro na Amazon");
+    elBookSecondary.innerHTML = renderBookCardInline(secondary, "Ver alternativa na Amazon");
 
     const linkPrimary = amazonLinkFor(primary);
     ctaBig.href = linkPrimary || "#";
@@ -1400,14 +1421,15 @@ document.addEventListener("DOMContentLoaded", () => {
     screenResult.style.display = "block";
 
     // ✅ TRACKING: ver qual temperamento conclui o teste
-    track("result_view",    { primary, secondary });
-    trackMeta("result_view",{ primary, secondary });
+    // (o que você pediu: test_complete { temperamento: "colerico" })
+    track("result_view", { temperamento: primary, primary, secondary });
+    trackMeta("result_view", { temperamento: primary, primary, secondary });
 
-    track("test_complete",    { primary, secondary });
-    trackMeta("test_complete",{ primary, secondary });
+    track("test_complete", { temperamento: primary, primary, secondary });
+    trackMeta("test_complete", { temperamento: primary, primary, secondary });
 
-    track(`result_${primary}`,    { primary, secondary });
-    trackMeta(`result_${primary}`,{ primary, secondary });
+    track(`result_${primary}`, { temperamento: primary, primary, secondary });
+    trackMeta(`result_${primary}`, { temperamento: primary, primary, secondary });
   }
 
   function start(opts){
@@ -1451,7 +1473,6 @@ document.addEventListener("DOMContentLoaded", () => {
     heroCta.addEventListener("click", () => {
       track("cta_click", { placement: "hero" });
       trackMeta("cta_click", { placement: "hero" });
-      // ✅ inicia após o scroll do hash
       setTimeout(() => start({ placement: "hero" }), 200);
     });
   }
