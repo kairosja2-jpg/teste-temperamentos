@@ -632,8 +632,12 @@
           <div class="grid">
             <div class="panel">
               <div class="resultTitle" id="resultTitle"></div>
+
+              <!-- ✅ ALTERAÇÃO: RESUMO (lista) em cima -->
+              <ul class="bullets2" id="traits" style="margin:8px 0 10px;"></ul>
+
+              <!-- ✅ ALTERAÇÃO: parágrafo abaixo -->
               <div class="muted" id="resultText"></div>
-              <div class="pills" id="traits"></div>
 
               <div class="bridge">
                 <b>Quer aprofundar esse resultado?</b><br>
@@ -1149,8 +1153,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ✅ Reforços: marcos + reta final
   function microCopyFor(qIndex, remaining){
-    // qIndex: 1..25
-    // remaining: 0..24
     if(remaining <= 5 && remaining > 0){
       return `Reta final: faltam <b>${remaining}</b>. O resultado aparece <b>imediatamente</b>.`;
     }
@@ -1309,35 +1311,59 @@ document.addEventListener("DOMContentLoaded", () => {
     return [primary, secondary];
   }
 
-  function resultCopy(key){
-    const map = {
-      colerico: {
-        title: "Seu temperamento dominante é: Colérico",
-        text:
-          "Você tende a agir com intensidade, direção e foco em resultado. A dor aparece quando a pressa vira tensão: impaciência, controle e cobranças (inclusive com você). O guia te mostra como manter sua força sem perder presença e autocontrole.",
-        traits: ["Decisão e liderança", "Urgência e ação", "Dor: impaciência/controle", "Ajuste: presença e autocontrole"]
-      },
-      melancolico: {
-        title: "Seu temperamento dominante é: Melancólico",
-        text:
-          "Você tem profundidade, sensibilidade e padrão alto. A dor aparece quando a exigência vira peso: travar, ruminar, se cobrar demais e perder o prazer do caminho. O guia te ajuda a transformar análise em direção prática, com leveza.",
-        traits: ["Profundidade e análise", "Senso de qualidade", "Dor: autoexigência/travar", "Ajuste: direção e leveza"]
-      },
-      sanguineo: {
-        title: "Seu temperamento dominante é: Sanguíneo",
-        text:
-          "Você é energia, presença e conexão. A dor aparece quando o impulso vence o foco: dispersão, começar muito e terminar pouco, culpa depois. O guia te ensina a canalizar entusiasmo em constância — sem apagar sua espontaneidade.",
-        traits: ["Carisma e comunicação", "Criatividade e entusiasmo", "Dor: dispersão/impulsos", "Ajuste: consistência"]
-      },
-      fleumatico: {
-        title: "Seu temperamento dominante é: Fleumático",
-        text:
-          "Você tende à calma, estabilidade e paciência. A dor aparece quando a paz vira inércia: procrastinar, evitar conflito e deixar a vida decidir por você. O guia te ajuda a ativar iniciativa e urgência sem perder o equilíbrio.",
-        traits: ["Calma e equilíbrio", "Estabilidade na rotina", "Dor: acomodação/procrastinação", "Ajuste: iniciativa e urgência"]
-      }
-    };
-    return map[key];
-  }
+function resultCopy(key){
+  const map = {
+    colerico: {
+      title: "Seu temperamento dominante é: Colérico",
+      traits: [
+        "Decidido e direto",
+        "Gosta de agir e resolver",
+        "Dor: impaciência e controle",
+        "Ajuste: presença e autocontrole"
+      ],
+      text:
+        "Você tende a agir com intensidade, direção e foco em resultado. A dor aparece quando a pressa vira tensão: impaciência, controle e cobranças (inclusive com você). O guia te mostra como manter sua força sem perder presença e autocontrole."
+    },
+
+    melancolico: {
+      title: "Seu temperamento dominante é: Melancólico",
+      traits: [
+        "Observador e detalhista",
+        "Busca fazer do jeito certo",
+        "Dor: autocobrança e ruminação",
+        "Ajuste: ação com leveza"
+      ],
+      text:
+        "Você tem profundidade, sensibilidade e padrão alto. A dor aparece quando a exigência vira peso: travar, pensar demais e se cobrar excessivamente. O guia te ajuda a transformar análise em direção prática, com mais leveza."
+    },
+
+    sanguineo: {
+      title: "Seu temperamento dominante é: Sanguíneo",
+      traits: [
+        "Comunicativo e espontâneo",
+        "Se empolga fácil",
+        "Dor: dispersão e dificuldade de terminar",
+        "Ajuste: constância sem perder alegria"
+      ],
+      text:
+        "Você é energia, presença e conexão. A dor aparece quando o impulso vence o foco: começar muito, terminar pouco e sentir culpa depois. O guia te ensina a canalizar entusiasmo em constância — sem apagar sua espontaneidade."
+    },
+
+    fleumatico: {
+      title: "Seu temperamento dominante é: Fleumático",
+      traits: [
+        "Calmo e equilibrado",
+        "Prefere estabilidade e paz",
+        "Dor: acomodação e evitar conflito",
+        "Ajuste: iniciativa com tranquilidade"
+      ],
+      text:
+        "Você tende à calma, estabilidade e paciência. A dor aparece quando a paz vira inércia: procrastinar, evitar conflito e deixar a vida decidir por você. O guia te ajuda a ativar iniciativa e firmeza sem perder o equilíbrio."
+    }
+  };
+
+  return map[key];
+}
 
   function showResult(){
     elBar.style.width = "100%";
@@ -1348,9 +1374,11 @@ document.addEventListener("DOMContentLoaded", () => {
     state.lastKey = primary;
 
     const copy = resultCopy(primary);
+
+    // ✅ Resultado: TÍTULO → RESUMO (lista) → PARÁGRAFO
     document.getElementById("resultTitle").textContent = copy.title;
+    document.getElementById("traits").innerHTML = copy.traits.map(t => `<li>${t}</li>`).join("");
     document.getElementById("resultText").textContent = copy.text;
-    document.getElementById("traits").innerHTML = copy.traits.map(t => `<span class="pill">${t}</span>`).join("");
 
     elBookPrimary.innerHTML = renderBookCardInline(primary,"Ver o guia recomendado");
     elBookSecondary.innerHTML = renderBookCardInline(secondary,"Ver alternativa");
