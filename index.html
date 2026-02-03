@@ -67,10 +67,12 @@
       overflow-x:hidden;
       font-size: 18px;
       line-height: 1.7;
+      -webkit-tap-highlight-color: transparent;
+      text-rendering: optimizeLegibility;
     }
 
     a{color:inherit}
-    .wrap{max-width:var(--max); margin:0 auto; padding:20px 18px 84px; position:relative; z-index:1;}
+    .wrap{max-width:var(--max); margin:0 auto; padding:20px 18px 92px; position:relative; z-index:1;}
 
     .topbar{
       display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
@@ -110,6 +112,7 @@
       user-select:none;
       box-shadow: 0 10px 28px rgba(0,0,0,.25);
       font-size: 16px;
+      touch-action: manipulation;
     }
     .btn:hover{border-color: rgba(255,77,46,.55); transform: translateY(-1px);}
     .btn.primary{
@@ -166,7 +169,7 @@
       font-weight:1000;
       letter-spacing:-1.0px;
       line-height:1.06;
-      font-size: clamp(34px, 4.3vw, 52px);
+      font-size: clamp(32px, 5vw, 52px);
     }
     .heroTitle .accent{color:var(--accent)}
     .heroSub{
@@ -356,13 +359,13 @@
 
     .qline{font-size:20px; margin: 6px 0 10px; font-weight:900;}
 
-    /* ✅ MICROHINT: reserva espaço p/ não “pular” as opções */
+    /* ✅ microHint reserva espaço (não empurra as opções) */
     .micro{
       font-size:15px;
       color: rgba(255,255,255,.82);
       line-height:1.7;
       margin: 0 0 12px;
-      min-height: 52px; /* ajuste fino: 44–60 */
+      min-height: 52px;
     }
 
     .opts{display:grid; gap:12px; margin-bottom: 10px;}
@@ -378,6 +381,7 @@
       font-weight:900;
       font-size:18px;
       line-height:1.55;
+      touch-action: manipulation;
     }
     .opt:hover{transform: translateY(-1px); border-color: rgba(255,77,46,.55); background: rgba(0,0,0,.24);}
 
@@ -396,8 +400,8 @@
     .resultTitle{font-size:22px; font-weight:1000; margin:0 0 8px; letter-spacing:-0.5px;}
     .muted{color:var(--muted); font-size:16px; line-height:1.75;}
 
-    .pills{display:flex; flex-wrap:wrap; gap:10px; margin-top:12px;}
-    .pill{padding:9px 12px; border-radius:999px; border:1px solid var(--stroke); background: rgba(0,0,0,.18); font-size:14px; color: rgba(255,255,255,.90);}
+    .bullets2{margin:10px 0 0; padding-left:20px; color: rgba(255,255,255,.90); font-size:15px;}
+    .bullets2 li{margin:8px 0;}
 
     .bridge{
       margin-top:12px;
@@ -420,8 +424,6 @@
       line-height:1.75;
       font-size:15px;
     }
-    .bullets2{margin:10px 0 0; padding-left:20px; color: rgba(255,255,255,.90); font-size:15px;}
-    .bullets2 li{margin:8px 0;}
 
     .bookTitle{font-weight:1000; margin:0 0 8px; font-size:16px;}
     .bookSub{margin:0 0 12px; color:var(--muted); line-height:1.65; font-size:15px;}
@@ -514,7 +516,7 @@
       text-align:center;
     }
 
-    /* ✅ Sticky CTA (mobile) */
+    /* ✅ Sticky CTA (mobile) - aparece para guiar o usuário */
     .stickyCta{
       position: fixed;
       left: 14px;
@@ -536,19 +538,30 @@
       .stickyCta{display:none !important;}
     }
 
-    /* ==========================================================
-       ✅ MODO "FOCO NO TESTE" (sem distrações)
-       - O resto do site só aparece quando o resultado for exibido.
-       ========================================================== */
-    body.preStart .hero,
-    body.preStart .section,
-    body.preStart footer{
-      display:none !important;
+    /* ===========================
+       ✅ Otimizações para celular
+       =========================== */
+    @media (max-width: 560px){
+      body{font-size:17px; line-height:1.65;}
+      .wrap{padding:16px 14px 104px;}
+      .hero{border-radius:24px;}
+      .heroInner{padding:16px 12px; gap:12px;}
+      .heroSub{font-size:16px;}
+      .heroBullets{font-size:15px;}
+      .btn.big{width:100%;}
+      .ctaRow{gap:10px;}
+      .content{padding:14px;}
+      .appHeader{padding:14px;}
+      .opt{padding:16px 14px; font-size:17px;}
+      .micro{min-height: 56px;}
+      .grid{gap:12px;}
+      .panel{padding:14px;}
+      .bookTile{padding:14px;}
     }
   </style>
 </head>
 
-<body class="preStart">
+<body>
   <div class="wrap">
     <div class="topbar">
       <div class="brand">
@@ -561,7 +574,7 @@
       </div>
     </div>
 
-    <!-- HERO -->
+    <!-- HERO (página inicial voltou) -->
     <section class="hero" aria-label="Apresentação">
       <div class="heroInner">
         <div>
@@ -583,7 +596,7 @@
           </ul>
 
           <div class="ctaRow">
-            <a class="btn primary big" href="#teste" id="heroCta">👉 Fazer o teste agora (2 min)</a>
+            <a class="btn primary big" href="#teste" id="heroCta">👉 Iniciar o teste (2 min)</a>
             <a class="btn" href="#colecao" id="collectionBtn">📚 Ver coleção</a>
           </div>
 
@@ -625,10 +638,11 @@
         </div>
         <div class="progressText" id="progressText" style="display:none;"></div>
 
+        <!-- ✅ Começa “quieto” (sem iniciar sozinho). Inicia ao clicar ou ao rolar até aqui -->
         <div id="screen-quiz" style="display:none;">
           <div class="qline" id="question"></div>
 
-          <!-- ✅ ALTERAÇÃO: sem display:none (vamos usar visibility) -->
+          <!-- ✅ microHint com espaço reservado (sem pulo nas opções) -->
           <div class="micro" id="microHint"></div>
 
           <div class="opts" id="options"></div>
@@ -644,10 +658,10 @@
             <div class="panel">
               <div class="resultTitle" id="resultTitle"></div>
 
-              <!-- ✅ ALTERAÇÃO: RESUMO (lista) em cima -->
+              <!-- ✅ RESUMO (lista) em cima -->
               <ul class="bullets2" id="traits" style="margin:8px 0 10px;"></ul>
 
-              <!-- ✅ ALTERAÇÃO: parágrafo abaixo -->
+              <!-- ✅ parágrafo abaixo -->
               <div class="muted" id="resultText"></div>
 
               <div class="bridge">
@@ -809,7 +823,7 @@
 
   <!-- ✅ Sticky CTA (mobile) -->
   <div class="stickyCta" id="stickyCta">
-    <button type="button" class="btn primary" id="stickyBtn">👉 Fazer o teste (2 min)</button>
+    <button type="button" class="btn primary" id="stickyBtn">👉 Iniciar o teste (2 min)</button>
   </div>
 
 <script>
@@ -825,20 +839,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ✅ GA4 helper
   function track(name, params){
-    try{
-      if(typeof gtag === "function"){
-        gtag("event", name, params || {});
-      }
-    } catch(e){}
+    try{ if(typeof gtag === "function"){ gtag("event", name, params || {}); } } catch(e){}
   }
 
   // ✅ Meta Pixel helper
   function trackMeta(name, params){
-    try{
-      if(typeof fbq === "function"){
-        fbq("trackCustom", name, params || {});
-      }
-    } catch(e){}
+    try{ if(typeof fbq === "function"){ fbq("trackCustom", name, params || {}); } } catch(e){}
   }
 
   // ✅ UTM base
@@ -1147,6 +1153,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function toggleSticky(){
     if(!stickyCta) return;
+    // ✅ Mostra no mobile quando o teste ainda não começou e o usuário não está “em cima” do teste
     if(state.started || inTestView){
       stickyCta.style.display = "none";
       return;
@@ -1162,7 +1169,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return "step_21_25";
   }
 
-  // ✅ Reforços: marcos + reta final
   function microCopyFor(qIndex, remaining){
     if(remaining <= 5 && remaining > 0){
       return `Reta final: faltam <b>${remaining}</b>. O resultado aparece <b>imediatamente</b>.`;
@@ -1178,7 +1184,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return map[qIndex] || "";
   }
 
-  // ✅ Progresso “por fase” (sem risco)
   function phaseProgressCopy(remaining){
     if(remaining <= 5 && remaining > 0){
       return `Reta final — faltam <b>${remaining}</b> perguntas.`;
@@ -1217,9 +1222,6 @@ document.addEventListener("DOMContentLoaded", () => {
     state.seenQuestionStep = {};
     state.started = false;
 
-    // ✅ volta para modo foco (sem distrações)
-    document.body.classList.add("preStart");
-
     elBar.style.width = "0%";
     progressText.style.display = "none";
     progressText.innerHTML = "";
@@ -1239,7 +1241,7 @@ document.addEventListener("DOMContentLoaded", () => {
     allBooksBox.style.display = "none";
     toggleAllBtn.textContent = "Ver coleção completa";
 
-    // ✅ MicroHint: mantém o espaço, mas some o texto (sem pulo)
+    // ✅ mantém o espaço do microHint SEM empurrar
     microHint.innerHTML = "";
     microHint.style.visibility = "hidden";
 
@@ -1263,8 +1265,6 @@ document.addEventListener("DOMContentLoaded", () => {
     elQ.textContent = `${qIndex}/${QUESTIONS.length} — ${item.q}`;
     elO.innerHTML = "";
 
-    // ✅ Reforços (microHint) sem empurrar as opções:
-    // mantém o espaço sempre e só alterna visibility
     const micro = microCopyFor(qIndex, remaining);
     microHint.innerHTML = micro || "";
     microHint.style.visibility = micro ? "visible" : "hidden";
@@ -1370,7 +1370,6 @@ document.addEventListener("DOMContentLoaded", () => {
           "Você tende à calma, estabilidade e paciência. A dor aparece quando a paz vira inércia: procrastinar, evitar conflito e deixar a vida decidir por você. O guia te ajuda a ativar iniciativa e firmeza sem perder o equilíbrio."
       }
     };
-
     return map[key];
   }
 
@@ -1384,7 +1383,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const copy = resultCopy(primary);
 
-    // ✅ Resultado: TÍTULO → RESUMO (lista) → PARÁGRAFO
     document.getElementById("resultTitle").textContent = copy.title;
     document.getElementById("traits").innerHTML = copy.traits.map(t => `<li>${t}</li>`).join("");
     document.getElementById("resultText").textContent = copy.text;
@@ -1400,14 +1398,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     screenQuiz.style.display = "none";
     screenResult.style.display = "block";
-
-    // ✅ libera o resto do site APENAS ao finalizar, com scroll-fix (sem “pulo”)
-    if(document.body.classList.contains("preStart")){
-      const beforeTop = testSection.getBoundingClientRect().top;
-      document.body.classList.remove("preStart");
-      const afterTop = testSection.getBoundingClientRect().top;
-      window.scrollBy({ top: (afterTop - beforeTop), left: 0, behavior: "auto" });
-    }
 
     // ✅ TRACKING: ver qual temperamento conclui o teste
     track("result_view",    { primary, secondary });
@@ -1431,7 +1421,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setProgress();
     renderQuestion();
 
-    const payload = { placement: (opts && opts.placement) ? opts.placement : "auto_load" };
+    const payload = { placement: (opts && opts.placement) ? opts.placement : "auto" };
     track("test_start", payload);
     trackMeta("test_start", payload);
 
@@ -1461,7 +1451,8 @@ document.addEventListener("DOMContentLoaded", () => {
     heroCta.addEventListener("click", () => {
       track("cta_click", { placement: "hero" });
       trackMeta("cta_click", { placement: "hero" });
-      setTimeout(() => start({ placement: "hero" }), 180);
+      // ✅ inicia após o scroll do hash
+      setTimeout(() => start({ placement: "hero" }), 200);
     });
   }
 
@@ -1471,29 +1462,30 @@ document.addEventListener("DOMContentLoaded", () => {
       trackMeta("cta_click", { placement: "sticky" });
 
       testSection.scrollIntoView({ behavior: "smooth", block: "start" });
-      setTimeout(() => start({ placement: "sticky" }), 220);
+      setTimeout(() => start({ placement: "sticky" }), 260);
     });
   }
 
-  setTimeout(() => start({ placement: "auto_load" }), 450);
-
+  // ✅ Inicia ao rolar até o teste (como você pediu)
   if(testSection){
     const io = new IntersectionObserver((entries) => {
       entries.forEach((en) => {
         inTestView = en.isIntersecting;
         toggleSticky();
         if(en.isIntersecting){
-          start({ placement: "auto_view" });
+          start({ placement: "scroll" });
         }
       });
-    }, { threshold: 0.15, rootMargin: "0px 0px -10% 0px" });
+    }, { threshold: 0.22, rootMargin: "0px 0px -10% 0px" });
     io.observe(testSection);
   }
 
+  // ✅ Se abrir direto em #teste, começa também
   if(window.location.hash === "#teste"){
     setTimeout(() => start({ placement: "hash" }), 160);
   }
 
+  // ✅ Início padrão: NÃO auto-start (reduz bounce)
   reset();
   toggleSticky();
 });
