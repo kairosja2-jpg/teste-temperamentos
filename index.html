@@ -355,7 +355,15 @@
     .progressText b{color: rgba(255,255,255,.96);}
 
     .qline{font-size:20px; margin: 6px 0 10px; font-weight:900;}
-    .micro{font-size:15px; color: rgba(255,255,255,.82); line-height:1.7; margin: 0 0 12px;}
+
+    /* ✅ MICROHINT: reserva espaço p/ não “pular” as opções */
+    .micro{
+      font-size:15px;
+      color: rgba(255,255,255,.82);
+      line-height:1.7;
+      margin: 0 0 12px;
+      min-height: 52px; /* ajuste fino: 44–60 */
+    }
 
     .opts{display:grid; gap:12px; margin-bottom: 10px;}
     .opt{
@@ -619,7 +627,10 @@
 
         <div id="screen-quiz" style="display:none;">
           <div class="qline" id="question"></div>
-          <div class="micro" id="microHint" style="display:none;"></div>
+
+          <!-- ✅ ALTERAÇÃO: sem display:none (vamos usar visibility) -->
+          <div class="micro" id="microHint"></div>
+
           <div class="opts" id="options"></div>
 
           <div class="navRow">
@@ -1228,8 +1239,10 @@ document.addEventListener("DOMContentLoaded", () => {
     allBooksBox.style.display = "none";
     toggleAllBtn.textContent = "Ver coleção completa";
 
-    microHint.style.display = "none";
+    // ✅ MicroHint: mantém o espaço, mas some o texto (sem pulo)
     microHint.innerHTML = "";
+    microHint.style.visibility = "hidden";
+
     backBtn.disabled = true;
 
     toggleSticky();
@@ -1250,15 +1263,11 @@ document.addEventListener("DOMContentLoaded", () => {
     elQ.textContent = `${qIndex}/${QUESTIONS.length} — ${item.q}`;
     elO.innerHTML = "";
 
-    // ✅ Reforços (microHint) em marcos + reta final (≤5)
+    // ✅ Reforços (microHint) sem empurrar as opções:
+    // mantém o espaço sempre e só alterna visibility
     const micro = microCopyFor(qIndex, remaining);
-    if(micro){
-      microHint.style.display = "block";
-      microHint.innerHTML = micro;
-    } else {
-      microHint.style.display = "none";
-      microHint.innerHTML = "";
-    }
+    microHint.innerHTML = micro || "";
+    microHint.style.visibility = micro ? "visible" : "hidden";
 
     item.o.forEach((opt) => {
       const btn = document.createElement("button");
@@ -1311,59 +1320,59 @@ document.addEventListener("DOMContentLoaded", () => {
     return [primary, secondary];
   }
 
-function resultCopy(key){
-  const map = {
-    colerico: {
-      title: "Seu temperamento dominante é: Colérico",
-      traits: [
-        "Decidido e direto",
-        "Gosta de agir e resolver",
-        "Dor: impaciência e controle",
-        "Ajuste: presença e autocontrole"
-      ],
-      text:
-        "Você tende a agir com intensidade, direção e foco em resultado. A dor aparece quando a pressa vira tensão: impaciência, controle e cobranças (inclusive com você). O guia te mostra como manter sua força sem perder presença e autocontrole."
-    },
+  function resultCopy(key){
+    const map = {
+      colerico: {
+        title: "Seu temperamento dominante é: Colérico",
+        traits: [
+          "Decidido e direto",
+          "Gosta de agir e resolver",
+          "Dor: impaciência e controle",
+          "Ajuste: presença e autocontrole"
+        ],
+        text:
+          "Você tende a agir com intensidade, direção e foco em resultado. A dor aparece quando a pressa vira tensão: impaciência, controle e cobranças (inclusive com você). O guia te mostra como manter sua força sem perder presença e autocontrole."
+      },
 
-    melancolico: {
-      title: "Seu temperamento dominante é: Melancólico",
-      traits: [
-        "Observador e detalhista",
-        "Busca fazer do jeito certo",
-        "Dor: autocobrança e ruminação",
-        "Ajuste: ação com leveza"
-      ],
-      text:
-        "Você tem profundidade, sensibilidade e padrão alto. A dor aparece quando a exigência vira peso: travar, pensar demais e se cobrar excessivamente. O guia te ajuda a transformar análise em direção prática, com mais leveza."
-    },
+      melancolico: {
+        title: "Seu temperamento dominante é: Melancólico",
+        traits: [
+          "Observador e detalhista",
+          "Busca fazer do jeito certo",
+          "Dor: autocobrança e ruminação",
+          "Ajuste: ação com leveza"
+        ],
+        text:
+          "Você tem profundidade, sensibilidade e padrão alto. A dor aparece quando a exigência vira peso: travar, pensar demais e se cobrar excessivamente. O guia te ajuda a transformar análise em direção prática, com mais leveza."
+      },
 
-    sanguineo: {
-      title: "Seu temperamento dominante é: Sanguíneo",
-      traits: [
-        "Comunicativo e espontâneo",
-        "Se empolga fácil",
-        "Dor: dispersão e dificuldade de terminar",
-        "Ajuste: constância sem perder alegria"
-      ],
-      text:
-        "Você é energia, presença e conexão. A dor aparece quando o impulso vence o foco: começar muito, terminar pouco e sentir culpa depois. O guia te ensina a canalizar entusiasmo em constância — sem apagar sua espontaneidade."
-    },
+      sanguineo: {
+        title: "Seu temperamento dominante é: Sanguíneo",
+        traits: [
+          "Comunicativo e espontâneo",
+          "Se empolga fácil",
+          "Dor: dispersão e dificuldade de terminar",
+          "Ajuste: constância sem perder alegria"
+        ],
+        text:
+          "Você é energia, presença e conexão. A dor aparece quando o impulso vence o foco: começar muito, terminar pouco e sentir culpa depois. O guia te ensina a canalizar entusiasmo em constância — sem apagar sua espontaneidade."
+      },
 
-    fleumatico: {
-      title: "Seu temperamento dominante é: Fleumático",
-      traits: [
-        "Calmo e equilibrado",
-        "Prefere estabilidade e paz",
-        "Dor: acomodação e evitar conflito",
-        "Ajuste: iniciativa com tranquilidade"
-      ],
-      text:
-        "Você tende à calma, estabilidade e paciência. A dor aparece quando a paz vira inércia: procrastinar, evitar conflito e deixar a vida decidir por você. O guia te ajuda a ativar iniciativa e firmeza sem perder o equilíbrio."
-    }
-  };
+      fleumatico: {
+        title: "Seu temperamento dominante é: Fleumático",
+        traits: [
+          "Calmo e equilibrado",
+          "Prefere estabilidade e paz",
+          "Dor: acomodação e evitar conflito",
+          "Ajuste: iniciativa com tranquilidade"
+        ],
+        text:
+          "Você tende à calma, estabilidade e paciência. A dor aparece quando a paz vira inércia: procrastinar, evitar conflito e deixar a vida decidir por você. O guia te ajuda a ativar iniciativa e firmeza sem perder o equilíbrio."
+      }
+    };
 
-  return map[key];
-}
+    return map[key];
+  }
 
   function showResult(){
     elBar.style.width = "100%";
